@@ -1,0 +1,168 @@
+# =========================
+# Operating System
+# =========================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# =========================
+# IDE / Editors
+# =========================
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.ncb
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Rider
+*.sln.iml
+
+# =========================
+# .NET / C#
+# =========================
+
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET generated files
+wwwroot/lib/
+wwwroot/dist/
+
+# Entity Framework
+*.db
+*.db-shm
+*.db-wal
+
+# =========================
+# Node.js
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+.next/
+.nuxt/
+
+# =========================
+# Environment / Secrets
+# =========================
+
+.env
+.env.*
+!.env.example
+
+# User secrets
+secrets.json
+appsettings.Development.json
+
+# Local configuration
+*.local.json
+
+# =========================
+# Logs
+# =========================
+
+*.log
+logs/
+log/
+
+# =========================
+# Docker
+# =========================
+
+# Docker volumes / local data
+docker-data/
+docker-volumes/
+
+# =========================
+# Coverage
+# =========================
+
+coverage/
+.coverage/
+.nyc_output/
+
+# =========================
+# Temporary Files
+# =========================
+
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+
+# =========================
+# Certificates / Keys
+# =========================
+
+*.pfx
+*.p12
+*.pem
+*.key
+*.crt
+
+# =========================
+# Local Development
+# =========================
+
+.vsconfig
+launchSettings.json
+
+# =========================
+# OS / IDE caches
+# =========================
+
+.cache/
+.parcel-cache/
