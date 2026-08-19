@@ -1,168 +1,42 @@
-# =========================
-# Operating System
-# =========================
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Linux
-*~
-
-# =========================
-# IDE / Editors
-# =========================
-
-# Visual Studio
-.vs/
-*.user
-*.userosscache
-*.suo
-*.userprefs
-*.ncb
-*.sln.docstates
-
-# Visual Studio Code
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# JetBrains
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# Rider
-*.sln.iml
-
-# =========================
-# .NET / C#
-# =========================
-
-# Build output
-[Bb]in/
-[Oo]bj/
-
-# Test results
-TestResults/
-[Tt]est[Rr]esult*/
-*.trx
-*.coverage
-*.coveragexml
-
-# NuGet
-*.nupkg
-*.snupkg
-packages/
-.nuget/
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-# ASP.NET generated files
-wwwroot/lib/
-wwwroot/dist/
-
-# Entity Framework
-*.db
-*.db-shm
-*.db-wal
-
-# =========================
-# Node.js
-# =========================
-
-node_modules/
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# Build output
-dist/
-build/
-.next/
-.nuxt/
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
 
-# =========================
-# Environment / Secrets
-# =========================
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-.env
-.env.*
-!.env.example
+*.tsbuildinfo
 
-# User secrets
-secrets.json
-appsettings.Development.json
+.eslintcache
 
-# Local configuration
-*.local.json
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
 
-# =========================
-# Logs
-# =========================
+# Vitest
+__screenshots__/
 
-*.log
-logs/
-log/
+# Vite
+*.timestamp-*-*.mjs
 
-# =========================
-# Docker
-# =========================
-
-# Docker volumes / local data
-docker-data/
-docker-volumes/
-
-# =========================
-# Coverage
-# =========================
-
-coverage/
-.coverage/
-.nyc_output/
-
-# =========================
-# Temporary Files
-# =========================
-
-*.tmp
-*.temp
-*.swp
-*.swo
-*.bak
-*.orig
-
-# =========================
-# Certificates / Keys
-# =========================
-
-*.pfx
-*.p12
-*.pem
-*.key
-*.crt
-
-# =========================
-# Local Development
-# =========================
-
-.vsconfig
-launchSettings.json
-
-# =========================
-# OS / IDE caches
-# =========================
-
-.cache/
-.parcel-cache/
+test-results/
+playwright-report/
