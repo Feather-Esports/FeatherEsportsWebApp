@@ -3,21 +3,13 @@
   --color-text: #f1f4f3;
   --color-text-muted: #858d8b;
   --color-accent: #1abc9c;
-  --color-red: #ef4444;
-  --color-orange: #e9a23b;
-  --color-sky: #2497d2;
-  --color-violet: #544bd6;
-  --color-lime: #50bd28;
-  --color-line: #1d2927;
+  --color-accent-muted: #082721;
+  --color-line: #27272a;
   --color-line-soft: rgba(255, 255, 255, 0.08);
   --color-panel: rgba(8, 10, 11, 0.9);
   --color-panel-hover: rgba(26, 188, 156, 0.08);
-  --color-header: rgba(9, 9, 11, 0.94);
   --color-grid: #182321;
   --color-glow: rgba(26, 188, 156, 0.12);
   --color-heading-glow: rgba(13, 51, 46, 0.58);
   --color-number: #4d5b59;
-  --font-display: "Pixelpurl", monospace;
-  --font-heading: "Martian Mono", monospace;
-  --font-body: "JetBrains Mono", monospace;
 }
