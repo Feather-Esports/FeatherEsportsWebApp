@@ -1,8 +1,8 @@
 import { createI18n } from "vue-i18n"
+import en from "./messages/en.json"
 
 export const i18n = createI18n({
-  locale: "de",
+  locale: "en",
   fallbackLocale: "en",
-  de: {},
-  en: {},
+  messages: { en },
 })

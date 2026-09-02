@@ -1,0 +1,39 @@
+{
+  "nav": { "home": "Home", "teams": "Teams", "matches": "Matches", "faq": "FAQ", "staff": "Staff" },
+  "actions": { "wip": "WIP", "discord": "Join Discord" },
+  "hero": {
+    "eyebrow": "Overwatch esports organization",
+    "title": "Feather Esports",
+    "subtitle": "Teams / Scrims / Pugs",
+    "game": "Overwatch",
+    "about": "About us",
+    "description": "We are a grassroots Overwatch organization competing in tournaments across multiple skill tiers. We are focused on building competitive teams, developing players, and growing our place in the Overwatch community."
+  },
+  "sections": {
+    "teams": { "title": "Teams", "description": "Regional rosters and the players representing Feather." },
+    "matches": { "title": "Matches", "description": "Track our next appearances and results." },
+    "faq": { "title": "FAQ", "description": "Answers to a few frequently asked questions." },
+    "staff": { "title": "Staff", "description": "Meet the crew that keeps Feather moving." }
+  },
+  "matches": { "empty": "No matches scheduled yet.", "hint": "Check back soon for the next Feather fixture." },
+  "footer": { "legal": "Legal notice", "homeLabel": "Feather Esports home" },
+  "staff": {
+    "roles": { "label": "Staff roles", "founders": "Founders", "administrators": "Administrators", "moderators": "Moderators", "staff": "Staff", "media": "Media" },
+    "subRoles": { "community": "Community Staff", "networking": "Networking Staff", "team": "Team Staff", "tech": "Tech Staff", "media": "Media Staff" }
+  },
+  "teams": {
+    "card": { "game": "Esport", "players": "Players", "staff": "Staff", "details": "View full details" },
+    "regions": { "emea": "EMEA teams", "na": "NA teams", "sa": "SA teams", "oce": "OCE teams" },
+    "emea": { "label": "EMEA teams", "detail": "Our European rosters and the players representing Feather." },
+    "na": { "label": "NA teams", "detail": "North American competition, community, and upcoming rosters." },
+    "sa": { "label": "SA teams", "detail": "South American players building the next Feather chapter." },
+    "oce": { "label": "OCE teams", "detail": "Oceanic talent, tournaments, and regional events." }
+  },
+  "faq": {
+    "join": { "label": "How do I join a team?", "detail": "Keep an eye on our announcements and submit your details when tryouts open." },
+    "watch": { "label": "Where can I watch Feather?", "detail": "Follow our social channels for match schedules and live broadcast links." },
+    "events": { "label": "Do you host community events?", "detail": "Yes. Community cups and scrims are part of our regular calendar." },
+    "work": { "label": "How can I work with Feather?", "detail": "Reach out through our business contact channels with a short introduction." },
+    "based": { "label": "Where is Feather based?", "detail": "We are an online-first organization with teams across multiple regions." }
+  }
+}
