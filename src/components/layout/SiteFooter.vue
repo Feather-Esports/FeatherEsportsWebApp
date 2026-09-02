@@ -7,9 +7,9 @@ const { t } = useI18n();
 
 <template>
   <footer>
-    <a class="wordmark" href="#top" :aria-label="t('footer.homeLabel')"
-      ><Icon icon="pixel:star-solid" /><span>Feather</span></a
-    ><span class="footer-divider">//</span><a href="#community">{{ t("footer.legal") }}</a>
+    <a class="wordmark" href="#home" :aria-label="t('footer.homeLabel')"
+      ><Icon icon="game-icons:feather" /><span>Feather</span></a
+    ><span class="footer-divider">//</span><a href="#home">{{ t("footer.legal") }}</a>
   </footer>
 </template>
 

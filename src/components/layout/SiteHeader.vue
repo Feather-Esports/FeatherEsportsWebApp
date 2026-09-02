@@ -3,19 +3,24 @@ import { Icon } from "@iconify/vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const navigation = [
+  { id: "home", label: "nav.home" },
+  { id: "teams", label: "nav.teams" },
+  { id: "matches", label: "nav.matches" },
+  { id: "faq", label: "nav.faq" },
+  { id: "staff", label: "nav.staff" },
+];
 </script>
 
 <template>
   <header class="site-header">
-    <a class="wordmark" href="#top" :aria-label="t('footer.homeLabel')"
-      ><Icon icon="pixel:star-solid" width="23" /><span>Feather</span></a
+    <a class="wordmark" href="#home" :aria-label="t('footer.homeLabel')"
+      ><Icon icon="game-icons:feather" width="23" /><span>Feather</span></a
     >
     <nav class="main-nav" aria-label="Main navigation">
-      <a class="active" href="#top">{{ t("nav.home") }}</a
-      ><a href="#teams">{{ t("nav.teams") }}</a
-      ><a href="#matches">{{ t("nav.matches") }}</a
-      ><a href="#faq">{{ t("nav.faq") }}</a
-      ><a href="#staff">{{ t("nav.staff") }}</a>
+      <a v-for="item in navigation" :key="item.id" :href="`#${item.id}`">
+        {{ t(item.label) }}
+      </a>
     </nav>
     <div class="header-actions">
       <a class="action-link" href="#matches"
@@ -60,12 +65,27 @@ const { t } = useI18n();
   text-transform: uppercase;
 }
 .main-nav a {
+  position: relative;
   color: var(--color-text-muted);
   padding: 0.7rem 0;
 }
-.main-nav a:hover,
-.main-nav a.active {
+.main-nav a:hover {
   color: var(--color-accent);
+}
+.main-nav a::after {
+  background: var(--color-accent);
+  bottom: 0;
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+  width: 100%;
+}
+.main-nav a:hover::after {
+  transform: scaleX(1);
 }
 .header-actions {
   align-items: center;

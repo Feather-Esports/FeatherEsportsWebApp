@@ -7,7 +7,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <section class="hero" aria-labelledby="hero-title">
+  <section id="home" class="hero" aria-labelledby="hero-title">
     <h1 id="hero-title">{{ t("hero.title") }}</h1>
     <p class="hero-subtitle">{{ t("hero.subtitle") }}</p>
     <p class="hero-description">{{ t("hero.description") }}</p>
@@ -15,8 +15,14 @@ const { t } = useI18n();
       ><Icon icon="pixel:discord" /> {{ t("actions.discord") }}</a
     >
     <div id="community" class="social-links" aria-label="Social links">
-      <a v-for="[icon, label] in socialLinks" :key="label" href="#community"
-        ><Icon :icon="icon" /> {{ label }}</a
+      <a
+        v-for="social in socialLinks"
+        :key="social.label"
+        :href="social.href"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Icon :icon="social.icon" /> {{ social.label }}</a
       >
     </div>
   </section>
