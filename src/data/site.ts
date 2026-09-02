@@ -71,3 +71,8 @@ export const socialLinks = [
   { icon: "pixel:tiktok", label: "TikTok", href: "https://www.tiktok.com/@featheresports" },
   { icon: "pixel:instagram", label: "Instagram", href: "https://www.instagram.com/fthr_esports" },
 ] as const
+
+export const discordLink = {
+  icon: "pixel:discord",
+  href: "https://discord.gg/uNJQD4j75N",
+} as const

@@ -1,6 +1,13 @@
 {
-  "nav": { "home": "Home", "teams": "Teams", "matches": "Matches", "faq": "FAQ", "staff": "Staff" },
-  "actions": { "wip": "WIP", "discord": "Join Discord" },
+  "header": {
+    "nav": { "home": "Home", "teams": "Teams", "matches": "Matches", "faq": "FAQ", "staff": "Staff" },
+    "wip": "WIP",
+    "wipTooltip": {
+      "title": "Work In Progress",
+      "description": "The Feather Esports website is still a work in progress. More features and updates are coming soon!"
+    },
+    "discord": "Join Discord"
+  },
   "hero": {
     "eyebrow": "Overwatch esports organization",
     "title": "Feather Esports",

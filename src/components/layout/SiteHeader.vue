@@ -1,32 +1,42 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { useI18n } from "vue-i18n";
+import { discordLink } from "@/data/site";
+import Tooltip from "@/components/ui/Tooltip.vue";
 
 const { t } = useI18n();
+
 const navigation = [
-  { id: "home", label: "nav.home" },
-  { id: "teams", label: "nav.teams" },
-  { id: "matches", label: "nav.matches" },
-  { id: "faq", label: "nav.faq" },
-  { id: "staff", label: "nav.staff" },
+  { id: "home", label: "header.nav.home" },
+  { id: "teams", label: "header.nav.teams" },
+  { id: "matches", label: "header.nav.matches" },
+  { id: "faq", label: "header.nav.faq" },
+  { id: "staff", label: "header.nav.staff" },
 ];
 </script>
 
 <template>
   <header class="site-header">
     <a class="wordmark" href="#home" :aria-label="t('footer.homeLabel')"
-      ><Icon icon="game-icons:feather" width="23" /><span>Feather</span></a
+      ><Icon icon="game-icons:feather" width="2.125rem" /><span>Feather</span></a
     >
     <nav class="main-nav" aria-label="Main navigation">
       <a v-for="item in navigation" :key="item.id" :href="`#${item.id}`">
         {{ t(item.label) }}
       </a>
     </nav>
-    <div class="header-actions">
-      <a class="action-link" href="#matches"
-        ><Icon icon="pixel:trophy-solid" /> {{ t("actions.wip") }}</a
-      ><a class="discord-link" href="#community"
-        ><Icon icon="pixel:discord" /> {{ t("actions.discord") }}</a
+    <div class="header-links">
+      <Tooltip id="wip-tooltip">
+        <template #trigger>
+          <div class="wip-indicator">
+            <Icon icon="pixel:exclaimation-solid" width="0.875rem" /> {{ t("header.wip") }}
+          </div>
+        </template>
+        <strong>{{ t("header.wipTooltip.title") }}</strong>
+        <p>{{ t("header.wipTooltip.description") }}</p>
+      </Tooltip>
+      <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer"
+        ><Icon :icon="discordLink.icon" width="1.375rem" /> {{ t("header.discord") }}</a
       >
     </div>
   </header>
@@ -34,79 +44,96 @@ const navigation = [
 
 <style scoped>
 .site-header {
-  align-items: center;
-  background: var(--color-header);
-  border-bottom: 1px solid var(--color-line);
+  z-index: 10;
   display: flex;
-  gap: 2rem;
-  justify-content: space-between;
-  min-height: 2.1rem;
-  padding: 0 clamp(1.25rem, 5vw, 5rem);
+  align-items: center;
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
-  z-index: 10;
+  min-height: 3.75rem;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 0 clamp(1.25rem, 5vw, 1.563rem);
+  background: color-mix(in srgb, var(--color-ink) 75%, transparent);
+  -webkit-backdrop-filter: blur(0.75rem) saturate(1.15);
+  backdrop-filter: blur(0.75rem) saturate(1.15);
+  border-bottom: 1px solid var(--color-line);
 }
+
 .wordmark {
-  align-items: center;
-  color: var(--color-accent);
   display: inline-flex;
+  align-items: center;
+  gap: 0.438rem;
+  color: var(--color-accent);
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  gap: 0.35rem;
-  letter-spacing: 0.08em;
+  font-size: 1.593rem;
   text-transform: uppercase;
 }
+
 .main-nav {
   display: flex;
   gap: clamp(0.8rem, 2vw, 2rem);
-  font-size: 0.65rem;
+  font-family: var(--font-heading);
+  font-size: 0.81rem;
+  font-weight: 600;
   text-transform: uppercase;
 }
 .main-nav a {
   position: relative;
-  color: var(--color-text-muted);
-  padding: 0.7rem 0;
+  color: var(--color-text);
+  padding: 0.313rem 0;
+
+  &:hover {
+    color: var(--color-accent);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 180ms ease;
+  }
 }
-.main-nav a:hover {
+
+.header-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.wip-indicator,
+.discord-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 0.688rem;
+  font-weight: 600;
+  gap: 0.313rem;
+  height: 1.875rem;
+  padding: 0rem 0.625rem;
+  text-transform: uppercase;
+  border-radius: 0.19rem;
+}
+.wip-indicator {
+  border: 1px solid var(--color-accent);
   color: var(--color-accent);
 }
-.main-nav a::after {
-  background: var(--color-accent);
-  bottom: 0;
-  content: "";
-  height: 1px;
-  left: 0;
-  position: absolute;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 180ms ease;
-  width: 100%;
-}
-.main-nav a:hover::after {
-  transform: scaleX(1);
-}
-.header-actions {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
-}
-.action-link,
-.discord-link {
-  align-items: center;
-  border: 1px solid var(--color-line);
-  color: var(--color-text);
-  display: inline-flex;
-  font-size: 0.6rem;
-  gap: 0.35rem;
-  padding: 0.55rem 0.7rem;
-  text-transform: uppercase;
-}
 .discord-link {
   background: var(--color-accent);
-  color: var(--color-ink);
+  color: var(--color-accent-muted);
 }
+
 @media (max-width: 760px) {
   .site-header {
     flex-wrap: wrap;
@@ -123,7 +150,7 @@ const navigation = [
     padding: 0.5rem 0;
     white-space: nowrap;
   }
-  .header-actions {
+  .header-links {
     margin-left: auto;
   }
 }
