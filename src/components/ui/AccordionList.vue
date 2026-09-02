@@ -68,15 +68,6 @@ const { t } = useI18n();
 .accordion-row > svg:first-child {
   color: var(--color-accent);
 }
-.accordion-row.red > svg:first-child {
-  color: var(--color-red);
-}
-.accordion-row.orange > svg:first-child {
-  color: var(--color-orange);
-}
-.accordion-row.blue > svg:first-child {
-  color: var(--color-sky);
-}
 .plus {
   color: var(--color-text-muted);
 }
