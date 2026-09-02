@@ -50,7 +50,7 @@ const { t } = useI18n();
   background: var(--color-panel);
   border: 0;
   border-bottom: 1px solid var(--color-line);
-  color: var(--color-text);
+  color: var(--color-title);
   cursor: pointer;
   display: grid;
   font: inherit;
@@ -66,17 +66,17 @@ const { t } = useI18n();
   background: var(--color-panel-hover);
 }
 .accordion-row > svg:first-child {
-  color: var(--color-accent);
+  color: var(--color-brand);
 }
 .plus {
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 .row-number {
   color: var(--color-number);
   font-size: 0.55rem;
 }
 .accordion-detail {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: 0.58rem;
   grid-column: 2 / 3;
   line-height: 1.6;

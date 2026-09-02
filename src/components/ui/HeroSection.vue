@@ -51,19 +51,19 @@ const { t } = useI18n();
       rgba(9, 9, 11, 0) 0%,
       rgba(9, 9, 11, 0.15) 50%,
       rgba(9, 9, 11, 0.75) 75%,
-      var(--color-ink) 100%
+      var(--color-bg) 100%
     ),
     url("@/assets/images/feather_banner_bg.png") center / cover;
 }
 .hero h1 {
-  color: var(--color-accent);
-  font-family: var(--font-display);
+  color: var(--color-brand);
+  font-family: var(--font-brand);
   font-size: 6.25rem;
-  text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-accent) 25%, transparent);
+  text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
   text-transform: uppercase;
 }
 .hero-subtitle {
-  color: var(--color-text);
+  color: var(--color-title);
   font-family: var(--font-accent);
   font-size: 1.1rem;
   font-weight: 600;
@@ -71,13 +71,13 @@ const { t } = useI18n();
   text-transform: uppercase;
 
   .subtitle-divider {
-    color: var(--color-accent);
+    color: var(--color-brand);
     margin: 0 0.7rem;
   }
 }
 .hero-description {
   max-width: 37.56rem;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: 1rem;
   line-height: 1.88em;
 }
@@ -86,15 +86,15 @@ const { t } = useI18n();
   align-items: center;
   height: 2.75rem;
   padding: 0 0.92rem;
-  color: var(--color-accent-muted);
-  font-family: var(--font-heading);
+  color: var(--color-brand-muted);
+  font-family: var(--font-title);
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   gap: 0.46rem;
   border-radius: 0.28rem;
-  background: var(--color-accent);
-  text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-accent) 25%, transparent);
+  background: var(--color-brand);
+  text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
 }
 
 .social-links {
@@ -108,8 +108,8 @@ const { t } = useI18n();
   display: inline-flex;
   align-items: center;
   height: 2.4rem;
-  color: var(--color-text);
-  font-family: var(--font-heading);
+  color: var(--color-title);
+  font-family: var(--font-title);
   font-size: 0.748rem;
   font-weight: 500;
   gap: 0.27rem;
@@ -119,10 +119,10 @@ const { t } = useI18n();
   text-transform: uppercase;
 
   &:hover {
-    background: var(--color-text);
-    border-color: var(--color-text);
+    background: var(--color-title);
+    border-color: var(--color-title);
     color: var(--color-line);
-    text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-text) 25%, transparent);
+    text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-title) 25%, transparent);
   }
 }
 

@@ -99,7 +99,7 @@ main {
 .empty-state {
   align-items: center;
   border: 1px solid var(--color-line);
-  color: var(--color-text-muted);
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -109,11 +109,11 @@ main {
   text-align: center;
 }
 .empty-state svg {
-  color: var(--color-accent);
+  color: var(--color-brand);
 }
 .empty-state p {
-  color: var(--color-text);
-  font-family: var(--font-heading);
+  color: var(--color-title);
+  font-family: var(--font-title);
   font-size: 1.1rem;
   text-transform: uppercase;
 }

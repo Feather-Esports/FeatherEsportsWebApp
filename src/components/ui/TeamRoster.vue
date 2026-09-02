@@ -71,7 +71,7 @@ const activeRegion = computed<TeamRegion>(
   background: transparent;
   border: 0;
   border-right: 1px solid var(--color-line);
-  color: var(--color-text-muted);
+  color: var(--color-text);
   display: flex;
   font: inherit;
   font-size: 0.58rem;
@@ -86,7 +86,7 @@ const activeRegion = computed<TeamRegion>(
 .team-regions button.active,
 .team-regions button:hover {
   background: var(--color-heading-glow);
-  color: var(--color-accent);
+  color: var(--color-brand);
 }
 .team-card {
   background: var(--color-panel);
@@ -107,12 +107,12 @@ const activeRegion = computed<TeamRegion>(
   min-height: 2rem;
 }
 .team-card header strong {
-  font-family: var(--font-heading);
+  font-family: var(--font-title);
   text-transform: uppercase;
 }
 .team-card header span,
 .team-card-bar {
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 .team-card-bar {
   background: rgba(255, 255, 255, 0.06);
@@ -126,23 +126,23 @@ const activeRegion = computed<TeamRegion>(
 }
 .team-card li {
   border-bottom: 1px solid var(--color-line-soft);
-  color: var(--color-text-muted);
+  color: var(--color-text);
   padding: 0.28rem 0;
 }
 .team-card button {
   background: transparent;
   border: 1px solid var(--color-line);
-  color: var(--color-text);
+  color: var(--color-title);
   font: inherit;
   padding: 0.35rem;
   width: 100%;
 }
 .team-card button span {
-  color: var(--color-accent);
+  color: var(--color-brand);
   float: right;
 }
 .team-card button svg {
-  color: var(--color-accent);
+  color: var(--color-brand);
   float: right;
 }
 @media (max-width: 760px) {

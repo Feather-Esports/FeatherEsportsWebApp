@@ -128,7 +128,7 @@ onBeforeUnmount(() => {
   width: 3px;
   background: color-mix(
     in srgb,
-    var(--color-accent) calc(var(--intensity) * 100%),
+    var(--color-brand) calc(var(--intensity) * 100%),
     var(--color-grid)
   );
   box-shadow: 0 0 calc(var(--intensity) * 16px) calc(var(--intensity) * 5px) var(--color-glow);

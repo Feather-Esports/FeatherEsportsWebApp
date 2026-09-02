@@ -9,8 +9,8 @@
 
 html,
 body {
-  background: var(--color-ink);
-  color: var(--color-text);
+  background: var(--color-bg);
+  color: var(--color-title);
   font-family: var(--font-body);
   font-feature-settings: "liga", "kern";
   -webkit-font-smoothing: antialiased;

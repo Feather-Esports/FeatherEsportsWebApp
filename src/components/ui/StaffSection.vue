@@ -57,7 +57,7 @@ const visibleStaff = computed(() =>
   background: transparent;
   border: 0;
   border-bottom: 2px solid transparent;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font: inherit;
   font-size: 0.58rem;
   min-height: 2rem;
@@ -66,8 +66,8 @@ const visibleStaff = computed(() =>
 }
 .staff-tabs button.active,
 .staff-tabs button:hover {
-  border-bottom-color: var(--color-accent);
-  color: var(--color-accent);
+  border-bottom-color: var(--color-brand);
+  color: var(--color-brand);
 }
 .staff-card {
   align-items: center;
@@ -80,18 +80,18 @@ const visibleStaff = computed(() =>
   align-items: center;
   align-self: stretch;
   border-right: 1px solid var(--color-line);
-  color: var(--color-text);
+  color: var(--color-title);
   display: flex;
   justify-content: center;
   width: 6rem;
 }
 .staff-card h3 {
-  font-family: var(--font-heading);
+  font-family: var(--font-title);
   font-size: 1.1rem;
   text-transform: uppercase;
 }
 .staff-card p {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: 0.55rem;
   line-height: 1.5;
   margin-top: 0.25rem;

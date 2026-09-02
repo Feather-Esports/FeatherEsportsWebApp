@@ -1,15 +1,22 @@
 :root {
-  --color-ink: #09090b;
-  --color-text: #f1f4f3;
-  --color-text-muted: #858d8b;
-  --color-accent: #1abc9c;
-  --color-accent-muted: #082721;
+  --color-bg: #09090b;
+
+  --color-title: #f1f4f3;
+  --color-text: #888888;
+  --color-text-muted: #4f5253;
+
+  --color-brand: #1abc9c;
+  --color-brand-muted: #082721;
+
   --color-line: #27272a;
   --color-line-soft: rgba(255, 255, 255, 0.08);
-  --color-panel: rgba(8, 10, 11, 0.9);
-  --color-panel-hover: rgba(26, 188, 156, 0.08);
+  --color-line-muted: #2f2f2f;
+
   --color-grid: #182321;
   --color-glow: rgba(26, 188, 156, 0.12);
+
   --color-heading-glow: rgba(13, 51, 46, 0.58);
+  --color-panel: rgba(8, 10, 11, 0.9);
+  --color-panel-hover: rgba(26, 188, 156, 0.08);
   --color-number: #4d5b59;
 }

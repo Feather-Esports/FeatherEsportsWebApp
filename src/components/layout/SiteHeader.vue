@@ -69,7 +69,7 @@ const navigation = [
   justify-content: space-between;
   gap: 2rem;
   padding: 0 clamp(1.25rem, 5vw, 1.563rem);
-  background: color-mix(in srgb, var(--color-ink) 75%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
   -webkit-backdrop-filter: blur(0.75rem) saturate(1.15);
   backdrop-filter: blur(0.75rem) saturate(1.15);
   border-bottom: 1px solid var(--color-line);
@@ -79,8 +79,8 @@ const navigation = [
   display: inline-flex;
   align-items: center;
   gap: 0.438rem;
-  color: var(--color-accent);
-  font-family: var(--font-display);
+  color: var(--color-brand);
+  font-family: var(--font-brand);
   font-size: 1.593rem;
   text-transform: uppercase;
 }
@@ -88,7 +88,7 @@ const navigation = [
 .main-nav {
   display: flex;
   gap: clamp(0.8rem, 2vw, 2rem);
-  font-family: var(--font-heading);
+  font-family: var(--font-title);
   font-size: 0.81rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -98,11 +98,11 @@ const navigation = [
 }
 .main-nav a {
   position: relative;
-  color: var(--color-text);
+  color: var(--color-title);
   padding: 0.313rem 0;
 
   &:hover {
-    color: var(--color-accent);
+    color: var(--color-brand);
 
     &::after {
       transform: scaleX(1);
@@ -116,7 +116,7 @@ const navigation = [
     left: 0;
     width: 100%;
     height: 1px;
-    background: var(--color-accent);
+    background: var(--color-brand);
     transform: scaleX(0);
     transform-origin: center;
     transition: transform 180ms ease;
@@ -132,8 +132,8 @@ const navigation = [
 .discord-link {
   display: inline-flex;
   align-items: center;
-  color: var(--color-text);
-  font-family: var(--font-heading);
+  color: var(--color-title);
+  font-family: var(--font-title);
   font-size: 0.688rem;
   font-weight: 600;
   gap: 0.313rem;
@@ -143,12 +143,12 @@ const navigation = [
   border-radius: 0.19rem;
 }
 .wip-indicator {
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent);
+  border: 1px solid var(--color-brand);
+  color: var(--color-brand);
 }
 .discord-link {
-  background: var(--color-accent);
-  color: var(--color-accent-muted);
+  background: var(--color-brand);
+  color: var(--color-brand-muted);
 }
 
 @media (max-width: 760px) {
@@ -164,10 +164,10 @@ const navigation = [
     margin-left: auto;
     width: 2.25rem;
     height: 2.25rem;
-    color: var(--color-accent);
+    color: var(--color-brand);
     font-size: 1.1rem;
     background: transparent;
-    border: 1px solid var(--color-accent);
+    border: 1px solid var(--color-brand);
     border-radius: 0.19rem;
   }
   .main-nav {

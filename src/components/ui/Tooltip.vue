@@ -82,9 +82,9 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
   width: min(15rem, calc(100vw - 1.5rem));
   padding: 1rem 1rem;
   gap: 0.5rem;
-  background: var(--color-text);
+  background: var(--color-title);
   border-radius: 0.188rem;
-  color: var(--color-ink);
+  color: var(--color-bg);
   text-align: left;
 
   &::before {
@@ -93,7 +93,7 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
     top: -0.85rem;
     left: var(--pointer-left);
     transform: translateX(-50%);
-    border-bottom: 0.9rem solid var(--color-text);
+    border-bottom: 0.9rem solid var(--color-title);
     border-left: 0.6rem solid transparent;
     border-right: 0.6rem solid transparent;
   }
@@ -106,7 +106,7 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
     height: 1rem;
   }
   & :deep(strong) {
-    font-family: var(--font-heading);
+    font-family: var(--font-title);
     font-size: 0.75rem;
     font-weight: 600;
   }

@@ -53,15 +53,15 @@ export const faqs: AccordionItem[] = [
 ]
 
 export const staff: StaffMember[] = [
-  { name: "Blaco", color: "var(--color-ink)", icon: "pixel:user-solid", roles: ["staff", "founders"], subRoles: ["staff.subRoles.community"] },
+  { name: "Blaco", color: "var(--color-bg)", icon: "pixel:user-solid", roles: ["staff", "founders"], subRoles: ["staff.subRoles.community"] },
   {
     name: "Kepler",
-    color: "var(--color-ink)",
+    color: "var(--color-bg)",
     icon: "pixel:users-solid",
     roles: ["administrators", "founders"],
     subRoles: ["staff.subRoles.networking", "staff.subRoles.team"],
   },
-  { name: "Yiruzu", color: "var(--color-ink)", icon: "pixel:laptop-solid", roles: ["staff", "media", "founders"], subRoles: ["staff.subRoles.tech", "staff.subRoles.media"] },
+  { name: "Yiruzu", color: "var(--color-bg)", icon: "pixel:laptop-solid", roles: ["staff", "media", "founders"], subRoles: ["staff.subRoles.tech", "staff.subRoles.media"] },
 ]
 
 export const socialLinks = [

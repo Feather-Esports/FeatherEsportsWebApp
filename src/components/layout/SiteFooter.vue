@@ -28,7 +28,7 @@ footer {
   align-items: center;
   gap: 0.438rem;
   color: var(--color-brand);
-  font-family: var(--font-display);
+  font-family: var(--font-brand);
   font-size: 1.593rem;
   text-transform: uppercase;
 }
@@ -39,7 +39,7 @@ footer {
   font-weight: 500;
 }
 .legal {
-  font-family: var(--font-heading);
+  font-family: var(--font-title);
   color: var(--color-text);
   font-size: 0.9rem;
   letter-spacing: -0.03em;
