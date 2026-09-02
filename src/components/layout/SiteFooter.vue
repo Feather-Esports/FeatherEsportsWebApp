@@ -7,32 +7,41 @@ const { t } = useI18n();
 
 <template>
   <footer>
-    <a class="wordmark" href="#home" :aria-label="t('footer.homeLabel')"
+    <a class="wordmark" href="#home" :aria-label="t('footer.label')"
       ><Icon icon="game-icons:feather" /><span>Feather</span></a
-    ><span class="footer-divider">//</span><a href="#home">{{ t("footer.legal") }}</a>
+    ><span class="footer-divider">//</span><a class="legal" href="#home">{{ t("footer.legal") }}</a>
   </footer>
 </template>
 
 <style scoped>
 footer {
-  align-items: center;
-  border-top: 1px solid var(--color-line);
-  color: var(--color-text-muted);
   display: flex;
-  font-size: 0.6rem;
-  gap: 1rem;
+  align-items: center;
   justify-content: center;
+  border-top: 1px solid var(--color-line);
+  gap: 1.188rem;
   margin-top: auto;
-  padding: 1.8rem;
+  padding: 1.7rem;
 }
 .wordmark {
-  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.438rem;
+  color: var(--color-brand);
   font-family: var(--font-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: 1.593rem;
   text-transform: uppercase;
 }
 .footer-divider {
-  color: var(--color-accent);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.legal {
+  font-family: var(--font-heading);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  letter-spacing: -0.03em;
 }
 </style>
