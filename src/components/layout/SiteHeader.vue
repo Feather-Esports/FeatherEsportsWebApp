@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { discordLink } from "@/data/site";
 import Tooltip from "@/components/ui/Tooltip.vue";
 
 const { t } = useI18n();
+const menuOpen = ref(false);
 
 const navigation = [
   { id: "home", label: "header.nav.home" },
@@ -20,24 +22,36 @@ const navigation = [
     <a class="wordmark" href="#home" :aria-label="t('footer.homeLabel')"
       ><Icon icon="game-icons:feather" width="2.125rem" /><span>Feather</span></a
     >
-    <nav class="main-nav" aria-label="Main navigation">
-      <a v-for="item in navigation" :key="item.id" :href="`#${item.id}`">
-        {{ t(item.label) }}
-      </a>
-    </nav>
-    <div class="header-links">
-      <Tooltip id="wip-tooltip">
-        <template #trigger>
-          <div class="wip-indicator">
-            <Icon icon="pixel:exclaimation-solid" width="0.875rem" /> {{ t("header.wip") }}
-          </div>
-        </template>
-        <strong>{{ t("header.wipTooltip.title") }}</strong>
-        <p>{{ t("header.wipTooltip.description") }}</p>
-      </Tooltip>
-      <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer"
-        ><Icon :icon="discordLink.icon" width="1.375rem" /> {{ t("header.discord") }}</a
-      >
+    <button
+      class="menu-toggle"
+      type="button"
+      :aria-expanded="menuOpen"
+      aria-controls="site-navigation"
+      :aria-label="menuOpen ? 'Close menu' : 'Open menu'"
+      @click="menuOpen = !menuOpen"
+    >
+      <Icon :icon="menuOpen ? 'pixel:times' : 'pixel:bars'" />
+    </button>
+    <div class="header-panel" :class="{ open: menuOpen }">
+      <nav id="site-navigation" class="main-nav" aria-label="Main navigation">
+        <a v-for="item in navigation" :key="item.id" :href="`#${item.id}`">
+          {{ t(item.label) }}
+        </a>
+      </nav>
+      <div class="header-links">
+        <Tooltip id="wip-tooltip">
+          <template #trigger>
+            <div class="wip-indicator">
+              <Icon icon="pixel:exclaimation-solid" width="0.875rem" /> {{ t("header.wip") }}
+            </div>
+          </template>
+          <strong>{{ t("header.wipTooltip.title") }}</strong>
+          <p>{{ t("header.wipTooltip.description") }}</p>
+        </Tooltip>
+        <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer"
+          ><Icon :icon="discordLink.icon" width="1.375rem" /> {{ t("header.discord") }}</a
+        >
+      </div>
     </div>
   </header>
 </template>
@@ -78,6 +92,9 @@ const navigation = [
   font-size: 0.81rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+.header-panel {
+  display: contents;
 }
 .main-nav a {
   position: relative;
@@ -136,22 +153,56 @@ const navigation = [
 
 @media (max-width: 760px) {
   .site-header {
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    min-height: 7.5rem;
+    gap: 0;
+    min-height: 3.75rem;
     padding: 0.8rem 1rem;
   }
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--color-accent);
+    font-size: 1.1rem;
+    background: transparent;
+    border: 1px solid var(--color-accent);
+    border-radius: 0.19rem;
+  }
   .main-nav {
-    order: 3;
-    overflow-x: auto;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    left: 0;
+    padding: 0.5rem 1rem 0.8rem;
     width: 100%;
   }
   .main-nav a {
-    padding: 0.5rem 0;
-    white-space: nowrap;
+    border-bottom: 1px solid var(--color-line-soft);
+    padding: 0.8rem 0;
+  }
+  .header-panel {
+    display: none;
+    background: color-mix(in srgb, var(--color-header) 96%, transparent);
+    flex-direction: column;
+    left: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+  }
+  .header-panel.open,
+  .header-panel.open .main-nav {
+    display: flex;
   }
   .header-links {
-    margin-left: auto;
+    display: none;
+  }
+}
+
+@media (min-width: 761px) {
+  .menu-toggle {
+    display: none;
   }
 }
 </style>

@@ -127,14 +127,37 @@ const { t } = useI18n();
 }
 
 @media (max-width: 760px) {
-  .hero {
-    padding: 7rem 1rem 4rem;
-  }
   .hero h1 {
-    font-size: 2.3rem;
+    font-size: clamp(3.1rem, 11vw, 4.5rem);
+  }
+  .hero-subtitle {
+    font-size: clamp(0.75rem, 3.2vw, 0.8rem);
+    letter-spacing: 0.08em;
   }
   .hero-description {
-    max-width: 26rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 27rem;
+  }
+  .hero-discord {
+    font-size: 0.82rem;
+    height: 2.5rem;
+  }
+  .social-links {
+    width: 70%;
+    gap: 0.4rem;
+    margin-top: 1.8rem;
+  }
+  .social-links a {
+    font-size: 0.7rem;
+    height: 2.4rem;
+    padding: 0 0.55rem;
+  }
+}
+@media (max-height: 700px) and (min-width: 761px) {
+  .hero {
+    padding-bottom: 3rem;
+    padding-top: 5rem;
   }
 }
 </style>
