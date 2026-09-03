@@ -8,7 +8,8 @@ import FaqSection from "@/components/sections/FaqSection.vue";
 import HeroSection from "@/components/sections/HeroSection.vue";
 import StaffSection from "@/components/sections/StaffSection.vue";
 import TeamSection from "@/components/sections/TeamSection.vue";
-import { faqs, teamRegions } from "@/data/site";
+import { faqs } from "@/data/site";
+import { teamRegions } from "@/data/teams";
 import { useUiStore } from "@/stores/ui";
 import Atmosphere from "@/components/background/Atmosphere.vue";
 

@@ -4,18 +4,6 @@ export type AccordionItem = {
   color?: string
 }
 
-export type TeamCard = {
-  name: string
-  players: string[]
-}
-
-export type TeamRegion = {
-  id: string
-  label: string
-  icon: string
-  teams: TeamCard[]
-}
-
 export type StaffMember = {
   name: string
   color: string
@@ -30,18 +18,6 @@ export const staffRoles = [
   { id: "moderators", label: "staff.roles.moderators" },
   { id: "staff", label: "staff.roles.staff" },
   { id: "media", label: "staff.roles.media" },
-]
-
-const roster = (name: string): TeamCard => ({
-  name,
-  players: ["yiruzu", "yiruzu", "yiruzu", "yiruzu", "yiruzu"],
-})
-
-export const teamRegions: TeamRegion[] = [
-  { id: "emea", label: "teams.regions.emea", icon: "pixel:globe-europe", teams: [roster("SkyFlock"), roster("Penguin"), roster("Swift"), roster("Nightwing")] },
-  { id: "na", label: "teams.regions.na", icon: "pixel:globe-americas", teams: [roster("SkyFlock"), roster("Penguin")] },
-  { id: "sa", label: "teams.regions.sa", icon: "pixel:globe-americas", teams: [roster("Swift"), roster("Nightwing")] },
-  { id: "oce", label: "teams.regions.oce", icon: "pixel:globe", teams: [roster("Penguin"), roster("Nightwing")] },
 ]
 
 export const faqs: AccordionItem[] = [

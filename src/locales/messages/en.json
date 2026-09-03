@@ -21,8 +21,25 @@
     "staff": { "title": "Staff", "description": "Meet the crew that keeps Feather moving." }
   },
   "teams": {
-    "card": { "game": "Esport", "players": "Players", "staff": "Staff", "details": "View full details" },
-    "regions": { "emea": "EMEA teams", "na": "NA teams", "sa": "SA teams", "oce": "OCE teams" },
+    "card": {
+      "game": "Esport",
+      "players": "Players",
+      "staff": "Staff",
+      "details": "View full details",
+      "advanced": "Advanced view",
+      "memberView": "Team members",
+      "tournaments": "Tournaments",
+      "achievements": "Achievements",
+      "results": "Recent results",
+      "upcoming": "Upcoming match",
+      "none": "None recorded",
+      "sub": "Sub",
+      "dnp": "DNP"
+    },
+    "tiers": { "expert": "Expert" },
+    "roles": { "dps": "DPS", "support": "Support", "tank": "Tank", "flex": "Flex" },
+    "staff": { "coach": "Coach", "headCoach": "Head Coach", "manager": "Manager", "analyst": "Analyst", "media": "Media Staff" },
+    "regions": { "label": "Team regions", "emea": "EMEA teams", "na": "NA teams", "sa": "SA teams", "oce": "OCE teams" },
     "emea": { "label": "EMEA teams", "detail": "Our European rosters and the players representing Feather." },
     "na": { "label": "NA teams", "detail": "North American competition, community, and upcoming rosters." },
     "sa": { "label": "SA teams", "detail": "South American players building the next Feather chapter." },
