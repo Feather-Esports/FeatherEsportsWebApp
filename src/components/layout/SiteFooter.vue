@@ -15,15 +15,16 @@ const { t } = useI18n();
 
 <style scoped>
 footer {
+  z-index: 2;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid var(--color-line);
-  gap: 1.188rem;
   margin-top: auto;
-  padding: 1.7rem;
-  position: relative;
-  z-index: 2;
+  gap: 1.188rem;
+  padding: 1.5rem;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-line);
 }
 .wordmark {
   display: inline-flex;
