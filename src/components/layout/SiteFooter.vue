@@ -45,6 +45,5 @@ footer {
   font-family: var(--font-title);
   color: var(--color-text);
   font-size: 0.9rem;
-  letter-spacing: -0.03em;
 }
 </style>
