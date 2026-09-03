@@ -86,7 +86,7 @@ const { t } = useI18n();
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.11em;
-  text-transform: uppercase;
+  word-spacing: -0.5em;
 
   .subtitle-divider {
     color: var(--color-brand);
@@ -132,7 +132,7 @@ const { t } = useI18n();
   font-family: var(--font-title);
   font-size: 0.748rem;
   font-weight: 500;
-  gap: 0.27rem;
+  gap: 0.3rem;
   padding: 0 0.8rem;
   border: 0.11rem solid var(--color-line);
   border-radius: 0.16rem;

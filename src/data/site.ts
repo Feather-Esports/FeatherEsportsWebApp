@@ -67,7 +67,7 @@ export const staff: StaffMember[] = [
 export const socialLinks = [
   { icon: "pixel:twitch", label: "Twitch", href: "https://www.twitch.tv/fthresports" },
   { icon: "pixel:youtube", label: "YouTube", href: "https://www.youtube.com/@FeatherEsports" },
-  { icon: "pixel:x", label: "X / Twitter", href: "https://x.com/FeatherEsports" },
+  { icon: "pixel:x", label: "X/Twitter", href: "https://x.com/FeatherEsports" },
   { icon: "pixel:tiktok", label: "TikTok", href: "https://www.tiktok.com/@featheresports" },
   { icon: "pixel:instagram", label: "Instagram", href: "https://www.instagram.com/fthr_esports" },
 ] as const
