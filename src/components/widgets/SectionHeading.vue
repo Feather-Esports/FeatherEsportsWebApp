@@ -6,27 +6,36 @@ defineProps<{ title: string; description: string }>();
   <div class="section-heading">
     <div>
       <h2>{{ title }}</h2>
-      <p v-if="description">{{ description }}</p>
+      <p>{{ description }}</p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .section-heading {
-  align-items: flex-start;
-  background: linear-gradient(90deg, var(--color-heading-glow), transparent);
-  border-left: 2px solid var(--color-brand);
   display: flex;
-  padding: 1rem 1.25rem;
+  align-items: flex-start;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-brand) 15%, transparent) 0%,
+      transparent 100%
+    ),
+    #09090b;
+  border-left: 2px solid var(--color-brand);
+  padding: 1.5rem 1.875rem;
 }
 h2 {
+  color: var(--color-title);
   font-family: var(--font-title);
-  font-size: 1.7rem;
+  font-size: 1.563rem;
+  font-weight: 700;
   text-transform: uppercase;
 }
 p {
   color: var(--color-text);
-  font-size: 0.57rem;
-  margin-top: 0.2rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  margin-top: 0.7rem;
 }
 </style>
