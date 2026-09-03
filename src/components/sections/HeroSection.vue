@@ -9,32 +9,35 @@ const { t } = useI18n();
 
 <template>
   <section id="home" class="hero" aria-labelledby="hero-title">
-    <h1 id="hero-title">{{ t("hero.title") }}</h1>
-    <p class="hero-subtitle">
-      <template v-for="(part, index) in t('hero.subtitle').split('/')" :key="index">
-        <span v-if="index" class="subtitle-divider">/</span>{{ part }}
-      </template>
-    </p>
-    <p class="hero-description">{{ t("hero.description") }}</p>
-    <a class="hero-discord" :href="discordLink.href" target="_blank" rel="noreferrer"
-      ><Icon :icon="discordLink.icon" width="2rem" /> {{ t("hero.discord") }}</a
-    >
-    <div class="social-links" aria-label="Social links">
-      <a
-        v-for="social in socialLinks"
-        :key="social.label"
-        :href="social.href"
-        target="_blank"
-        rel="noreferrer"
+    <div class="hero-content">
+      <h1 id="hero-title">{{ t("hero.title") }}</h1>
+      <p class="hero-subtitle">
+        <template v-for="(part, index) in t('hero.subtitle').split('/')" :key="index">
+          <span v-if="index" class="subtitle-divider">/</span>{{ part }}
+        </template>
+      </p>
+      <p class="hero-description">{{ t("hero.description") }}</p>
+      <a class="hero-cta" :href="discordLink.href" target="_blank" rel="noreferrer"
+        ><Icon :icon="discordLink.icon" width="2rem" /> {{ t("hero.discord") }}</a
       >
-        <Icon :icon="social.icon" width="1.175rem" /> {{ social.label }}</a
-      >
+      <div class="social-links" aria-label="Social links">
+        <a
+          v-for="social in socialLinks"
+          :key="social.label"
+          :href="social.href"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Icon :icon="social.icon" width="1.175rem" /> {{ social.label }}</a
+        >
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
 .hero {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,17 +46,32 @@ const { t } = useI18n();
   padding: 8rem 1.25rem 6rem;
   margin-left: calc(50% - 50vw);
   min-height: 100svh;
-  gap: 1.25rem;
   text-align: center;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(9, 9, 11, 0) 0%,
-      rgba(9, 9, 11, 0.15) 50%,
-      rgba(9, 9, 11, 0.75) 75%,
-      var(--color-bg) 100%
-    ),
-    url("@/assets/images/feather_banner_bg.png") center / cover;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(9, 9, 11, 0) 0%,
+        rgba(9, 9, 11, 0.15) 50%,
+        rgba(9, 9, 11, 0.75) 75%,
+        rgba(9, 9, 11, 0.15) 100%
+      ),
+      url("@/assets/images/feather_banner_bg.png") center / cover;
+    mask: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+    -webkit-mask: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  }
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 .hero h1 {
   color: var(--color-brand);
@@ -81,9 +99,11 @@ const { t } = useI18n();
   font-size: 1rem;
   line-height: 1.88em;
 }
-.hero-discord {
+
+.hero-cta {
   display: inline-flex;
   align-items: center;
+  margin-top: 0.5rem;
   height: 2.75rem;
   padding: 0 0.92rem;
   color: var(--color-brand-muted);
@@ -139,7 +159,7 @@ const { t } = useI18n();
     line-height: 1.6;
     max-width: 27rem;
   }
-  .hero-discord {
+  .hero-cta {
     font-size: 0.82rem;
     height: 2.5rem;
   }

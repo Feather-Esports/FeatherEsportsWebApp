@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
-import { useEventListener, useWindowSize } from "@vueuse/core";
+import { computed } from "vue";
+import { useWindowSize } from "@vueuse/core";
+import { Icon } from "@iconify/vue";
 
-const CELL_SIZE = 22;
-const INTERACTION_RADIUS = 6;
-const INTERACTION_RADIUS_SQUARED = INTERACTION_RADIUS ** 2;
+const CELL_SIZE = 30;
+const PLUS_COUNT = 25;
 
 const { width, height } = useWindowSize();
-const squareElements = ref<(HTMLElement | null)[]>([]);
-let pointerX = -1;
-let pointerY = -1;
-let frameId = 0;
-let affectedIndices: number[] = [];
 
 const columns = computed(() => Math.ceil(width.value / CELL_SIZE));
 const rows = computed(() => Math.ceil(height.value / CELL_SIZE));
@@ -19,119 +14,99 @@ const squares = computed(() =>
   Array.from({ length: columns.value * rows.value }, (_, index) => index),
 );
 
-function setSquareElement(index: number, element: unknown) {
-  squareElements.value[index] = element instanceof HTMLElement ? element : null;
-}
-
-function resetSquares() {
-  for (const index of affectedIndices) {
-    squareElements.value[index]?.style.setProperty("--intensity", "0");
-  }
-  affectedIndices = [];
-}
-
-function updateSquares() {
-  frameId = 0;
-  resetSquares();
-
-  if (pointerX < 0 || pointerY < 0) {
-    return;
-  }
-
-  const centerColumn = Math.floor(pointerX / CELL_SIZE);
-  const centerRow = Math.floor(pointerY / CELL_SIZE);
-  const firstColumn = Math.max(0, centerColumn - INTERACTION_RADIUS);
-  const lastColumn = Math.min(columns.value - 1, centerColumn + INTERACTION_RADIUS);
-  const firstRow = Math.max(0, centerRow - INTERACTION_RADIUS);
-  const lastRow = Math.min(rows.value - 1, centerRow + INTERACTION_RADIUS);
-
-  for (let row = firstRow; row <= lastRow; row += 1) {
-    for (let column = firstColumn; column <= lastColumn; column += 1) {
-      const index = row * columns.value + column;
-      const centerX = column * CELL_SIZE + CELL_SIZE / 2;
-      const centerY = row * CELL_SIZE + CELL_SIZE / 2;
-      const distanceX = (pointerX - centerX) / CELL_SIZE;
-      const distanceY = (pointerY - centerY) / CELL_SIZE;
-      const distanceSquared = distanceX * distanceX + distanceY * distanceY;
-      const element = squareElements.value[index];
-
-      if (element && distanceSquared <= INTERACTION_RADIUS_SQUARED) {
-        const intensity = Math.max(0.08, 1 - distanceSquared / INTERACTION_RADIUS_SQUARED);
-        element.style.setProperty("--intensity", intensity.toString());
-        affectedIndices.push(index);
-      }
-    }
-  }
-}
-
-function scheduleUpdate() {
-  if (frameId === 0) {
-    frameId = requestAnimationFrame(updateSquares);
-  }
-}
-
-useEventListener("pointermove", (event) => {
-  pointerX = event.clientX;
-  pointerY = event.clientY;
-  scheduleUpdate();
-});
-useEventListener("pointerleave", () => {
-  pointerX = -1;
-  pointerY = -1;
-  scheduleUpdate();
-});
-
-onBeforeUnmount(() => {
-  if (frameId !== 0) {
-    cancelAnimationFrame(frameId);
-  }
-});
+const pluses = computed(() =>
+  Array.from({ length: PLUS_COUNT }, (_, index) => ({
+    id: index,
+    left: `${2 + ((index * 37) % 94)}%`,
+    top: `${2 + ((index * 53) % 94)}%`,
+    size: `${0.7 + (index % 4) * 0.25}rem`,
+    delay: `${(index % 6) * -0.8}s`,
+    duration: `${5 + (index % 4)}s`,
+    driftX: `${index % 2 ? 5 : -5}rem`,
+    driftY: `${index % 3 ? -4 : 4}rem`,
+  })),
+);
 </script>
 
 <template>
-  <div class="atmosphere" aria-hidden="true">
+  <div class="atmosphere-grid" aria-hidden="true">
     <div class="grid" :style="{ '--columns': columns }">
-      <span
-        v-for="index in squares"
-        :key="index"
-        class="square"
-        :ref="(element) => setSquareElement(index, element)"
-      />
+      <span v-for="index in squares" :key="index" class="square" />
     </div>
+  </div>
+  <div class="atmosphere-pluses" aria-hidden="true">
+    <Icon
+      v-for="plus in pluses"
+      :key="`plus-${plus.id}`"
+      class="atmosphere-plus"
+      icon="pixel:plus"
+      :style="{
+        '--left': plus.left,
+        '--top': plus.top,
+        '--size': plus.size,
+        '--delay': plus.delay,
+        '--duration': plus.duration,
+        '--drift-x': plus.driftX,
+        '--drift-y': plus.driftY,
+      }"
+    />
   </div>
 </template>
 
 <style scoped>
-.atmosphere {
-  background: radial-gradient(circle at 78% 12%, transparent 22rem);
-  height: 100vh;
+.atmosphere-grid,
+.atmosphere-pluses {
   inset: 0;
+  width: 100vw;
   pointer-events: none;
-  position: fixed;
-  width: 100%;
-  z-index: -1;
 }
+.atmosphere-grid {
+  z-index: 0;
+  position: fixed;
+  height: 100vh;
+}
+.atmosphere-pluses {
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  height: auto;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(var(--columns), 22px);
-  grid-auto-rows: 22px;
+  grid-template-columns: repeat(var(--columns), 30px);
+  grid-auto-rows: 30px;
+  width: 100%;
   height: 100%;
   overflow: hidden;
-  width: 100%;
 }
 .square {
-  align-self: center;
-  height: 3px;
   justify-self: center;
-  --intensity: 0;
-  opacity: calc(0.45 + var(--intensity) * 0.55);
-  width: 3px;
-  background: color-mix(
-    in srgb,
-    var(--color-brand) calc(var(--intensity) * 100%),
-    var(--color-grid)
-  );
-  box-shadow: 0 0 calc(var(--intensity) * 16px) calc(var(--intensity) * 5px) var(--color-glow);
-  transform: scale(calc(1 + var(--intensity) * 1.1));
+  align-self: center;
+  width: 4px;
+  height: 4px;
+  background: var(--color-grid);
+  opacity: 0.7;
+}
+
+.atmosphere-plus {
+  z-index: 2;
+  position: absolute;
+  left: var(--left);
+  top: var(--top);
+  width: var(--size);
+  height: var(--size);
+  color: var(--color-brand);
+  animation: float-plus var(--duration) ease-in-out var(--delay) infinite alternate;
+}
+@keyframes float-plus {
+  from {
+    opacity: 0.3;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    opacity: 0.8;
+    transform: translate3d(var(--drift-x), var(--drift-y), 0) rotate(90deg);
+  }
 }
 </style>

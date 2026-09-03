@@ -3,13 +3,14 @@ import { Icon } from "@iconify/vue";
 import { useI18n } from "vue-i18n";
 import SiteFooter from "@/components/layout/SiteFooter.vue";
 import SiteHeader from "@/components/layout/SiteHeader.vue";
-import AccordionList from "@/components/ui/AccordionList.vue";
-import HeroSection from "@/components/ui/HeroSection.vue";
-import SectionHeading from "@/components/ui/SectionHeading.vue";
-import StaffSection from "@/components/ui/StaffSection.vue";
-import TeamRoster from "@/components/ui/TeamRoster.vue";
+import SectionHeading from "@/components/widgets/SectionHeading.vue";
+import FaqSection from "@/components/sections/FaqSection.vue";
+import HeroSection from "@/components/sections/HeroSection.vue";
+import StaffSection from "@/components/sections/StaffSection.vue";
+import TeamSection from "@/components/sections/TeamSection.vue";
 import { faqs, teamRegions } from "@/data/site";
 import { useUiStore } from "@/stores/ui";
+import Atmosphere from "@/components/background/Atmosphere.vue";
 
 const { t } = useI18n();
 const uiStore = useUiStore();
@@ -17,8 +18,9 @@ const uiStore = useUiStore();
 
 <template>
   <div class="site-shell">
+    <Atmosphere />
     <SiteHeader />
-    <main id="top">
+    <main>
       <HeroSection />
 
       <section id="teams" class="content-section" aria-labelledby="teams-title">
@@ -26,7 +28,7 @@ const uiStore = useUiStore();
           :title="t('sections.teams.title')"
           :description="t('sections.teams.description')"
         />
-        <TeamRoster :regions="teamRegions" />
+        <TeamSection :regions="teamRegions" />
       </section>
 
       <section id="matches" class="content-section compact" aria-labelledby="matches-title">
@@ -46,12 +48,7 @@ const uiStore = useUiStore();
           :title="t('sections.faq.title')"
           :description="t('sections.faq.description')"
         />
-        <AccordionList
-          :items="faqs"
-          numbered
-          :open-item="uiStore.openAccordion"
-          @toggle="uiStore.toggleAccordion"
-        />
+        <FaqSection :items="faqs" :open-item="uiStore.openFaq" @toggle="uiStore.toggleFaq" />
       </section>
 
       <StaffSection>
@@ -69,21 +66,10 @@ const uiStore = useUiStore();
 .site-shell {
   display: flex;
   flex-direction: column;
-  isolation: isolate;
   min-height: 100vh;
   font-family: var(--font-body);
   position: relative;
   z-index: 1;
-}
-.site-shell::before {
-  background-image: radial-gradient(var(--color-grid) 1px, transparent 1px);
-  background-size: 1rem 1rem;
-  content: "";
-  inset: 0;
-  opacity: 0.42;
-  pointer-events: none;
-  position: fixed;
-  z-index: -1;
 }
 main {
   flex: 1;
@@ -94,7 +80,9 @@ main {
   margin: 4.5rem auto 0;
   max-width: 68rem;
   padding: 0 1.25rem;
+  position: relative;
   scroll-margin-top: 6rem;
+  z-index: 2;
 }
 .empty-state {
   align-items: center;

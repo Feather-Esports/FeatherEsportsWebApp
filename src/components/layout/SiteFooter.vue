@@ -22,6 +22,8 @@ footer {
   gap: 1.188rem;
   margin-top: auto;
   padding: 1.7rem;
+  position: relative;
+  z-index: 2;
 }
 .wordmark {
   display: inline-flex;

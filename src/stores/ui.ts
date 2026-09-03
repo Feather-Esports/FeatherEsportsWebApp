@@ -2,13 +2,9 @@ import { defineStore } from "pinia"
 import { ref } from "vue"
 
 export const useUiStore = defineStore("ui", () => {
-  const openAccordion = ref<string | null>(null)
   const activeTeamRegion = ref("emea")
   const activeStaffRole = ref("founders")
-
-  function toggleAccordion(label: string) {
-    openAccordion.value = openAccordion.value === label ? null : label
-  }
+  const openFaq = ref<string | null>(null)
 
   function selectTeamRegion(region: string) {
     activeTeamRegion.value = region
@@ -18,12 +14,16 @@ export const useUiStore = defineStore("ui", () => {
     activeStaffRole.value = role
   }
 
+  function toggleFaq(label: string) {
+    openFaq.value = openFaq.value === label ? null : label
+  }
+
   return {
     activeStaffRole,
     activeTeamRegion,
-    openAccordion,
+    openFaq,
     selectStaffRole,
     selectTeamRegion,
-    toggleAccordion,
+    toggleFaq,
   }
 })
