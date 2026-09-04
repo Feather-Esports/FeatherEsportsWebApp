@@ -18,7 +18,7 @@ const { t } = useI18n();
       </p>
       <p class="hero-description">{{ t("hero.description") }}</p>
       <a class="hero-cta" :href="discordLink.href" target="_blank" rel="noreferrer"
-        ><Icon :icon="discordLink.icon" width="2rem" /> {{ t("hero.discord") }}</a
+        ><Icon :icon="discordLink.icon" width="2rem" /> {{ t("hero.cta") }}</a
       >
       <div class="social-links" aria-label="Social links">
         <a
@@ -101,6 +101,8 @@ const { t } = useI18n();
 }
 
 .hero-cta {
+  overflow: hidden;
+  position: relative;
   display: inline-flex;
   align-items: center;
   margin-top: 0.5rem;
@@ -115,6 +117,43 @@ const { t } = useI18n();
   border-radius: 0.28rem;
   background: var(--color-brand);
   text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
+  box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, var(--color-brand) 20%, transparent);
+  transition:
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    filter 250ms ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      color-mix(in srgb, #fff 35%, transparent),
+      transparent
+    );
+    transition: left 550ms ease-in-out;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.4rem 1.25rem color-mix(in srgb, var(--color-brand) 40%, transparent);
+    filter: brightness(1.08);
+
+    &::before {
+      left: 140%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 0.2rem 0.5rem color-mix(in srgb, var(--color-brand) 30%, transparent);
+  }
 }
 
 .social-links {
@@ -134,15 +173,25 @@ const { t } = useI18n();
   font-weight: 500;
   gap: 0.3rem;
   padding: 0 0.8rem;
-  border: 0.11rem solid var(--color-line);
+  border: 0.15rem solid var(--color-line-soft);
   border-radius: 0.16rem;
   text-transform: uppercase;
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease,
+    color 250ms ease,
+    text-shadow 250ms ease,
+    transform 250ms ease;
 
   &:hover {
     background: var(--color-title);
     border-color: var(--color-title);
     color: var(--color-line);
     text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-title) 25%, transparent);
+    transform: translateY(-2px);
+  }
+  &:active {
+    transform: translateY(0);
   }
 }
 

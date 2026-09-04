@@ -12,7 +12,7 @@
     "title": "Feather Esports",
     "subtitle": "Teams / Scrims / PUGs / Tournaments",
     "description": "We are a grassroots Overwatch organization competing in tournaments across multiple skill tiers. We are focused on building competitive teams, developing players, and growing our place in the Overwatch community.",
-    "discord": "Join Our Community"
+    "cta": "Join Our Community"
   },
   "sections": {
     "teams": { "title": "Teams", "description": "Regional rosters and the players representing Feather." },
