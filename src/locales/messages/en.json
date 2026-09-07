@@ -23,30 +23,17 @@
   },
   "teams": {
     "card": {
-      "game": "Esport",
       "players": "Players",
       "staff": "Staff",
-      "details": "View full details",
       "advanced": "Advanced view",
-      "memberView": "Team members",
-      "tournaments": "Tournaments",
-      "achievements": "Achievements",
-      "results": "Recent results",
-      "upcoming": "Upcoming match",
-      "none": "None recorded",
+      "memberView": "Team Members",
       "sub": "Sub",
       "dnp": "DNP"
     },
-    "tiers": { "expert": "Expert" },
-    "roles": { "dps": "DPS", "support": "Support", "tank": "Tank", "flex": "Flex" },
-    "staff": { "coach": "Coach", "headCoach": "Head Coach", "manager": "Manager", "analyst": "Analyst", "media": "Media Staff" },
-    "regions": { "label": "Team regions", "emea": "EMEA teams", "na": "NA teams", "sa": "SA teams", "oce": "OCE teams" },
-    "emea": { "label": "EMEA teams", "detail": "Our European rosters and the players representing Feather." },
-    "na": { "label": "NA teams", "detail": "North American competition, community, and upcoming rosters." },
-    "sa": { "label": "SA teams", "detail": "South American players building the next Feather chapter." },
-    "oce": { "label": "OCE teams", "detail": "Oceanic talent, tournaments, and regional events." }
+    "roles": { "tank": "Tank", "damage": "Damage", "support": "Support", "flex": "Flex" },
+    "staff": { "manager": "Manager", "headCoach": "Head Coach", "coach": "Coach", "analyst": "Analyst", "captain": "Captain", "media": "Media" },
+    "regions": { "label": "Team Regions", "emea": "EMEA Teams", "na": "NA Teams", "sa": "SA Teams", "oce": "OCE Teams" }
   },
-  "matches": { "empty": "matches are not available yet.", "hint": "This feature is still under development." },
   "faq": {
     "join": { "label": "How do I join a team?", "detail": "Keep an eye on our announcements and submit your details when tryouts open." },
     "watch": { "label": "Where can I watch Feather?", "detail": "Follow our social channels for match schedules and live broadcast links." },

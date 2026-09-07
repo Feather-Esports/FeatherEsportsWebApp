@@ -29,7 +29,6 @@ export const faqs: AccordionItem[] = [
 ]
 
 export const staff: StaffMember[] = [
-  { name: "Blaco", color: "var(--color-bg)", icon: "pixel:user-solid", roles: ["staff", "founders"], subRoles: ["staff.subRoles.community"] },
   {
     name: "Kepler",
     color: "var(--color-bg)",
@@ -38,6 +37,7 @@ export const staff: StaffMember[] = [
     subRoles: ["staff.subRoles.networking", "staff.subRoles.team"],
   },
   { name: "Yiruzu", color: "var(--color-bg)", icon: "pixel:laptop-solid", roles: ["staff", "media", "founders"], subRoles: ["staff.subRoles.tech", "staff.subRoles.media"] },
+  { name: "Blaco", color: "var(--color-bg)", icon: "pixel:user-solid", roles: ["staff", "founders"], subRoles: ["staff.subRoles.community"] },
 ]
 
 export const socialLinks = [
