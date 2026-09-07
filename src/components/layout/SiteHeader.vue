@@ -145,6 +145,7 @@ const navigation = [
 .wip-indicator {
   border: 1px solid var(--color-brand);
   color: var(--color-brand);
+  cursor: help;
 }
 .discord-link {
   background: var(--color-brand);
