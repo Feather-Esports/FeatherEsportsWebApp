@@ -43,7 +43,6 @@ const { t } = useI18n();
   justify-content: center;
   flex-direction: column;
   width: 100vw;
-  padding: 8rem 1.25rem 6rem;
   margin-left: calc(50% - 50vw);
   min-height: 100svh;
   text-align: center;
@@ -166,13 +165,13 @@ const { t } = useI18n();
 .social-links a {
   display: inline-flex;
   align-items: center;
-  height: 2.4rem;
+  height: 2.7rem;
   color: var(--color-title);
   font-family: var(--font-title);
-  font-size: 0.748rem;
+  font-size: 0.8rem;
   font-weight: 500;
   gap: 0.3rem;
-  padding: 0 0.8rem;
+  padding: 0 0.85rem;
   border: 0.15rem solid var(--color-line-soft);
   border-radius: 0.16rem;
   text-transform: uppercase;
@@ -221,12 +220,6 @@ const { t } = useI18n();
     font-size: 0.7rem;
     height: 2.4rem;
     padding: 0 0.55rem;
-  }
-}
-@media (max-height: 700px) and (min-width: 761px) {
-  .hero {
-    padding-bottom: 3rem;
-    padding-top: 5rem;
   }
 }
 </style>
