@@ -9,6 +9,7 @@ const { t } = useI18n();
   <footer>
     <a class="wordmark" href="/" :aria-label="t('footer.label')"
       ><Icon icon="game-icons:feather" /><span>Feather</span></a
+    ><span class="footer-divider">//</span><a class="contact" href="/">{{ t("footer.contact") }}</a
     ><span class="footer-divider">//</span><a class="legal" href="/">{{ t("footer.legal") }}</a>
   </footer>
 </template>
@@ -40,10 +41,17 @@ footer {
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 500;
+  pointer-events: none;
 }
+.contact,
 .legal {
   font-family: var(--font-title);
   color: var(--color-text);
   font-size: 0.9rem;
+  transition: color 150ms ease-in-out;
+
+  &:hover {
+    color: var(--color-title);
+  }
 }
 </style>

@@ -57,5 +57,5 @@
     "roles": { "label": "Staff roles", "founders": "Founders", "administrators": "Administrators", "moderators": "Moderators", "staff": "Staff", "media": "Media" },
     "subRoles": { "community": "Community Staff", "networking": "Networking Staff", "team": "Team Staff", "tech": "Tech Staff", "media": "Media Staff" }
   },
-  "footer": { "label": "Feather Esports", "legal": "Legal Notice" }
+  "footer": { "label": "Feather Esports", "contact": "Contact", "legal": "Legal Notice" }
 }
