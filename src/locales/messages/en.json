@@ -1,6 +1,6 @@
 {
   "header": {
-    "nav": { "home": "Home", "teams": "Teams", "matches": "Matches", "faq": "FAQ", "staff": "Staff" },
+    "nav": { "teams": "Teams", "faq": "FAQ", "matches": "Matches", "partners": "Partners", "staff": "Staff" },
     "wip": "WIP",
     "wipTooltip": {
       "title": "Work In Progress",
@@ -16,8 +16,9 @@
   },
   "sections": {
     "teams": { "title": "Teams", "description": "Regional rosters and the players representing Feather." },
-    "matches": { "title": "Matches", "description": "Track our next appearances and results." },
     "faq": { "title": "FAQ", "description": "Answers to a few frequently asked questions." },
+    "matches": { "title": "Matches", "description": "Track our next appearances and results." },
+    "partners": { "title": "Partners", "description": "Our official partners proudly affiliated with Feather Esports." },
     "staff": { "title": "Staff", "description": "Meet the crew that keeps Feather moving." }
   },
   "teams": {
@@ -53,6 +54,7 @@
     "work": { "label": "How can I work with Feather?", "detail": "Reach out through our business contact channels with a short introduction." },
     "based": { "label": "Where is Feather based?", "detail": "We are an online-first organization with teams across multiple regions." }
   },
+  "matches": { "empty": "matches are not available yet.", "hint": "This feature is still under development." },
   "staff": {
     "roles": { "label": "Staff roles", "founders": "Founders", "administrators": "Administrators", "moderators": "Moderators", "staff": "Staff", "media": "Media" },
     "subRoles": { "community": "Community Staff", "networking": "Networking Staff", "team": "Team Staff", "tech": "Tech Staff", "media": "Media Staff" }

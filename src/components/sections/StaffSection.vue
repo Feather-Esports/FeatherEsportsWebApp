@@ -13,33 +13,31 @@ const visibleStaff = computed(() =>
 </script>
 
 <template>
-  <section id="staff" class="content-section staff-section" aria-labelledby="staff-title">
-    <slot />
-    <div class="staff-tabs" role="tablist" :aria-label="t('staff.roles.label')">
-      <button
-        v-for="role in staffRoles"
-        :key="role.id"
-        type="button"
-        role="tab"
-        :aria-selected="uiStore.activeStaffRole === role.id"
-        :class="{ active: uiStore.activeStaffRole === role.id }"
-        @click="uiStore.selectStaffRole(role.id)"
-      >
-        {{ t(role.label) }}
-      </button>
-    </div>
-    <div class="staff-grid">
-      <article v-for="member in visibleStaff" :key="member.name" class="staff-card">
-        <div class="staff-avatar" :style="{ backgroundColor: member.color }">
-          <Icon :icon="member.icon" width="42" />
-        </div>
-        <div>
-          <h3>{{ member.name }}</h3>
-          <p v-for="role in member.subRoles" :key="role">- {{ t(role) }}</p>
-        </div>
-      </article>
-    </div>
-  </section>
+  <slot />
+  <div class="staff-tabs" role="tablist" :aria-label="t('staff.roles.label')">
+    <button
+      v-for="role in staffRoles"
+      :key="role.id"
+      type="button"
+      role="tab"
+      :aria-selected="uiStore.activeStaffRole === role.id"
+      :class="{ active: uiStore.activeStaffRole === role.id }"
+      @click="uiStore.selectStaffRole(role.id)"
+    >
+      {{ t(role.label) }}
+    </button>
+  </div>
+  <div class="staff-grid">
+    <article v-for="member in visibleStaff" :key="member.name" class="staff-card">
+      <div class="staff-avatar" :style="{ backgroundColor: member.color }">
+        <Icon :icon="member.icon" width="42" />
+      </div>
+      <div>
+        <h3>{{ member.name }}</h3>
+        <p v-for="role in member.subRoles" :key="role">- {{ t(role) }}</p>
+      </div>
+    </article>
+  </div>
 </template>
 
 <style scoped>
@@ -97,9 +95,6 @@ const visibleStaff = computed(() =>
   margin-top: 0.25rem;
   padding-right: 0.7rem;
 }
-.staff-section {
-  margin-bottom: 4rem;
-}
 @media (max-width: 760px) {
   .staff-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -117,9 +112,6 @@ const visibleStaff = computed(() =>
   .staff-avatar {
     min-height: 5.5rem;
     width: 5.5rem;
-  }
-  .staff-section {
-    margin-bottom: 5rem;
   }
 }
 </style>

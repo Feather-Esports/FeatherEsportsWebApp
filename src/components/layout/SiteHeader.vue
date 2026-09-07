@@ -9,10 +9,10 @@ const { t } = useI18n();
 const menuOpen = ref(false);
 
 const navigation = [
-  { id: "home", label: "header.nav.home" },
   { id: "teams", label: "header.nav.teams" },
-  { id: "matches", label: "header.nav.matches" },
   { id: "faq", label: "header.nav.faq" },
+  { id: "matches", label: "header.nav.matches" },
+  { id: "partners", label: "header.nav.partners" },
   { id: "staff", label: "header.nav.staff" },
 ];
 </script>

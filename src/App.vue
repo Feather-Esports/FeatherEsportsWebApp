@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import { useI18n } from "vue-i18n";
 import SiteFooter from "@/components/layout/SiteFooter.vue";
 import SiteHeader from "@/components/layout/SiteHeader.vue";
 import SectionHeading from "@/components/widgets/SectionHeading.vue";
-import FaqSection from "@/components/sections/FaqSection.vue";
 import HeroSection from "@/components/sections/HeroSection.vue";
-import StaffSection from "@/components/sections/StaffSection.vue";
 import TeamSection from "@/components/sections/TeamSection.vue";
+import FaqSection from "@/components/sections/FaqSection.vue";
+import MatchesSection from "@/components/sections/MatchesSection.vue";
+import StaffSection from "@/components/sections/StaffSection.vue";
 import { faqs } from "@/data/site";
 import { teamRegions } from "@/data/teams";
 import { useUiStore } from "@/stores/ui";
@@ -19,47 +19,59 @@ const uiStore = useUiStore();
 
 <template>
   <div class="site-shell">
-    <Atmosphere />
-    <SiteHeader />
+    <Atmosphere v-once />
+    <SiteHeader v-once />
     <main>
-      <HeroSection />
+      <HeroSection v-once />
 
+      <!-- Teams -->
       <section id="teams" class="content-section" aria-labelledby="teams-title">
         <SectionHeading
           :title="t('sections.teams.title')"
           :description="t('sections.teams.description')"
+          v-once
         />
         <TeamSection :regions="teamRegions" />
       </section>
 
-      <section id="matches" class="content-section compact" aria-labelledby="matches-title">
-        <SectionHeading
-          :title="t('sections.matches.title')"
-          :description="t('sections.matches.description')"
-        />
-        <div class="empty-state">
-          <Icon icon="pixel:calendar-alt-solid" />
-          <p>{{ t("matches.empty") }}</p>
-          <span>{{ t("matches.hint") }}</span>
-        </div>
-      </section>
-
+      <!-- FAQ -->
       <section id="faq" class="content-section" aria-labelledby="faq-title">
         <SectionHeading
           :title="t('sections.faq.title')"
           :description="t('sections.faq.description')"
+          v-once
         />
         <FaqSection :items="faqs" :open-item="uiStore.openFaq" @toggle="uiStore.toggleFaq" />
       </section>
 
-      <StaffSection>
+      <!-- Matches -->
+      <section id="matches" class="content-section" aria-labelledby="matches-title" v-once>
+        <SectionHeading
+          :title="t('sections.matches.title')"
+          :description="t('sections.matches.description')"
+        />
+        <MatchesSection />
+      </section>
+
+      <!-- Partners -->
+      <section id="partners" class="content-section" aria-labelledby="partners-title" v-once>
+        <SectionHeading
+          :title="t('sections.partners.title')"
+          :description="t('sections.partners.description')"
+        />
+      </section>
+
+      <!-- Staff -->
+      <section id="staff" class="content-section" aria-labelledby="staff-title">
         <SectionHeading
           :title="t('sections.staff.title')"
           :description="t('sections.staff.description')"
+          v-once
         />
-      </StaffSection>
+        <StaffSection />
+      </section>
     </main>
-    <SiteFooter />
+    <SiteFooter v-once />
   </div>
 </template>
 
@@ -84,30 +96,6 @@ main {
   position: relative;
   scroll-margin-top: 6rem;
   z-index: 2;
-}
-.empty-state {
-  align-items: center;
-  border: 1px solid var(--color-line);
-  color: var(--color-text);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  justify-content: center;
-  min-height: 10rem;
-  padding: 2.5rem 1rem;
-  text-align: center;
-}
-.empty-state svg {
-  color: var(--color-brand);
-}
-.empty-state p {
-  color: var(--color-title);
-  font-family: var(--font-title);
-  font-size: 1.1rem;
-  text-transform: uppercase;
-}
-.empty-state span {
-  font-size: 0.58rem;
 }
 @media (max-width: 760px) {
   .content-section {

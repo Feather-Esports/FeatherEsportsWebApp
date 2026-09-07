@@ -8,7 +8,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <section id="home" class="hero" aria-labelledby="hero-title">
+  <section class="hero" aria-labelledby="hero-title">
     <div class="hero-content">
       <h1 id="hero-title">{{ t("hero.title") }}</h1>
       <p class="hero-subtitle">
