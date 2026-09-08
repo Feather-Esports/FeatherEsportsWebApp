@@ -89,107 +89,118 @@ function getTeamLogo(id: string) {
   </div>
 
   <div class="team-rosters">
-    <template v-if="activeRegion.teams && activeRegion.teams.length">
-      <article
-        v-for="team in activeRegion.teams"
-        :key="team.id"
-        class="team-card"
-        :class="{ expanded: expandedTeams.has(team.id) }"
-        :style="{ '--team-color': team.color }"
-      >
-        <header class="team-card-header">
-          <img class="team-logo" :src="getTeamLogo(team.id)" :alt="team.name" />
-
-          <div class="team-name">{{ team.name }}</div>
-          <div class="team-tier">{{ team.skillTier }}</div>
-
-          <button
-            class="team-expand"
-            type="button"
-            :aria-expanded="expandedTeams.has(team.id)"
-            @click="toggleTeam(team.id)"
+    <Transition name="region-fade" mode="out-in">
+      <div :key="activeRegion.id" class="rosters-grid">
+        <template v-if="activeRegion.teams && activeRegion.teams.length">
+          <article
+            v-for="team in activeRegion.teams"
+            :key="team.id"
+            class="team-card"
+            :class="{ expanded: expandedTeams.has(team.id) }"
+            :style="{ '--team-color': team.color }"
           >
-            <Icon
-              :class="{ rotated: expandedTeams.has(team.id) }"
-              icon="pixel:chevron-down"
-              width="0.9rem"
-            />
-          </button>
-        </header>
+            <header class="team-card-header">
+              <img class="team-logo" :src="getTeamLogo(team.id)" :alt="team.name" />
 
-        <Transition name="expand">
-          <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
-            <div class="team-card-inner">
-              <div class="team-card-body">
-                <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
-                  <button
-                    type="button"
-                    :class="{ active: getTeamView(team.id) === 'players' }"
-                    @click="setTeamView(team.id, 'players')"
-                  >
-                    {{ t("teams.card.players") }}
-                  </button>
+              <div class="team-name">{{ team.name }}</div>
+              <div class="team-tier">{{ team.skillTier }}</div>
 
-                  <button
-                    type="button"
-                    :class="{ active: getTeamView(team.id) === 'staff' }"
-                    @click="setTeamView(team.id, 'staff')"
-                  >
-                    {{ t("teams.card.staff") }}
-                  </button>
-                </div>
+              <button
+                class="team-expand"
+                type="button"
+                :aria-expanded="expandedTeams.has(team.id)"
+                @click="toggleTeam(team.id)"
+              >
+                <Icon
+                  :class="{ rotated: expandedTeams.has(team.id) }"
+                  icon="pixel:chevron-down"
+                  width="0.9rem"
+                />
+              </button>
+            </header>
 
-                <Transition name="tab-switch" mode="out-in">
-                  <div :key="getTeamView(team.id)" class="tab-content">
-                    <ul class="member-list">
-                      <li v-for="member in getMembers(team)" :key="member.username + member.role">
-                        <img
-                          v-if="getTeamView(team.id) === 'players'"
-                          class="member-role-icon"
-                          :src="getRoleIcon(member.role)"
-                          :alt="member.role"
-                        />
+            <Transition name="expand">
+              <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
+                <div class="team-card-inner">
+                  <div class="team-card-body">
+                    <div
+                      class="member-toggle"
+                      role="tablist"
+                      :aria-label="t('teams.card.memberView')"
+                    >
+                      <button
+                        type="button"
+                        :class="{ active: getTeamView(team.id) === 'players' }"
+                        @click="setTeamView(team.id, 'players')"
+                      >
+                        {{ t("teams.card.players") }}
+                      </button>
 
-                        <div class="member-user">
-                          <FlagIcon :code="member.country.toLowerCase()" square />
-                          <span>{{ member.username }}</span>
-                        </div>
+                      <button
+                        type="button"
+                        :class="{ active: getTeamView(team.id) === 'staff' }"
+                        @click="setTeamView(team.id, 'staff')"
+                      >
+                        {{ t("teams.card.staff") }}
+                      </button>
+                    </div>
 
-                        <span v-if="'isSub' in member && member.isSub" class="member-badge">
-                          {{ t("teams.card.sub") }}
-                        </span>
+                    <Transition name="tab-switch" mode="out-in">
+                      <div :key="getTeamView(team.id)" class="tab-content">
+                        <ul class="member-list">
+                          <li
+                            v-for="member in getMembers(team)"
+                            :key="member.username + member.role"
+                          >
+                            <img
+                              v-if="getTeamView(team.id) === 'players'"
+                              class="member-role-icon"
+                              :src="getRoleIcon(member.role)"
+                              :alt="member.role"
+                            />
 
-                        <span v-if="'dnp' in member && member.dnp" class="member-badge">
-                          {{ t("teams.card.dnp") }}
-                        </span>
+                            <div class="member-user">
+                              <FlagIcon :code="member.country.toLowerCase()" square />
+                              <span>{{ member.username }}</span>
+                            </div>
 
-                        <span
-                          v-if="getTeamView(team.id) === 'staff' && member.role"
-                          class="member-badge"
-                        >
-                          {{ t(`teams.staff.${member.role}`) }}
-                        </span>
-                      </li>
-                    </ul>
+                            <span v-if="'isSub' in member && member.isSub" class="member-badge">
+                              {{ t("teams.card.sub") }}
+                            </span>
+
+                            <span v-if="'dnp' in member && member.dnp" class="member-badge">
+                              {{ t("teams.card.dnp") }}
+                            </span>
+
+                            <span
+                              v-if="getTeamView(team.id) === 'staff' && member.role"
+                              class="member-badge"
+                            >
+                              {{ t(`teams.staff.${member.role}`) }}
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </Transition>
                   </div>
-                </Transition>
+                </div>
               </div>
-            </div>
-          </div>
-        </Transition>
+            </Transition>
 
-        <!-- <div class="advanced-wrapper">
+            <!-- <div class="advanced-wrapper">
           <button class="advanced-button" type="button">
             <span>{{ t("teams.card.advanced") }}</span>
             <Icon icon="pixel:arrow-right" />
           </button>
         </div> -->
-      </article>
-    </template>
+          </article>
+        </template>
 
-    <div v-else class="empty-roster">
-      <p>{{ t("teams.emptyState") }}</p>
-    </div>
+        <div v-else class="empty-roster">
+          <p>{{ t("teams.emptyState") }}</p>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -251,13 +262,18 @@ function getTeamLogo(id: string) {
 }
 
 .team-rosters {
-  display: grid;
-  gap: 0.63rem;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 0.63rem;
   background: var(--color-bg);
   border: 1px solid var(--color-line);
   border-radius: 0.19rem;
+  overflow: hidden;
+}
+
+.rosters-grid {
+  display: grid;
+  gap: 0.63rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
 }
 
 .empty-roster {
@@ -476,6 +492,24 @@ function getTeamLogo(id: string) {
   font-size: 0.63rem;
 }
 
+.region-fade {
+  &-enter-active,
+  &-leave-active {
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+
+  &-enter-from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
 .expand {
   &-enter-from,
   &-leave-to {
@@ -495,7 +529,6 @@ function getTeamLogo(id: string) {
     opacity: 0;
     transform: translateY(4px);
   }
-
   &-leave-to {
     opacity: 0;
     transform: translateY(-4px);
@@ -513,7 +546,7 @@ function getTeamLogo(id: string) {
     border-bottom: 1px solid var(--color-line);
   }
 
-  .team-rosters {
+  .rosters-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
