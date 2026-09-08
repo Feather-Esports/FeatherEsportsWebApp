@@ -1,25 +1,16 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { faqs } from "@/data/site";
 import { useUiStore } from "@/stores/ui";
 import { useI18n } from "vue-i18n";
 
 const uiStore = useUiStore();
 const { t } = useI18n();
-
-const items = [
-  { label: "faq.1.label", detail: "faq.1.detail" },
-  { label: "faq.2.label", detail: "faq.2.detail" },
-  { label: "faq.3.label", detail: "faq.3.detail" },
-  { label: "faq.4.label", detail: "faq.4.detail" },
-  { label: "faq.5.label", detail: "faq.5.detail" },
-  { label: "faq.6.label", detail: "faq.6.detail" },
-  { label: "faq.7.label", detail: "faq.7.detail" },
-];
 </script>
 
 <template>
   <div class="faq-section">
-    <div v-for="(item, index) in items" :key="item.label" class="faq-row">
+    <div v-for="(item, index) in faqs" :key="item.label" class="faq-row">
       <button
         class="faq-header"
         :class="{ active: uiStore.openFaq === item.label }"

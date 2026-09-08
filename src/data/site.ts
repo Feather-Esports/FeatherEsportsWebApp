@@ -1,4 +1,4 @@
-export type AccordionItem = {
+export type FAQItem = {
   label: string
   detail: string
   color?: string
@@ -20,12 +20,14 @@ export const staffRoles = [
   { id: "media", label: "staff.roles.media" },
 ]
 
-export const faqs: AccordionItem[] = [
-  { label: "faq.join.label", detail: "faq.join.detail" },
-  { label: "faq.watch.label", detail: "faq.watch.detail" },
-  { label: "faq.events.label", detail: "faq.events.detail" },
-  { label: "faq.work.label", detail: "faq.work.detail" },
-  { label: "faq.based.label", detail: "faq.based.detail" },
+export const faqs: FAQItem[] = [
+  { label: "faq.1.label", detail: "faq.1.detail" },
+  { label: "faq.2.label", detail: "faq.2.detail" },
+  { label: "faq.3.label", detail: "faq.3.detail" },
+  { label: "faq.4.label", detail: "faq.4.detail" },
+  { label: "faq.5.label", detail: "faq.5.detail" },
+  { label: "faq.6.label", detail: "faq.6.detail" },
+  { label: "faq.7.label", detail: "faq.7.detail" },
 ]
 
 export const staff: StaffMember[] = [
