@@ -19,7 +19,7 @@ const navigation = [
 
 <template>
   <header class="site-header">
-    <a class="wordmark" href="/" :aria-label="t('footer.homeLabel')"
+    <a class="wordmark" href="/"
       ><Icon icon="game-icons:feather" width="2.125rem" /><span>Feather</span></a
     >
     <button
