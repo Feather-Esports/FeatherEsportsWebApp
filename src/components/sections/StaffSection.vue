@@ -13,7 +13,6 @@ const visibleStaff = computed(() =>
 </script>
 
 <template>
-  <slot />
   <div class="staff-tabs" role="tablist" :aria-label="t('staff.roles.label')">
     <button
       v-for="role in staffRoles"
