@@ -15,11 +15,26 @@
     "cta": "Join Our Community"
   },
   "sections": {
-    "teams": { "title": "Teams", "description": "Regional rosters and the players representing Feather." },
-    "faq": { "title": "FAQ", "description": "Answers to a few frequently asked questions." },
-    "matches": { "title": "Matches", "description": "Track our next appearances and results." },
-    "partners": { "title": "Partners", "description": "Our official partners proudly affiliated with Feather Esports." },
-    "staff": { "title": "Staff", "description": "Meet the crew that keeps Feather moving." }
+    "teams": {
+      "title": "Teams",
+      "description": "Explore our regional rosters, players, and team staff."
+    },
+    "faq": {
+      "title": "FAQ",
+      "description": "Find quick answers to common questions about our organization."
+    },
+    "matches": {
+      "title": "Matches",
+      "description": "Stay updated on upcoming fixtures and recent competitive results."
+    },
+    "partners": {
+      "title": "Partners",
+      "description": "The brands and sponsors supporting Feather Esports."
+    },
+    "staff": {
+      "title": "Staff",
+      "description": "Meet our organizational team powering operations behind the scenes."
+    }
   },
   "teams": {
     "card": {
@@ -66,7 +81,10 @@
       "detail": "<p>Getting involved is simple! Depending on your role, you can open a ticket in our Discord:</p><ul><li><strong>Players:</strong> Open a <strong>Join Team</strong> ticket to apply for an open roster. We also actively scout LFT posts across the community and occasionally host team tryouts.</li><li><strong>Teams & Managers:</strong> If you are an existing team looking to migrate or a manager wanting to build a roster under Feather Esports, open a <strong>Create Team</strong> ticket.</li><li><strong>Org Staff:</strong> To join our internal staff open an <strong>Join Staff</strong> ticket.</li></ul><p>Head over to our Discord server to get started!</p>"
     }
   },
-  "matches": { "empty": "matches are not available yet.", "hint": "This feature is still under development." },
+  "matches": {
+    "empty": "No scheduled matches found.",
+    "hint": "Match schedules and results tracking are currently under development."
+  },
   "staff": {
     "roles": { "label": "Staff roles", "founders": "Founders", "administrators": "Administrators", "moderators": "Moderators", "staff": "Staff", "media": "Media" },
     "subRoles": { "community": "Community Staff", "networking": "Networking Staff", "team": "Team Staff", "tech": "Tech Staff", "media": "Media Staff" }
