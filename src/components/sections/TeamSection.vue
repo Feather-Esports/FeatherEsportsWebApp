@@ -387,10 +387,10 @@ function getRoleIcon(role: string) {
   padding: 0.5rem 0.6rem;
 }
 .member-list li:nth-child(even) {
-  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  background: transparent;
 }
 .member-list li:nth-child(odd) {
-  background: transparent;
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
 }
 
 .member-role-icon {
