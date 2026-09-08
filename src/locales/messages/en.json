@@ -35,12 +35,36 @@
     "regions": { "label": "Team Regions", "emea": "EMEA Teams", "na": "NA Teams", "sa": "SA Teams", "oce": "OCE Teams" },
     "emptyState": "We don't have teams competing in this region right now."
   },
+
   "faq": {
-    "join": { "label": "How do I join a team?", "detail": "Keep an eye on our announcements and submit your details when tryouts open." },
-    "watch": { "label": "Where can I watch Feather?", "detail": "Follow our social channels for match schedules and live broadcast links." },
-    "events": { "label": "Do you host community events?", "detail": "Yes. Community cups and scrims are part of our regular calendar." },
-    "work": { "label": "How can I work with Feather?", "detail": "Reach out through our business contact channels with a short introduction." },
-    "based": { "label": "Where is Feather based?", "detail": "We are an online-first organization with teams across multiple regions." }
+    "1": {
+      "label": "Where does Feather Esports operate, and what competitive tiers do you field teams in?",
+      "detail": "<p>We operate globally with active rosters in <strong>EMEA</strong> and <strong>NA</strong>, with active plans to expand into <strong>SA</strong> and <strong>OCE</strong>.</p><p>Rather than focusing on a single level of play, we field teams across all competitive tiers, from grassroots and development leagues up to high-tier tournaments, giving players at every skill level a structured path to grow.</p>"
+    },
+    "2": {
+      "label": "How is Feather Esports structured behind the scenes?",
+      "detail": "<p>We run on specialized departments to keep our competitive and community ecosystems running smoothly:</p><ul><li><strong>Team Staff:</strong> Interfaces directly with team managers to handle daily logistics and schedule coordination.</li><li><strong>Media & Tech Staff:</strong> Manages our content creation, graphics, social media, and Discord server operations.</li><li><strong>Community Staff:</strong> Coordinates community PUGs, tournaments, and engagement events.</li><li><strong>HR & Networking Staff:</strong> Oversees member welfare, dispute resolution, partner relations, and sponsor opportunities.</li></ul>"
+    },
+    "3": {
+      "label": "What support and benefits does Feather Esports provide to its players?",
+      "detail": "<p>Even in our initial growth phase, we focus heavily on real player development and operational stability. Joining Feather means:</p><ul><li><strong>Administrative Relief:</strong> Dedicated Team Staff handle all logistics so you can focus 100% on playing.</li><li><strong>Coaching & Strategy:</strong> Access to dedicated coaches and analysts for VOD reviews and meta prep.</li><li><strong>Media Exposure:</strong> Professional roster reveals, graphic cards, and coverage across our social media.</li><li><strong>Player Welfare:</strong> A safe, non-toxic environment managed by dedicated HR staff.</li></ul>"
+    },
+    "4": {
+      "label": "Where can fans watch Feather Esports matches and roster updates?",
+      "detail": "<p>We make sure our rosters get the spotlight they deserve across our media platforms:</p><ul><li><strong>Match Streams:</strong> Select team matches are broadcast live on our channels with community casters.</li><li><strong>Highlight Series:</strong> We produce regular highlight videos featuring top plays from teams across every tier.</li><li><strong>Roster Reveals:</strong> Follow our socials for custom graphics, official player announcements, and match schedules.</li></ul>"
+    },
+    "5": {
+      "label": "How is Team Staff assigned and managed for each roster?",
+      "detail": "<p>We initially bring on a Team Manager or Lead Coach to oversee roster building and recruit players alongside supporting staff. While your Team Staff handles direct recruitment, strategy, and day-to-day team performance, our main Org Staff works alongside them to provide overarching support and administrative oversight.</p>"
+    },
+    "6": {
+      "label": "What is Feather Esports long-term plan for player compensation and sponsorships?",
+      "detail": "<p>Our immediate priority is building an organized, highly stable foundation. As our <strong>Networking Staff</strong> continues to bring on brand partners and commercial sponsors, our roadmap prioritizes rolling out direct financial backing, gear allocation, and tournament fee coverage for our active rosters.</p>"
+    },
+    "7": {
+      "label": "How can I join Feather Esports as a player, team, or staff member?",
+      "detail": "<p>Getting involved is simple! Depending on your role, you can open a ticket in our Discord:</p><ul><li><strong>Players:</strong> Open a <strong>Join Team</strong> ticket to apply for an open roster. We also actively scout LFT posts across the community and occasionally host team tryouts.</li><li><strong>Teams & Managers:</strong> If you are an existing team looking to migrate or a manager wanting to build a roster under Feather Esports, open a <strong>Create Team</strong> ticket.</li><li><strong>Org Staff:</strong> To join our internal staff open an <strong>Join Staff</strong> ticket.</li></ul><p>Head over to our Discord server to get started!</p>"
+    }
   },
   "matches": { "empty": "matches are not available yet.", "hint": "This feature is still under development." },
   "staff": {

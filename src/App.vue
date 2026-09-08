@@ -8,13 +8,10 @@ import TeamSection from "@/components/sections/TeamSection.vue";
 import FaqSection from "@/components/sections/FaqSection.vue";
 import MatchesSection from "@/components/sections/MatchesSection.vue";
 import StaffSection from "@/components/sections/StaffSection.vue";
-import { faqs } from "@/data/site";
 import { teamRegions } from "@/data/teams";
-import { useUiStore } from "@/stores/ui";
 import Atmosphere from "@/components/background/Atmosphere.vue";
 
 const { t } = useI18n();
-const uiStore = useUiStore();
 </script>
 
 <template>
@@ -41,7 +38,7 @@ const uiStore = useUiStore();
           :description="t('sections.faq.description')"
           v-once
         />
-        <FaqSection :items="faqs" :open-item="uiStore.openFaq" @toggle="uiStore.toggleFaq" />
+        <FaqSection />
       </section>
 
       <!-- Matches -->
