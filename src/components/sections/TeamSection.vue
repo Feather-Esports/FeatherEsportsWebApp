@@ -167,12 +167,12 @@ function getRoleIcon(role: string) {
           </div>
         </Transition>
 
-        <div class="advanced-wrapper">
+        <!-- <div class="advanced-wrapper">
           <button class="advanced-button" type="button">
             <span>{{ t("teams.card.advanced") }}</span>
             <Icon icon="pixel:arrow-right" />
           </button>
-        </div>
+        </div> -->
       </article>
     </template>
 
