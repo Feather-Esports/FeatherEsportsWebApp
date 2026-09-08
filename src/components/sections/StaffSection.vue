@@ -1,21 +1,100 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed } from "vue";
+import { computed, ref, onMounted, onUnmounted, watch, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { staff, staffRoles } from "@/data/site";
+import { staff, staffRoles, staffSubRoles } from "@/data/site";
 import { useUiStore } from "@/stores/ui";
 
 const { t } = useI18n();
 const uiStore = useUiStore();
+
+const subRoleLabelMap = computed(() => new Map(staffSubRoles.map((sr) => [sr.id, sr.label])));
+
+const avatarModules = import.meta.glob<string>("@/assets/images/staff/*.webp", {
+  eager: true,
+  import: "default",
+  query: "?url",
+});
+
+const staffAvatarMap = computed(() => {
+  const map = new Map<string, string>();
+  for (const [path, url] of Object.entries(avatarModules)) {
+    const id = path.split("/").pop()?.replace(".webp", "");
+    if (id) map.set(id, url);
+  }
+  return map;
+});
+
+const activeStaffRoles = computed(() =>
+  staffRoles.filter((role) => staff.some((member) => member.roles.includes(role.id))),
+);
+
 const visibleStaff = computed(() =>
   staff.filter((member) => member.roles.includes(uiStore.activeStaffRole)),
 );
+
+// Carousel Scroll Logic
+const carouselRef = ref<HTMLElement | null>(null);
+const canScrollLeft = ref(false);
+const canScrollRight = ref(false);
+
+function updateScrollState() {
+  const el = carouselRef.value;
+  if (!el) return;
+
+  const maxScrollLeft = el.scrollWidth - el.clientWidth;
+  canScrollLeft.value = el.scrollLeft > 1;
+  canScrollRight.value = el.scrollLeft < maxScrollLeft - 1;
+}
+
+function scrollCarousel(direction: "left" | "right") {
+  const el = carouselRef.value;
+  if (!el) return;
+
+  const scrollAmount = el.clientWidth * 0.8;
+  el.scrollBy({
+    left: direction === "left" ? -scrollAmount : scrollAmount,
+    behavior: "smooth",
+  });
+}
+
+function getSubRoleLabel(id: string): string {
+  const labelKey = subRoleLabelMap.value.get(id);
+  return labelKey ? t(labelKey) : id;
+}
+
+watch(visibleStaff, async () => {
+  await nextTick();
+  if (carouselRef.value) {
+    carouselRef.value.scrollLeft = 0;
+    updateScrollState();
+  }
+});
+
+let resizeObserver: ResizeObserver | null = null;
+
+onMounted(() => {
+  const el = carouselRef.value;
+  if (!el) return;
+
+  el.addEventListener("scroll", updateScrollState, { passive: true });
+
+  resizeObserver = new ResizeObserver(updateScrollState);
+  resizeObserver.observe(el);
+
+  updateScrollState();
+});
+
+onUnmounted(() => {
+  carouselRef.value?.removeEventListener("scroll", updateScrollState);
+  resizeObserver?.disconnect();
+});
 </script>
 
 <template>
   <div class="staff-tabs" role="tablist" :aria-label="t('staff.roles.label')">
     <button
-      v-for="role in staffRoles"
+      v-for="role in activeStaffRoles"
       :key="role.id"
       type="button"
       role="tab"
@@ -26,91 +105,214 @@ const visibleStaff = computed(() =>
       {{ t(role.label) }}
     </button>
   </div>
-  <div class="staff-grid">
-    <article v-for="member in visibleStaff" :key="member.name" class="staff-card">
-      <div class="staff-avatar" :style="{ backgroundColor: member.color }">
-        <Icon :icon="member.icon" width="42" />
-      </div>
-      <div>
-        <h3>{{ member.name }}</h3>
-        <p v-for="role in member.subRoles" :key="role">- {{ t(role) }}</p>
-      </div>
-    </article>
+
+  <div class="carousel-container">
+    <button
+      v-if="canScrollLeft"
+      type="button"
+      class="carousel-arrow prev"
+      aria-label="Scroll left"
+      @click="scrollCarousel('left')"
+    >
+      <Icon icon="pixel:angle-left" />
+    </button>
+
+    <div ref="carouselRef" class="staff-grid">
+      <article
+        v-for="member in visibleStaff"
+        :key="member.id"
+        class="staff-card"
+        :style="{ '--member-color': member.color }"
+      >
+        <img
+          class="staff-avatar"
+          :src="staffAvatarMap.get(member.id)"
+          :alt="member.name"
+          draggable="false"
+        />
+        <div>
+          <h3>{{ member.name }}</h3>
+          <p v-for="subRoleId in member.subRoles" :key="subRoleId">
+            - {{ getSubRoleLabel(subRoleId) }}
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <button
+      v-if="canScrollRight"
+      type="button"
+      class="carousel-arrow next"
+      aria-label="Scroll right"
+      @click="scrollCarousel('right')"
+    >
+      <Icon icon="pixel:angle-right" />
+    </button>
   </div>
 </template>
 
 <style scoped>
-.staff-grid {
-  border: 1px solid var(--color-line);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 0.9rem;
 }
+
+.staff-grid {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  width: 100%;
+  padding: 0.5rem 0;
+  background: var(--color-bg);
+  scrollbar-width: none;
+}
+
+.staff-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.staff-card {
+  flex: 0 0 calc(33.333% - 0.67rem);
+  scroll-snap-align: start;
+  box-sizing: border-box;
+  display: flex;
+  height: 9rem;
+  gap: 1rem;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--member-color) 50%, transparent) 0%,
+      transparent 95%,
+      transparent 100%
+    ),
+    var(--color-bg);
+}
+
+.carousel-arrow {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: color-mix(in srgb, var(--color-bg) 50%, transparent);
+  color: var(--color-text);
+  border: none;
+  font-size: 1.45rem;
+  padding: 0.9rem 0.6rem;
+  cursor: pointer;
+  border-radius: 0.19rem;
+  transition:
+    background-color 200ms ease,
+    opacity 200ms ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--color-brand);
+  color: var(--color-title);
+}
+
+.carousel-arrow.prev {
+  left: 0.5rem;
+}
+.carousel-arrow.next {
+  right: 0.5rem;
+}
+
 .staff-tabs {
   border-bottom: 1px solid var(--color-line);
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  width: 100%;
+  background: var(--color-bg);
+  margin-top: 0.9rem;
 }
+
 .staff-tabs button {
   background: transparent;
   border: 0;
   border-bottom: 2px solid transparent;
   color: var(--color-text);
-  font: inherit;
-  font-size: 0.58rem;
+  font-style: var(--font-title);
+  font-size: 0.75rem;
+  font-weight: 600;
   min-height: 2rem;
   padding: 0.5rem;
   text-transform: uppercase;
+  width: 100%;
+  cursor: pointer;
+  transition:
+    background 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+
+  &:hover {
+    border-bottom-color: color-mix(in srgb, var(--color-brand) 70%, var(--color-line));
+    color: color-mix(in srgb, var(--color-brand) 70%, transparent);
+    background: linear-gradient(
+      360deg,
+      color-mix(in srgb, var(--color-brand) 10%, transparent) 0%,
+      transparent 75%,
+      transparent 100%
+    );
+  }
+
+  &.active {
+    border-bottom-color: var(--color-brand);
+    color: var(--color-brand);
+    background: linear-gradient(
+      360deg,
+      color-mix(in srgb, var(--color-brand) 20%, transparent) 0%,
+      transparent 75%,
+      transparent 100%
+    );
+  }
 }
-.staff-tabs button.active,
-.staff-tabs button:hover {
-  border-bottom-color: var(--color-brand);
-  color: var(--color-brand);
-}
-.staff-card {
-  align-items: center;
-  background: linear-gradient(90deg, rgba(26, 188, 156, 0.14), transparent 78%);
-  border-right: 1px solid var(--color-line);
-  display: flex;
-  min-height: 8rem;
-}
+
 .staff-avatar {
-  align-items: center;
-  align-self: stretch;
-  border-right: 1px solid var(--color-line);
   color: var(--color-title);
-  display: flex;
-  justify-content: center;
-  width: 6rem;
+  height: 100%;
+  width: auto;
 }
+
 .staff-card h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
   font-family: var(--font-title);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   text-transform: uppercase;
 }
+
 .staff-card p {
-  color: var(--color-text);
-  font-size: 0.55rem;
-  line-height: 1.5;
-  margin-top: 0.25rem;
   padding-right: 0.7rem;
+  font-family: var(--font-body);
+  font-size: 0.81rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text);
 }
-@media (max-width: 760px) {
+
+@media (max-width: 900px) {
+  .staff-card {
+    flex: 0 0 calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 600px) {
   .staff-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .staff-tabs button:nth-child(-n + 4) {
     border-bottom: 1px solid var(--color-line);
   }
-  .staff-grid {
-    grid-template-columns: 1fr;
-  }
   .staff-card {
-    border-bottom: 1px solid var(--color-line);
-    border-right: 0;
-  }
-  .staff-avatar {
-    min-height: 5.5rem;
-    width: 5.5rem;
+    flex: 0 0 100%;
   }
 }
 </style>

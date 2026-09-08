@@ -51,11 +51,11 @@ export const partners: Partner[] = [
 ]
 
 export type StaffMember = {
+  id: string
   name: string
   color: string
-  icon: string
   roles: string[]
-  subRoles: string[]
+  subRoles?: string[]
 }
 export const staffRoles = [
   { id: "founders", label: "staff.roles.founders" },
@@ -64,14 +64,22 @@ export const staffRoles = [
   { id: "staff", label: "staff.roles.staff" },
   { id: "media", label: "staff.roles.media" },
 ]
+export const staffSubRoles = [
+  { id: "networking", label: "staff.subRoles.networking" },
+  { id: "community", label: "staff.subRoles.community" },
+  { id: "team", label: "staff.subRoles.team" },
+  { id: "hr", label: "staff.subRoles.hr" },
+  { id: "tech", label: "staff.subRoles.tech" },
+  { id: "media", label: "staff.subRoles.media" },
+]
 export const staff: StaffMember[] = [
-  {
-    name: "Kepler",
-    color: "var(--color-bg)",
-    icon: "pixel:users-solid",
-    roles: ["administrators", "founders"],
-    subRoles: ["staff.subRoles.networking", "staff.subRoles.team"],
-  },
-  { name: "Yiruzu", color: "var(--color-bg)", icon: "pixel:laptop-solid", roles: ["staff", "media", "founders"], subRoles: ["staff.subRoles.tech", "staff.subRoles.media"] },
-  { name: "Blaco", color: "var(--color-bg)", icon: "pixel:user-solid", roles: ["staff", "founders"], subRoles: ["staff.subRoles.community"] },
+  { id: "kepler", name: "Kepler", color: "#221d75", roles: ["founders"], subRoles: ["networking", "team"] },
+  { id: "yiruzu", name: "yiruzu", color: "#0288df", roles: ["founders"], subRoles: ["networking", "tech", "media"] },
+  { id: "yuri", name: "Yuri", color: "#7252b3", roles: ["founders"], subRoles: ["tech", "media"] },
+  { id: "blaco", name: "Blaco", color: "#2ba90a", roles: ["founders"], subRoles: ["community"] },
+  { id: "luna", name: "Luna", color: "#ff0100", roles: ["founders"], subRoles: ["hr"] },
+  { id: "genesis", name: "Genesis", color: "#03263f", roles: ["staff"], subRoles: ["team"] },
+  { id: "sid", name: "Sid", color: "#ed7819", roles: ["staff"] },
+  { id: "callson", name: "Callson", color: "#16171b", roles: ["media"], subRoles: ["media"] },
+  { id: "rain", name: "Rain", color: "#94cdde", roles: ["media"], subRoles: ["media"] },
 ]

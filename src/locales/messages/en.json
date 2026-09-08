@@ -86,8 +86,8 @@
     "hint": "Match schedules and results tracking are currently under development."
   },
   "staff": {
-    "roles": { "label": "Staff roles", "founders": "Founders", "administrators": "Administrators", "moderators": "Moderators", "staff": "Staff", "media": "Media" },
-    "subRoles": { "community": "Community Staff", "networking": "Networking Staff", "team": "Team Staff", "tech": "Tech Staff", "media": "Media Staff" }
+    "roles": { "founders": "Founders", "administrators": "Administrators", "moderators": "Moderators", "staff": "Staff", "media": "Media" },
+    "subRoles": { "networking": "Networking Staff", "community": "Community Staff", "team": "Team Staff", "hr": "HR Staff", "tech": "Tech Staff", "media": "Media Staff" }
   },
   "footer": { "label": "Feather Esports", "contact": "Contact", "legal": "Legal Notice" }
 }
