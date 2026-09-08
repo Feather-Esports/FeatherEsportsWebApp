@@ -138,7 +138,7 @@ const navigation = [
   font-weight: 600;
   gap: 0.313rem;
   height: 1.875rem;
-  padding: 0rem 0.625rem;
+  padding: 0rem 0.63rem;
   text-transform: uppercase;
   border-radius: 0.19rem;
 }

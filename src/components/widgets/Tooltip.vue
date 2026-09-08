@@ -83,7 +83,7 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
   padding: 1rem 1rem;
   gap: 0.5rem;
   background: var(--color-title);
-  border-radius: 0.188rem;
+  border-radius: 0.19rem;
   color: var(--color-bg);
   text-align: left;
 
