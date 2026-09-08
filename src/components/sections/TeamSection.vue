@@ -6,42 +6,58 @@ import { useI18n } from "vue-i18n";
 import type { Team, TeamRegion } from "@/data/teams";
 import { useUiStore } from "@/stores/ui";
 
+type TeamView = "players" | "staff";
+
 const props = defineProps<{ regions: TeamRegion[] }>();
+
 const { t } = useI18n();
 const uiStore = useUiStore();
-const teamViews = reactive<Record<string, "players" | "staff">>({});
+
+const teamViews = reactive<Record<string, TeamView>>({});
 const expandedTeams = reactive(new Set<string>());
 
 const activeRegion = computed<TeamRegion>(
   () =>
     props.regions.find((region) => region.id === uiStore.activeTeamRegion) ??
-    props.regions[0] ?? { id: "", label: "", icon: "", color: "", teams: [] },
+    props.regions[0] ?? {
+      id: "",
+      label: "",
+      icon: "",
+      color: "",
+      teams: [],
+    },
 );
-
-function toggleTeam(teamId: string) {
-  if (expandedTeams.has(teamId)) expandedTeams.delete(teamId);
-  else expandedTeams.add(teamId);
-}
-
-function members(team: Team) {
-  return (teamViews[team.id] ?? "players") === "players" ? team.players : team.staff;
-}
-
-function setTeamView(teamId: string, view: "players" | "staff") {
-  teamViews[teamId] = view;
-}
 
 const ROLE_ICONS = {
   tank: new URL("@/assets/images/icons/role_tank.png", import.meta.url).href,
   damage: new URL("@/assets/images/icons/role_damage.png", import.meta.url).href,
   support: new URL("@/assets/images/icons/role_support.png", import.meta.url).href,
   flex: new URL("@/assets/images/icons/role_flex.png", import.meta.url).href,
-};
+} as const;
 
-const getRoleIcon = (role: string) => {
-  const key = role?.toLowerCase();
-  return ROLE_ICONS[key] ?? ROLE_ICONS.flex;
-};
+function toggleTeam(teamId: string) {
+  if (expandedTeams.has(teamId)) {
+    expandedTeams.delete(teamId);
+  } else {
+    expandedTeams.add(teamId);
+  }
+}
+
+function getTeamView(teamId: string): TeamView {
+  return teamViews[teamId] ?? "players";
+}
+
+function getMembers(team: Team) {
+  return getTeamView(team.id) === "players" ? team.players : team.staff;
+}
+
+function setTeamView(teamId: string, view: TeamView) {
+  teamViews[teamId] = view;
+}
+
+function getRoleIcon(role: string) {
+  return ROLE_ICONS[role?.toLowerCase() as keyof typeof ROLE_ICONS] ?? ROLE_ICONS.flex;
+}
 </script>
 
 <template>
@@ -60,100 +76,109 @@ const getRoleIcon = (role: string) => {
       {{ t(region.label) }}
     </button>
   </div>
+
   <div class="team-rosters">
-    <article
-      v-for="team in activeRegion.teams"
-      :key="team.id"
-      class="team-card"
-      :class="{ expanded: expandedTeams.has(team.id) }"
-      :style="{ '--team-color': team.color }"
-    >
-      <header class="team-card-header">
-        <img class="team-logo" :src="team.logo" :alt="team.name" />
-        <div class="team-name">{{ team.name }}</div>
-        <div class="team-tier">{{ team.skillTier }}</div>
-        <button
-          class="team-expand"
-          type="button"
-          :aria-expanded="expandedTeams.has(team.id)"
-          @click="toggleTeam(team.id)"
-        >
-          <Icon
-            :class="{ rotated: expandedTeams.has(team.id) }"
-            icon="pixel:chevron-down"
-            width="0.9rem"
-          />
-        </button>
-      </header>
+    <template v-if="activeRegion.teams && activeRegion.teams.length">
+      <article
+        v-for="team in activeRegion.teams"
+        :key="team.id"
+        class="team-card"
+        :class="{ expanded: expandedTeams.has(team.id) }"
+        :style="{ '--team-color': team.color }"
+      >
+        <header class="team-card-header">
+          <img class="team-logo" :src="team.logo" :alt="team.name" />
 
-      <Transition name="expand">
-        <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
-          <div class="team-card-inner">
-            <div class="team-card-body">
-              <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
-                <button
-                  type="button"
-                  :class="{ active: (teamViews[team.id] ?? 'players') === 'players' }"
-                  @click="setTeamView(team.id, 'players')"
-                >
-                  {{ t("teams.card.players") }}
-                </button>
-                <button
-                  type="button"
-                  :class="{ active: (teamViews[team.id] ?? 'players') === 'staff' }"
-                  @click="setTeamView(team.id, 'staff')"
-                >
-                  {{ t("teams.card.staff") }}
-                </button>
-              </div>
+          <div class="team-name">{{ team.name }}</div>
+          <div class="team-tier">{{ team.skillTier }}</div>
 
-              <Transition name="tab-switch" mode="out-in">
-                <div :key="teamViews[team.id] ?? 'players'" class="tab-content">
-                  <ul class="member-list">
-                    <li v-for="member in members(team)" :key="member.username + member.role">
-                      <img
-                        v-if="(teamViews[team.id] ?? 'players') !== 'staff'"
-                        class="member-role-icon"
-                        :src="getRoleIcon(member.role)"
-                        :alt="member.role"
-                      />
+          <button
+            class="team-expand"
+            type="button"
+            :aria-expanded="expandedTeams.has(team.id)"
+            @click="toggleTeam(team.id)"
+          >
+            <Icon
+              :class="{ rotated: expandedTeams.has(team.id) }"
+              icon="pixel:chevron-down"
+              width="0.9rem"
+            />
+          </button>
+        </header>
 
-                      <div class="member-user">
-                        <FlagIcon :code="member.country.toLowerCase()" square />
-                        <span>{{ member.username }}</span>
-                      </div>
+        <Transition name="expand">
+          <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
+            <div class="team-card-inner">
+              <div class="team-card-body">
+                <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
+                  <button
+                    type="button"
+                    :class="{ active: getTeamView(team.id) === 'players' }"
+                    @click="setTeamView(team.id, 'players')"
+                  >
+                    {{ t("teams.card.players") }}
+                  </button>
 
-                      <!-- Status Badges -->
-                      <span v-if="'isSub' in member && member.isSub" class="member-badge">
-                        {{ t("teams.card.sub") }}
-                      </span>
-                      <span v-if="'dnp' in member && member.dnp" class="member-badge">
-                        {{ t("teams.card.dnp") }}
-                      </span>
-
-                      <!-- Staff Role Badge -->
-                      <span
-                        v-if="(teamViews[team.id] ?? 'players') === 'staff' && member.role"
-                        class="member-badge"
-                      >
-                        {{ t(`teams.staff.${member.role}`) }}
-                      </span>
-                    </li>
-                  </ul>
+                  <button
+                    type="button"
+                    :class="{ active: getTeamView(team.id) === 'staff' }"
+                    @click="setTeamView(team.id, 'staff')"
+                  >
+                    {{ t("teams.card.staff") }}
+                  </button>
                 </div>
-              </Transition>
+
+                <Transition name="tab-switch" mode="out-in">
+                  <div :key="getTeamView(team.id)" class="tab-content">
+                    <ul class="member-list">
+                      <li v-for="member in getMembers(team)" :key="member.username + member.role">
+                        <img
+                          v-if="getTeamView(team.id) === 'players'"
+                          class="member-role-icon"
+                          :src="getRoleIcon(member.role)"
+                          :alt="member.role"
+                        />
+
+                        <div class="member-user">
+                          <FlagIcon :code="member.country.toLowerCase()" square />
+                          <span>{{ member.username }}</span>
+                        </div>
+
+                        <span v-if="'isSub' in member && member.isSub" class="member-badge">
+                          {{ t("teams.card.sub") }}
+                        </span>
+
+                        <span v-if="'dnp' in member && member.dnp" class="member-badge">
+                          {{ t("teams.card.dnp") }}
+                        </span>
+
+                        <span
+                          v-if="getTeamView(team.id) === 'staff' && member.role"
+                          class="member-badge"
+                        >
+                          {{ t(`teams.staff.${member.role}`) }}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </Transition>
+              </div>
             </div>
           </div>
-        </div>
-      </Transition>
+        </Transition>
 
-      <div class="advanced-wrapper">
-        <button class="advanced-button" type="button">
-          <span>{{ t("teams.card.advanced") }}</span>
-          <Icon icon="pixel:arrow-right" />
-        </button>
-      </div>
-    </article>
+        <div class="advanced-wrapper">
+          <button class="advanced-button" type="button">
+            <span>{{ t("teams.card.advanced") }}</span>
+            <Icon icon="pixel:arrow-right" />
+          </button>
+        </div>
+      </article>
+    </template>
+
+    <div v-else class="empty-roster">
+      <p>{{ t("teams.emptyState", "We don't have teams competing in this region right now.") }}</p>
+    </div>
   </div>
 </template>
 
@@ -167,6 +192,7 @@ const getRoleIcon = (role: string) => {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+
 .team-regions button {
   align-items: center;
   background: var(--color-bg);
@@ -181,10 +207,16 @@ const getRoleIcon = (role: string) => {
   min-height: 2.81rem;
   padding: 0.5rem;
   border-radius: 0;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    transform 150ms ease;
 
   &:first-child {
     border-radius: 0.19rem 0 0 0.19rem;
   }
+
   &:last-child {
     border-radius: 0 0.19rem 0.19rem 0;
   }
@@ -193,8 +225,13 @@ const getRoleIcon = (role: string) => {
     margin-left: -1px;
   }
 
-  &.active,
   &:hover {
+    z-index: 1;
+    background: color-mix(in srgb, var(--region-color) 5%, var(--color-bg));
+    border-color: color-mix(in srgb, var(--region-color) 20%, var(--color-bg));
+    color: var(--color-title);
+  }
+  &.active {
     z-index: 1;
     background: color-mix(in srgb, var(--region-color) 15%, var(--color-bg));
     border-color: color-mix(in srgb, var(--region-color) 30%, var(--color-bg));
@@ -211,6 +248,20 @@ const getRoleIcon = (role: string) => {
   border: 1px solid var(--color-line);
   border-radius: 0.19rem;
 }
+
+.empty-roster {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+}
+
 .team-card {
   min-width: 0;
   background: color-mix(in srgb, var(--team-color) 5%, transparent);
@@ -218,6 +269,7 @@ const getRoleIcon = (role: string) => {
   border-radius: 0.28rem;
   overflow: hidden;
 }
+
 .team-card-header {
   align-items: center;
   display: flex;
@@ -262,7 +314,7 @@ const getRoleIcon = (role: string) => {
   cursor: pointer;
 
   svg {
-    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 250ms ease;
   }
   svg.rotated {
     transform: rotate(180deg);
@@ -272,18 +324,10 @@ const getRoleIcon = (role: string) => {
 .team-card-expandable {
   display: grid;
   grid-template-rows: 1fr;
-  transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: grid-template-rows 250ms ease;
 }
+
 .team-card-inner {
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.tab-content {
-  display: grid;
-  grid-template-rows: 1fr;
-  transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
@@ -307,7 +351,7 @@ const getRoleIcon = (role: string) => {
   background: color-mix(in srgb, var(--team-color) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--team-color) 15%, var(--color-line));
   border-radius: 0.14rem;
-  transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 225ms ease;
   z-index: 0;
 }
 .member-toggle button {
@@ -413,7 +457,7 @@ const getRoleIcon = (role: string) => {
 
   &:hover {
     background: color-mix(in srgb, var(--team-color) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
+    border-color: color-mix(in srgb, var(--team-color) 20%, var(--color-line));
   }
 }
 .advanced-button svg {
@@ -421,26 +465,30 @@ const getRoleIcon = (role: string) => {
   font-size: 0.63rem;
 }
 
-.expand-enter-from,
-.expand-leave-to {
-  grid-template-rows: 0fr;
+.expand {
+  &-enter-from,
+  &-leave-to {
+    grid-template-rows: 0fr;
+  }
 }
 
-.tab-switch-enter-active,
-.tab-switch-leave-active {
-  transition:
-    opacity 200ms ease,
-    transform 200ms ease;
-}
+.tab-switch {
+  &-enter-active,
+  &-leave-active {
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
+  }
 
-.tab-switch-enter-from {
-  opacity: 0;
-  transform: translateY(4px);
-}
+  &-enter-from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 
-.tab-switch-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
 @media (max-width: 760px) {
@@ -453,6 +501,7 @@ const getRoleIcon = (role: string) => {
   .team-regions button:nth-child(-n + 2) {
     border-bottom: 1px solid var(--color-line);
   }
+
   .team-rosters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
