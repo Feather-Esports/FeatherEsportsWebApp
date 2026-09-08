@@ -43,11 +43,11 @@ const { t } = useI18n();
   border: 1px solid var(--color-line);
   border-bottom: 0;
   border-radius: 0.19rem;
-  background: var(--color-bg);
 }
 
 .faq-row {
   border-bottom: 1px solid var(--color-line);
+  background: var(--color-bg);
 }
 
 .faq-header {
