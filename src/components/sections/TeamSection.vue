@@ -177,7 +177,7 @@ function getRoleIcon(role: string) {
     </template>
 
     <div v-else class="empty-roster">
-      <p>{{ t("teams.emptyState", "We don't have teams competing in this region right now.") }}</p>
+      <p>{{ t("teams.emptyState") }}</p>
     </div>
   </div>
 </template>

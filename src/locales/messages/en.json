@@ -32,7 +32,8 @@
     },
     "roles": { "tank": "Tank", "damage": "Damage", "support": "Support", "flex": "Flex" },
     "staff": { "manager": "Manager", "headCoach": "Head Coach", "coach": "Coach", "analyst": "Analyst", "captain": "Captain", "media": "Media" },
-    "regions": { "label": "Team Regions", "emea": "EMEA Teams", "na": "NA Teams", "sa": "SA Teams", "oce": "OCE Teams" }
+    "regions": { "label": "Team Regions", "emea": "EMEA Teams", "na": "NA Teams", "sa": "SA Teams", "oce": "OCE Teams" },
+    "emptyState": "We don't have teams competing in this region right now."
   },
   "faq": {
     "join": { "label": "How do I join a team?", "detail": "Keep an eye on our announcements and submit your details when tryouts open." },
