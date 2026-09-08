@@ -15,27 +15,34 @@ const { t } = useI18n();
 
 <style scoped>
 .matches-section {
-  align-items: center;
-  border: 1px solid var(--color-line);
-  color: var(--color-text);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   justify-content: center;
-  min-height: 10rem;
-  padding: 2.5rem 1rem;
+  align-items: center;
+  margin-top: 0.75rem;
+  min-height: 12rem;
+  gap: 0.94rem;
+  border-radius: 0.19rem;
   text-align: center;
+  background: var(--color-bg);
+  border: 1px dashed var(--color-line);
 }
 .matches-section svg {
+  font-size: 1.5rem;
   color: var(--color-brand);
 }
 .matches-section p {
-  color: var(--color-title);
   font-family: var(--font-title);
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1.13rem;
+  color: var(--color-title);
   text-transform: uppercase;
 }
 .matches-section span {
   font-size: 0.58rem;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: var(--color-text);
 }
 </style>
