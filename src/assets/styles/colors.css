@@ -1,5 +1,6 @@
 :root {
   --color-bg: #09090b;
+  --color-panel: #101012;
 
   --color-title: #f1f4f3;
   --color-text: #888888;
@@ -14,9 +15,4 @@
 
   --color-grid: #182321;
   --color-glow: rgba(26, 188, 156, 0.12);
-
-  --color-heading-glow: rgba(13, 51, 46, 0.58);
-  --color-panel: rgba(8, 10, 11, 0.9);
-  --color-panel-hover: rgba(26, 188, 156, 0.08);
-  --color-number: #4d5b59;
 }

@@ -7,6 +7,7 @@ import HeroSection from "@/components/sections/HeroSection.vue";
 import TeamSection from "@/components/sections/TeamSection.vue";
 import FaqSection from "@/components/sections/FaqSection.vue";
 import MatchesSection from "@/components/sections/MatchesSection.vue";
+import PartnersSection from "@/components/sections/PartnersSection.vue";
 import StaffSection from "@/components/sections/StaffSection.vue";
 import { teamRegions } from "@/data/teams";
 import Atmosphere from "@/components/background/Atmosphere.vue";
@@ -56,6 +57,7 @@ const { t } = useI18n();
           :title="t('sections.partners.title')"
           :description="t('sections.partners.description')"
         />
+        <PartnersSection />
       </section>
 
       <!-- Staff -->
