@@ -23,7 +23,6 @@ export type Team = {
   name: string
   region: string
   color: string
-  logo: string
   skillTier: string
   players: TeamPlayer[]
   staff: TeamStaff[]
@@ -65,24 +64,23 @@ export const teamRegions: TeamRegion[] = [
         name: "Nightwing",
         region: "EMEA",
         color: "#5C33EE",
-        logo: "/images/teams/nightwing.png",
         skillTier: "4.2K",
         players: [
-          player("Kepler", "DZ", "tank"),
-          player("Yuri", "NL", "tank"),
-          player("yiruzu", "DE", "damage"),
-          player("Swifty", "GB", "damage"),
-          player("Orpheus", "DE", "damage", false, true),
-          player("Blaco", "DK", "support"),
-          player("Whackey", "GB", "support"),
+          player("Kepler", "dz", "tank"),
+          player("Yuri", "nl", "tank"),
+          player("yiruzu", "de", "damage"),
+          player("Swifty", "gb", "damage"),
+          player("Orpheus", "de", "damage", false, true),
+          player("Blaco", "dk", "support"),
+          player("Whackey", "gb", "support"),
         ],
         staff: [
-          staff("Kepler", "DZ", "manager"),
-          staff("yiruzu", "DE", "manager"),
-          staff("Blaco", "DK", "captain"),
-          staff("Yuri", "NL", "captain"),
-          staff("Aubstacle", "US", "headCoach"),
-          staff("Orpheus", "DE", "coach"),
+          staff("Kepler", "dz", "manager"),
+          staff("yiruzu", "de", "manager"),
+          staff("Blaco", "dk", "captain"),
+          staff("Yuri", "nl", "captain"),
+          staff("Aubstacle", "us", "headCoach"),
+          staff("Orpheus", "de", "coach"),
         ],
       }),
     ],

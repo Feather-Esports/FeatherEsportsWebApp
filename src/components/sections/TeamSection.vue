@@ -58,6 +58,17 @@ function setTeamView(teamId: string, view: TeamView) {
 function getRoleIcon(role: string) {
   return ROLE_ICONS[role?.toLowerCase() as keyof typeof ROLE_ICONS] ?? ROLE_ICONS.flex;
 }
+
+const teamLogos = import.meta.glob("@/assets/images/teams/*.png", {
+  eager: true,
+  import: "default",
+  query: "?url",
+}) as Record<string, string>;
+
+function getTeamLogo(id: string) {
+  if (!id) return undefined;
+  return teamLogos[`/src/assets/images/teams/${id}.png`];
+}
 </script>
 
 <template>
@@ -87,7 +98,7 @@ function getRoleIcon(role: string) {
         :style="{ '--team-color': team.color }"
       >
         <header class="team-card-header">
-          <img class="team-logo" :src="team.logo" :alt="team.name" />
+          <img class="team-logo" :src="getTeamLogo(team.id)" :alt="team.name" />
 
           <div class="team-name">{{ team.name }}</div>
           <div class="team-tier">{{ team.skillTier }}</div>
