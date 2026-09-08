@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import FlagIcon from "vue3-flag-icons";
 import { computed, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Team, TeamRegion } from "@/data/teams";
@@ -29,6 +30,18 @@ function members(team: Team) {
 function setTeamView(teamId: string, view: "players" | "staff") {
   teamViews[teamId] = view;
 }
+
+const ROLE_ICONS = {
+  tank: new URL("@/assets/images/icons/role_tank.png", import.meta.url).href,
+  damage: new URL("@/assets/images/icons/role_damage.png", import.meta.url).href,
+  support: new URL("@/assets/images/icons/role_support.png", import.meta.url).href,
+  flex: new URL("@/assets/images/icons/role_flex.png", import.meta.url).href,
+};
+
+const getRoleIcon = (role: string) => {
+  const key = role?.toLowerCase();
+  return ROLE_ICONS[key] ?? ROLE_ICONS.flex;
+};
 </script>
 
 <template>
@@ -40,13 +53,14 @@ function setTeamView(teamId: string, view: "players" | "staff") {
       role="tab"
       :aria-selected="activeRegion.id === region.id"
       :class="{ active: activeRegion.id === region.id }"
+      :style="{ '--region-color': region.color }"
       @click="uiStore.selectTeamRegion(region.id)"
     >
-      <Icon :icon="region.icon" />
+      <Icon :icon="region.icon" :color="region.color" width="1.375rem" />
       {{ t(region.label) }}
     </button>
   </div>
-  <div class="team-roster">
+  <div class="team-rosters">
     <article
       v-for="team in activeRegion.teams"
       :key="team.id"
@@ -56,49 +70,86 @@ function setTeamView(teamId: string, view: "players" | "staff") {
     >
       <header class="team-card-header">
         <img class="team-logo" :src="team.logo" :alt="team.name" />
-        <div class="team-name">
-          <strong>{{ team.name }}</strong>
-          <span>{{ t(team.skillTier) }}</span>
-        </div>
+        <div class="team-name">{{ team.name }}</div>
+        <div class="team-tier">{{ team.skillTier }}</div>
         <button
           class="team-expand"
           type="button"
           :aria-expanded="expandedTeams.has(team.id)"
           @click="toggleTeam(team.id)"
         >
-          <Icon :icon="expandedTeams.has(team.id) ? 'pixel:chevron-up' : 'pixel:chevron-down'" />
+          <Icon
+            :class="{ rotated: expandedTeams.has(team.id) }"
+            icon="pixel:chevron-down"
+            width="0.9rem"
+          />
         </button>
       </header>
-      <div class="team-card-body">
-        <template v-if="expandedTeams.has(team.id)">
-          <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
-            <button
-              type="button"
-              :class="{ active: (teamViews[team.id] ?? 'players') === 'players' }"
-              @click="setTeamView(team.id, 'players')"
-            >
-              {{ t("teams.card.players") }}
-            </button>
-            <button
-              type="button"
-              :class="{ active: (teamViews[team.id] ?? 'players') === 'staff' }"
-              @click="setTeamView(team.id, 'staff')"
-            >
-              {{ t("teams.card.staff") }}
-            </button>
+
+      <Transition name="expand">
+        <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
+          <div class="team-card-inner">
+            <div class="team-card-body">
+              <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
+                <button
+                  type="button"
+                  :class="{ active: (teamViews[team.id] ?? 'players') === 'players' }"
+                  @click="setTeamView(team.id, 'players')"
+                >
+                  {{ t("teams.card.players") }}
+                </button>
+                <button
+                  type="button"
+                  :class="{ active: (teamViews[team.id] ?? 'players') === 'staff' }"
+                  @click="setTeamView(team.id, 'staff')"
+                >
+                  {{ t("teams.card.staff") }}
+                </button>
+              </div>
+
+              <Transition name="tab-switch" mode="out-in">
+                <div :key="teamViews[team.id] ?? 'players'" class="tab-content">
+                  <ul class="member-list">
+                    <li v-for="member in members(team)" :key="member.username + member.role">
+                      <img
+                        v-if="(teamViews[team.id] ?? 'players') !== 'staff'"
+                        class="member-role-icon"
+                        :src="getRoleIcon(member.role)"
+                        :alt="member.role"
+                      />
+
+                      <div class="member-user">
+                        <FlagIcon :code="member.country.toLowerCase()" square />
+                        <span>{{ member.username }}</span>
+                      </div>
+
+                      <!-- Status Badges -->
+                      <span v-if="'isSub' in member && member.isSub" class="member-badge">
+                        {{ t("teams.card.sub") }}
+                      </span>
+                      <span v-if="'dnp' in member && member.dnp" class="member-badge">
+                        {{ t("teams.card.dnp") }}
+                      </span>
+
+                      <!-- Staff Role Badge -->
+                      <span
+                        v-if="(teamViews[team.id] ?? 'players') === 'staff' && member.role"
+                        class="member-badge"
+                      >
+                        {{ t(`teams.staff.${member.role}`) }}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </Transition>
+            </div>
           </div>
-          <ul class="member-list">
-            <li v-for="member in members(team)" :key="member.username + member.role">
-              <Icon icon="pixel:user-solid" />
-              <span>{{ member.username }}</span>
-              <small>{{ t(member.role) }}</small>
-              <em v-if="'isSub' in member && member.isSub">{{ t("teams.card.sub") }}</em>
-              <em v-if="'dnp' in member && member.dnp">{{ t("teams.card.dnp") }}</em>
-            </li>
-          </ul>
-        </template>
+        </div>
+      </Transition>
+
+      <div class="advanced-wrapper">
         <button class="advanced-button" type="button">
-          {{ t("teams.card.advanced") }}
+          <span>{{ t("teams.card.advanced") }}</span>
           <Icon icon="pixel:arrow-right" />
         </button>
       </div>
@@ -107,166 +158,291 @@ function setTeamView(teamId: string, view: "players" | "staff") {
 </template>
 
 <style scoped>
+.team-regions,
+.team-rosters {
+  margin-top: 0.75rem;
+}
+
 .team-regions {
-  border: 1px solid var(--color-line);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
-.team-regions {
-  margin-bottom: 0.75rem;
-}
-.team-regions button,
-.member-toggle button {
+.team-regions button {
   align-items: center;
-  background: transparent;
-  border: 0;
-  border-right: 1px solid var(--color-line);
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
   color: var(--color-text);
   display: flex;
-  font: inherit;
-  font-size: 0.58rem;
-  gap: 0.45rem;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.875rem;
+  gap: 0.75rem;
   justify-content: center;
-  min-height: 2.2rem;
+  min-height: 2.81rem;
   padding: 0.5rem;
+  border-radius: 0;
+
+  &:first-child {
+    border-radius: 0.19rem 0 0 0.19rem;
+  }
+  &:last-child {
+    border-radius: 0 0.19rem 0.19rem 0;
+  }
+
+  &:not(:first-child) {
+    margin-left: -1px;
+  }
+
+  &.active,
+  &:hover {
+    z-index: 1;
+    background: color-mix(in srgb, var(--region-color) 15%, var(--color-bg));
+    border-color: color-mix(in srgb, var(--region-color) 30%, var(--color-bg));
+    color: var(--color-title);
+  }
 }
-.team-regions button:last-child,
-.member-toggle button:last-child {
-  border-right: 0;
-}
-.team-regions button.active,
-.team-regions button:hover,
-.member-toggle button.active {
-  background: var(--color-heading-glow);
-  color: var(--color-brand);
-}
-.member-toggle {
-  border: 1px solid var(--color-line);
+
+.team-rosters {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-bottom: 0.55rem;
-}
-.team-roster {
-  display: grid;
-  gap: 0.5rem;
+  gap: 0.63rem;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 0.63rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 0.19rem;
 }
 .team-card {
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--team-color) 16%, var(--color-panel)),
-    var(--color-panel) 75%
-  );
-  border: 1px solid color-mix(in srgb, var(--team-color) 45%, var(--color-line));
   min-width: 0;
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  border: 0.09rem solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
+  border-radius: 0.28rem;
   overflow: hidden;
 }
 .team-card-header {
   align-items: center;
   display: flex;
-  gap: 0.6rem;
-  min-height: 3.7rem;
-  padding: 0.6rem;
+  gap: 0.5rem;
+  min-height: 2.53rem;
+  padding: 0.5rem;
 }
 .team-logo {
-  height: 1.594rem;
+  display: block;
+  height: 1.59rem;
   width: auto;
 }
 .team-name {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-}
-.team-name strong {
-  font-family: var(--font-title);
-  font-size: 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-transform: uppercase;
   white-space: nowrap;
 }
-.team-name span,
-.team-meta,
-.team-details {
-  color: var(--color-text);
-  font-size: 0.5rem;
-}
-.team-expand,
-.advanced-button {
-  background: transparent;
-  border: 1px solid var(--color-line);
-  color: var(--color-text);
-  font: inherit;
+.team-tier {
+  display: inline-flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  border: 0.03rem solid color-mix(in srgb, var(--team-color) 10%, var(--color-line));
+  border-radius: 0.12rem;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--color-title) 75%, transparent);
+  padding: 0.24rem 0.47rem;
 }
 .team-expand {
-  border: 0;
-  color: var(--team-color);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  color: var(--color-title);
   padding: 0.3rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  svg {
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  svg.rotated {
+    transform: rotate(180deg);
+  }
 }
-.team-card-body {
-  padding: 0 0.6rem 0.6rem;
+
+.team-card-expandable {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+.team-card-inner {
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tab-content {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
 .member-toggle {
-  border: 1px solid var(--color-line);
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-bottom: 0.55rem;
+  isolation: isolate;
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  border-radius: 0.28rem;
+  padding: 0.28rem;
+  margin: 0 0.6rem 0.55rem;
+}
+.member-toggle::before {
+  content: "";
+  position: absolute;
+  top: 0.28rem;
+  bottom: 0.28rem;
+  left: 0.28rem;
+  width: calc(50% - 0.28rem);
+  background: color-mix(in srgb, var(--team-color) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--team-color) 15%, var(--color-line));
+  border-radius: 0.14rem;
+  transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
 }
 .member-toggle button {
-  border-right: 1px solid var(--color-line);
+  z-index: 1;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  position: relative;
+  cursor: pointer;
+  transition: color 175ms ease;
+
+  &.active {
+    color: var(--color-title);
+  }
 }
-.member-toggle button:last-child {
-  border-right: 0;
+.member-toggle:has(button:last-child.active)::before {
+  transform: translateX(100%);
 }
-.member-toggle button.active {
-  background: color-mix(in srgb, var(--team-color) 18%, transparent);
-  color: var(--team-color);
-}
-.team-meta {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto;
-  gap: 0.4rem;
-  padding: 0.45rem 0;
-}
-.team-meta strong {
-  color: var(--team-color);
-}
+
 .member-list {
   list-style: none;
   margin: 0;
+  padding: 0;
 }
 .member-list li {
   align-items: center;
-  border-top: 1px solid var(--color-line-soft);
-  display: grid;
-  gap: 0.3rem;
-  grid-template-columns: 0.8rem 1fr auto;
-  padding: 0.42rem 0;
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.5rem 0.6rem;
 }
-.member-list li svg {
-  color: var(--team-color);
+.member-list li:nth-child(even) {
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
 }
-.member-list small {
-  color: var(--color-text);
-  font-size: 0.48rem;
+.member-list li:nth-child(odd) {
+  background: transparent;
 }
-.member-list em {
-  color: var(--team-color);
-  font-size: 0.45rem;
-  grid-column: 2 / -1;
+
+.member-role-icon {
+  display: block;
+  height: 0.94rem;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.member-user {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.member-user span {
+  color: var(--color-title);
+  font-size: 0.75rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.member-badge {
+  display: inline-flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  border: 0.03rem solid color-mix(in srgb, var(--team-color) 10%, var(--color-line));
+  border-radius: 0.12rem;
+  font-family: var(--font-body);
+  font-size: 0.53rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--color-title) 75%, transparent);
+  padding: 0.24rem 0.47rem;
+  margin-left: auto;
+}
+
+.advanced-wrapper {
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  box-sizing: border-box;
+  padding: 0.6rem;
+  width: 100%;
 }
 .advanced-button {
-  align-items: center;
   display: flex;
-  justify-content: space-between;
-  margin: 0.5rem 0.6rem 0.6rem;
-  padding: 0.45rem;
-  width: calc(100% - 1.2rem);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--color-title);
+  background: color-mix(in srgb, var(--team-color) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--team-color) 15%, var(--color-line));
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--team-color) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
+  }
 }
 .advanced-button svg {
-  color: var(--team-color);
+  color: currentColor;
+  font-size: 0.63rem;
 }
+
+.expand-enter-from,
+.expand-leave-to {
+  grid-template-rows: 0fr;
+}
+
+.tab-switch-enter-active,
+.tab-switch-leave-active {
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.tab-switch-enter-from {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.tab-switch-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
 @media (max-width: 760px) {
   .team-regions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -277,7 +453,7 @@ function setTeamView(teamId: string, view: "players" | "staff") {
   .team-regions button:nth-child(-n + 2) {
     border-bottom: 1px solid var(--color-line);
   }
-  .team-roster {
+  .team-rosters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
