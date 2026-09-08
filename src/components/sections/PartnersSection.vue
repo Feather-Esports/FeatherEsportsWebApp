@@ -64,6 +64,7 @@ function getPartnerLogo(id: string) {
           class="partner-logo"
           :src="getPartnerLogo(partner.id)"
           :alt="partner.id"
+          draggable="false"
         />
         <div class="partner-name">
           {{ partner.label }}

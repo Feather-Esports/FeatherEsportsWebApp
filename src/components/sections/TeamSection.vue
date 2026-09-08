@@ -100,7 +100,12 @@ function getTeamLogo(id: string) {
             :style="{ '--team-color': team.color }"
           >
             <header class="team-card-header">
-              <img class="team-logo" :src="getTeamLogo(team.id)" :alt="team.name" />
+              <img
+                class="team-logo"
+                :src="getTeamLogo(team.id)"
+                :alt="team.name"
+                draggable="false"
+              />
 
               <div class="team-name">{{ team.name }}</div>
               <div class="team-tier">{{ team.skillTier }}</div>
@@ -157,6 +162,7 @@ function getTeamLogo(id: string) {
                               class="member-role-icon"
                               :src="getRoleIcon(member.role)"
                               :alt="member.role"
+                              draggable="false"
                             />
 
                             <div class="member-user">
