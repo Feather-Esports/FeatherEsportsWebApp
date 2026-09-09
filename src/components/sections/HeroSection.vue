@@ -138,15 +138,10 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   background: var(--color-brand);
   text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
   box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, var(--color-brand) 20%, transparent);
-  will-change: transform;
   transition:
     transform 250ms ease,
     box-shadow 250ms ease,
     filter 250ms ease;
-
-  svg {
-    will-change: transform;
-  }
 
   &::before {
     content: "";
@@ -203,17 +198,12 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   border: 0.15rem solid var(--color-line-soft);
   border-radius: 0.2rem;
   text-transform: uppercase;
-  will-change: transform;
   transition:
     background-color 250ms ease,
     border-color 250ms ease,
     color 250ms ease,
     text-shadow 250ms ease,
     transform 250ms ease;
-
-  svg {
-    will-change: transform;
-  }
 
   &:hover {
     background: var(--color-title);
@@ -224,6 +214,20 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   }
   &:active {
     transform: translateY(0);
+  }
+}
+
+@supports (-moz-appearance: none) {
+  .hero-cta,
+  .hero-cta svg {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .social-links a,
+  .social-links a svg {
+    will-change: transform;
+    transform: translateZ(0);
   }
 }
 

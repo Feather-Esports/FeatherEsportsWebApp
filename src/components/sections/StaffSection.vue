@@ -185,7 +185,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   margin-top: 0.9rem;
-  will-change: transform;
 }
 
 .staff-grid {
@@ -347,6 +346,13 @@ onUnmounted(() => {
   &-leave-to {
     opacity: 0;
     transform: translateY(-8px);
+  }
+}
+
+@supports (-moz-appearance: none) {
+  .carousel-container {
+    will-change: transform, opacity;
+    transform: translateZ(0);
   }
 }
 
