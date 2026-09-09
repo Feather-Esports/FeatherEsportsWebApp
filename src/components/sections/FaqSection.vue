@@ -53,7 +53,8 @@ const { t } = useI18n();
 .faq-header {
   align-items: center;
   background: transparent;
-  border: 0;
+  outline: none;
+  border: none;
   display: grid;
   gap: 1rem;
   grid-template-columns: 1.1rem 1fr 1.25rem;
@@ -77,7 +78,6 @@ const { t } = useI18n();
   font-size: 0.7rem;
   transition: color 150ms ease;
 }
-
 .faq-header.active .faq-number {
   color: var(--color-brand);
 }
@@ -90,7 +90,6 @@ const { t } = useI18n();
   text-align: left;
   transition: color 150ms ease;
 }
-
 .faq-header.active .faq-title {
   color: var(--color-title);
 }
@@ -105,7 +104,6 @@ const { t } = useI18n();
     transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
     color 150ms ease;
 }
-
 .faq-header.active .faq-toggle {
   color: var(--color-brand);
   transform: rotate(45deg);
@@ -136,20 +134,16 @@ const { t } = useI18n();
 .faq-detail :deep(p) {
   margin: 0 0 0.6rem 0;
 }
-
 .faq-detail :deep(p:last-child) {
   margin-bottom: 0;
 }
-
 .faq-detail :deep(ul) {
   margin: 0.4rem 0 0.6rem 0;
   padding-left: 1.2rem;
 }
-
 .faq-detail :deep(li) {
   margin-bottom: 0.3rem;
 }
-
 .faq-detail :deep(strong) {
   color: var(--color-title);
 }

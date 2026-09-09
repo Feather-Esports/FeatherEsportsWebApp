@@ -231,6 +231,7 @@ onUnmounted(() => {
   background: color-mix(in srgb, var(--color-bg) 50%, transparent);
   color: var(--color-text);
   border: none;
+  outline: none;
   font-size: 1.45rem;
   padding: 0.9rem 0.6rem;
   cursor: pointer;
@@ -274,6 +275,7 @@ onUnmounted(() => {
   padding: 0.5rem;
   text-transform: uppercase;
   width: 100%;
+  outline: none;
   cursor: pointer;
   transition:
     background 200ms ease,
