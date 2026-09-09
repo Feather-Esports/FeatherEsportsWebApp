@@ -10,20 +10,11 @@ const uiStore = useUiStore();
 
 const subRoleLabelMap = computed(() => new Map(staffSubRoles.map((sr) => [sr.id, sr.label])));
 
-const avatarModules = import.meta.glob<string>("@/assets/images/staff/*.webp", {
+const staffAvatars = import.meta.glob("@/assets/images/staff/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
-});
-
-const staffAvatarMap = computed(() => {
-  const map = new Map<string, string>();
-  for (const [path, url] of Object.entries(avatarModules)) {
-    const id = path.split("/").pop()?.replace(".webp", "");
-    if (id) map.set(id, url);
-  }
-  return map;
-});
+}) as Record<string, string>;
 
 const activeStaffRoles = computed(() =>
   staffRoles.filter((role) => staff.some((member) => member.roles.includes(role.id))),
@@ -37,14 +28,33 @@ const visibleStaff = computed(() =>
 const carouselRef = ref<HTMLElement | null>(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
+let resizeObserver: ResizeObserver | null = null;
 
 function updateScrollState() {
   const el = carouselRef.value;
-  if (!el) return;
+  if (!el) {
+    canScrollLeft.value = false;
+    canScrollRight.value = false;
+    return;
+  }
 
   const maxScrollLeft = el.scrollWidth - el.clientWidth;
   canScrollLeft.value = el.scrollLeft > 1;
   canScrollRight.value = el.scrollLeft < maxScrollLeft - 1;
+}
+
+function attachObserverAndScroll() {
+  const el = carouselRef.value;
+  if (!el) return;
+
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
+
+  resizeObserver = new ResizeObserver(updateScrollState);
+  resizeObserver.observe(el);
+
+  updateScrollState();
 }
 
 function scrollCarousel(direction: "left" | "right") {
@@ -63,30 +73,17 @@ function getSubRoleLabel(id: string): string {
   return labelKey ? t(labelKey) : id;
 }
 
-watch(visibleStaff, async () => {
+watch([visibleStaff, uiStore.activeStaffRole], async () => {
   await nextTick();
   if (carouselRef.value) {
     carouselRef.value.scrollLeft = 0;
-    updateScrollState();
   }
 });
 
-let resizeObserver: ResizeObserver | null = null;
-
 onMounted(() => {
-  const el = carouselRef.value;
-  if (!el) return;
-
-  el.addEventListener("scroll", updateScrollState, { passive: true });
-
-  resizeObserver = new ResizeObserver(updateScrollState);
-  resizeObserver.observe(el);
-
-  updateScrollState();
+  attachObserverAndScroll();
 });
-
 onUnmounted(() => {
-  carouselRef.value?.removeEventListener("scroll", updateScrollState);
   resizeObserver?.disconnect();
 });
 </script>
@@ -117,27 +114,39 @@ onUnmounted(() => {
       <Icon icon="pixel:angle-left" />
     </button>
 
-    <div ref="carouselRef" class="staff-grid">
-      <article
-        v-for="member in visibleStaff"
-        :key="member.id"
-        class="staff-card"
-        :style="{ '--member-color': member.color }"
+    <Transition
+      name="fade-slide"
+      mode="out-in"
+      @after-enter="attachObserverAndScroll"
+      @leave="updateScrollState"
+    >
+      <div
+        :key="uiStore.activeStaffRole"
+        ref="carouselRef"
+        class="staff-grid"
+        @scroll="updateScrollState"
       >
-        <img
-          class="staff-avatar"
-          :src="staffAvatarMap.get(member.id)"
-          :alt="member.name"
-          draggable="false"
-        />
-        <div>
-          <h3>{{ member.name }}</h3>
-          <p v-for="subRoleId in member.subRoles" :key="subRoleId">
-            - {{ getSubRoleLabel(subRoleId) }}
-          </p>
-        </div>
-      </article>
-    </div>
+        <article
+          v-for="member in visibleStaff"
+          :key="member.id"
+          class="staff-card"
+          :style="{ '--member-color': member.color }"
+        >
+          <img
+            class="staff-avatar"
+            :src="staffAvatars[`/src/assets/images/staff/${member.id}.webp`]"
+            :alt="member.name"
+            draggable="false"
+          />
+          <div>
+            <h3>{{ member.name }}</h3>
+            <p v-for="subRoleId in member.subRoles" :key="subRoleId">
+              - {{ getSubRoleLabel(subRoleId) }}
+            </p>
+          </div>
+        </article>
+      </div>
+    </Transition>
 
     <button
       v-if="canScrollRight"
@@ -298,12 +307,29 @@ onUnmounted(() => {
   color: var(--color-text);
 }
 
+.fade-slide {
+  &-enter-active,
+  &-leave-active {
+    transition:
+      opacity 250ms ease,
+      transform 250ms ease;
+  }
+
+  &-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
 @media (max-width: 900px) {
   .staff-card {
     flex: 0 0 calc(50% - 0.5rem);
   }
 }
-
 @media (max-width: 600px) {
   .staff-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));

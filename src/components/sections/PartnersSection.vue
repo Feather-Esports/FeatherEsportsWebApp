@@ -33,16 +33,11 @@ const copyCode = async (code: string) => {
   }
 };
 
-const partnerLogos = import.meta.glob("@/assets/images/partners/*.png", {
+const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
 }) as Record<string, string>;
-
-function getPartnerLogo(id: string) {
-  if (!id) return undefined;
-  return partnerLogos[`/src/assets/images/partners/${id}.png`];
-}
 </script>
 
 <template>
@@ -62,7 +57,7 @@ function getPartnerLogo(id: string) {
         <img
           v-if="partner.id !== 'cta'"
           class="partner-logo"
-          :src="getPartnerLogo(partner.id)"
+          :src="partnerLogos[`/src/assets/images/partners/${partner.id}.webp`]"
           :alt="partner.id"
           draggable="false"
         />
@@ -113,7 +108,6 @@ function getPartnerLogo(id: string) {
   padding: 1rem;
   cursor: pointer;
   transition:
-    transform 180ms ease,
     border-color 180ms ease,
     background-color 180ms ease,
     box-shadow 180ms ease;
@@ -123,7 +117,6 @@ function getPartnerLogo(id: string) {
     border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-line));
     background: color-mix(in srgb, var(--color-brand) 6%, var(--color-bg));
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-brand) 15%, transparent);
-    transform: translateY(-1px);
   }
 }
 .partner-card.is-cta {

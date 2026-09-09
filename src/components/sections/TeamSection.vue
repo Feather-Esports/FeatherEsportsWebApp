@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import FlagIcon from "vue3-flag-icons";
 import { computed, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Team, TeamRegion } from "@/data/teams";
@@ -29,10 +28,10 @@ const activeRegion = computed<TeamRegion>(
 );
 
 const ROLE_ICONS = {
-  tank: new URL("@/assets/images/icons/role_tank.png", import.meta.url).href,
-  damage: new URL("@/assets/images/icons/role_damage.png", import.meta.url).href,
-  support: new URL("@/assets/images/icons/role_support.png", import.meta.url).href,
-  flex: new URL("@/assets/images/icons/role_flex.png", import.meta.url).href,
+  tank: new URL("@/assets/images/icons/role_tank.webp", import.meta.url).href,
+  damage: new URL("@/assets/images/icons/role_damage.webp", import.meta.url).href,
+  support: new URL("@/assets/images/icons/role_support.webp", import.meta.url).href,
+  flex: new URL("@/assets/images/icons/role_flex.webp", import.meta.url).href,
 } as const;
 
 function toggleTeam(teamId: string) {
@@ -59,16 +58,21 @@ function getRoleIcon(role: string) {
   return ROLE_ICONS[role?.toLowerCase() as keyof typeof ROLE_ICONS] ?? ROLE_ICONS.flex;
 }
 
-const teamLogos = import.meta.glob("@/assets/images/teams/*.png", {
+function getCountryEmoji(country: string) {
+  const normalizedCountry = country.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(normalizedCountry)) {
+    return "??";
+  }
+  return String.fromCodePoint(
+    ...normalizedCountry.split("").map((char) => 127397 + char.charCodeAt(0)),
+  );
+}
+
+const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
 }) as Record<string, string>;
-
-function getTeamLogo(id: string) {
-  if (!id) return undefined;
-  return teamLogos[`/src/assets/images/teams/${id}.png`];
-}
 </script>
 
 <template>
@@ -102,7 +106,7 @@ function getTeamLogo(id: string) {
             <header class="team-card-header">
               <img
                 class="team-logo"
-                :src="getTeamLogo(team.id)"
+                :src="teamLogos[`/src/assets/images/teams/${team.id}.webp`]"
                 :alt="team.name"
                 draggable="false"
               />
@@ -166,7 +170,12 @@ function getTeamLogo(id: string) {
                             />
 
                             <div class="member-user">
-                              <FlagIcon :code="member.country.toLowerCase()" square />
+                              <span
+                                class="member-country"
+                                :aria-label="member.country.toUpperCase()"
+                              >
+                                {{ getCountryEmoji(member.country) }}
+                              </span>
                               <span>{{ member.username }}</span>
                             </div>
 
@@ -301,6 +310,7 @@ function getTeamLogo(id: string) {
   border: 0.09rem solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
   border-radius: 0.28rem;
   overflow: hidden;
+  will-change: transform;
 }
 
 .team-card-header {
@@ -412,6 +422,7 @@ function getTeamLogo(id: string) {
   list-style: none;
   margin: 0;
   padding: 0;
+  will-change: transform;
 }
 .member-list li {
   align-items: center;
@@ -432,6 +443,13 @@ function getTeamLogo(id: string) {
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+.member-country {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  font-family: var(--font-emoji);
 }
 
 .member-user {

@@ -42,10 +42,10 @@ const { t } = useI18n();
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
   min-height: 100svh;
   text-align: center;
+  contain: paint layout;
 
   &::before {
     content: "";
@@ -59,9 +59,10 @@ const { t } = useI18n();
         rgba(9, 9, 11, 0.75) 75%,
         rgba(9, 9, 11, 0.15) 100%
       ),
-      url("@/assets/images/feather_banner_bg.png") center / cover;
-    mask: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
-    -webkit-mask: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+      url("@/assets/images/background/hero_banner.webp") center / cover;
+
+    -webkit-mask: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
+    mask: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
   }
 }
 .hero-content {
@@ -117,10 +118,15 @@ const { t } = useI18n();
   background: var(--color-brand);
   text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
   box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, var(--color-brand) 20%, transparent);
+  will-change: transform;
   transition:
     transform 250ms ease,
     box-shadow 250ms ease,
     filter 250ms ease;
+
+  svg {
+    will-change: transform;
+  }
 
   &::before {
     content: "";
@@ -143,12 +149,10 @@ const { t } = useI18n();
     transform: translateY(-2px);
     box-shadow: 0 0.4rem 1.25rem color-mix(in srgb, var(--color-brand) 40%, transparent);
     filter: brightness(1.08);
-
     &::before {
       left: 140%;
     }
   }
-
   &:active {
     transform: translateY(0);
     box-shadow: 0 0.2rem 0.5rem color-mix(in srgb, var(--color-brand) 30%, transparent);
@@ -175,12 +179,17 @@ const { t } = useI18n();
   border: 0.15rem solid var(--color-line-soft);
   border-radius: 0.16rem;
   text-transform: uppercase;
+  will-change: transform;
   transition:
     background-color 250ms ease,
     border-color 250ms ease,
     color 250ms ease,
     text-shadow 250ms ease,
     transform 250ms ease;
+
+  svg {
+    will-change: transform;
+  }
 
   &:hover {
     background: var(--color-title);

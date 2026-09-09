@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import SiteFooter from "@/components/layout/SiteFooter.vue";
-import SiteHeader from "@/components/layout/SiteHeader.vue";
-import SectionHeading from "@/components/widgets/SectionHeading.vue";
-import HeroSection from "@/components/sections/HeroSection.vue";
-import TeamSection from "@/components/sections/TeamSection.vue";
-import FaqSection from "@/components/sections/FaqSection.vue";
-import MatchesSection from "@/components/sections/MatchesSection.vue";
-import PartnersSection from "@/components/sections/PartnersSection.vue";
-import StaffSection from "@/components/sections/StaffSection.vue";
-import { teamRegions } from "@/data/teams";
-import Atmosphere from "@/components/background/Atmosphere.vue";
+import { useI18n } from "vue-i18n"
+import Atmosphere from "@/components/background/Atmosphere.vue"
+import SiteFooter from "@/components/layout/SiteFooter.vue"
+import SiteHeader from "@/components/layout/SiteHeader.vue"
+import FaqSection from "@/components/sections/FaqSection.vue"
+import HeroSection from "@/components/sections/HeroSection.vue"
+import MatchesSection from "@/components/sections/MatchesSection.vue"
+import PartnersSection from "@/components/sections/PartnersSection.vue"
+import StaffSection from "@/components/sections/StaffSection.vue"
+import TeamSection from "@/components/sections/TeamSection.vue"
+import { teamRegions } from "@/data/teams"
+import SectionHeading from "@/components/widgets/SectionHeading.vue"
 
-const { t } = useI18n();
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="site-shell">
-    <Atmosphere v-once />
-    <SiteHeader v-once />
+    <Atmosphere />
+    <SiteHeader />
     <main>
-      <HeroSection v-once />
+      <HeroSection />
 
       <!-- Teams -->
       <section id="teams" class="content-section" aria-labelledby="teams-title">
         <SectionHeading
+          heading-id="teams-title"
           :title="t('sections.teams.title')"
           :description="t('sections.teams.description')"
-          v-once
         />
         <TeamSection :regions="teamRegions" />
       </section>
@@ -35,16 +35,17 @@ const { t } = useI18n();
       <!-- FAQ -->
       <section id="faq" class="content-section" aria-labelledby="faq-title">
         <SectionHeading
+          heading-id="faq-title"
           :title="t('sections.faq.title')"
           :description="t('sections.faq.description')"
-          v-once
         />
         <FaqSection />
       </section>
 
       <!-- Matches -->
-      <section id="matches" class="content-section" aria-labelledby="matches-title" v-once>
+      <section id="matches" class="content-section" aria-labelledby="matches-title">
         <SectionHeading
+          heading-id="matches-title"
           :title="t('sections.matches.title')"
           :description="t('sections.matches.description')"
         />
@@ -52,8 +53,9 @@ const { t } = useI18n();
       </section>
 
       <!-- Partners -->
-      <section id="partners" class="content-section" aria-labelledby="partners-title" v-once>
+      <section id="partners" class="content-section" aria-labelledby="partners-title">
         <SectionHeading
+          heading-id="partners-title"
           :title="t('sections.partners.title')"
           :description="t('sections.partners.description')"
         />
@@ -63,14 +65,14 @@ const { t } = useI18n();
       <!-- Staff -->
       <section id="staff" class="content-section" aria-labelledby="staff-title">
         <SectionHeading
+          heading-id="staff-title"
           :title="t('sections.staff.title')"
           :description="t('sections.staff.description')"
-          v-once
         />
         <StaffSection />
       </section>
     </main>
-    <SiteFooter v-once />
+    <SiteFooter />
   </div>
 </template>
 
