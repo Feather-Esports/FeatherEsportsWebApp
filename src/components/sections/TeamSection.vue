@@ -42,6 +42,16 @@ const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   query: "?url",
 }) as Record<string, string>;
 
+const PLATFORM_ICONS = {
+  pc: "pixel:pc-solid",
+  console: "pixel:gaming",
+  mixed: "pixel:retro-pc-solid",
+} as const;
+
+function getPlatformIcon(platform: Team["platform"]): string {
+  return PLATFORM_ICONS[platform] ?? "lucide:monitor";
+}
+
 function toggleTeam(teamId: string): void {
   const nextExpanded = new Set(expandedTeams.value);
 
@@ -119,7 +129,15 @@ onMounted(() => {
             :class="{ expanded: expandedTeams.has(team.id) }"
             :style="{ '--team-color': team.color }"
           >
-            <header class="team-card-header">
+            <header
+              class="team-card-header"
+              tabindex="0"
+              role="button"
+              :aria-expanded="expandedTeams.has(team.id)"
+              @click="toggleTeam(team.id)"
+              @keydown.enter.prevent="toggleTeam(team.id)"
+              @keydown.space.prevent="toggleTeam(team.id)"
+            >
               <img
                 class="team-logo"
                 :src="teamLogos[`/src/assets/images/teams/${team.id}.webp`]"
@@ -130,20 +148,16 @@ onMounted(() => {
               />
 
               <div class="team-name">{{ team.name }}</div>
+              <Icon class="team-platform" :icon="getPlatformIcon(team.platform)" />
               <div class="team-tier">{{ team.skillTier }}</div>
 
-              <button
-                class="team-expand"
-                type="button"
-                :aria-expanded="expandedTeams.has(team.id)"
-                @click="toggleTeam(team.id)"
-              >
+              <div class="team-expand">
                 <Icon
                   :class="{ rotated: expandedTeams.has(team.id) }"
                   icon="pixel:chevron-down"
                   width="0.9rem"
                 />
-              </button>
+              </div>
             </header>
 
             <Transition name="expand">
@@ -261,6 +275,7 @@ onMounted(() => {
   justify-content: center;
   min-height: 2.81rem;
   padding: 0.5rem;
+  outline: none;
   border-radius: 0;
   transition:
     background-color 200ms ease,
@@ -304,6 +319,7 @@ onMounted(() => {
 
 .rosters-grid {
   display: grid;
+  align-items: start;
   gap: 0.63rem;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   width: 100%;
@@ -337,6 +353,10 @@ onMounted(() => {
   gap: 0.5rem;
   min-height: 2.53rem;
   padding: 0.5rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 .team-logo {
   display: block;
@@ -350,6 +370,16 @@ onMounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.team-card.expanded .team-name {
+  white-space: normal;
+  word-break: break-word;
+  overflow: visible;
+  text-overflow: clip;
+}
+.team-platform {
+  font-size: 0.9rem;
+  color: var(--color-title);
 }
 .team-tier {
   display: inline-flex;
@@ -370,9 +400,6 @@ onMounted(() => {
   margin-left: auto;
   color: var(--color-title);
   padding: 0.3rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
 
   svg {
     transition: transform 250ms ease;
@@ -419,6 +446,7 @@ onMounted(() => {
   z-index: 1;
   background: transparent;
   border: none;
+  outline: none;
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 0.66rem;
@@ -553,9 +581,17 @@ onMounted(() => {
 }
 
 .expand {
+  &-enter-active,
+  &-leave-active {
+    transition:
+      grid-template-rows 250ms ease,
+      opacity 200ms ease;
+  }
+
   &-enter-from,
   &-leave-to {
     grid-template-rows: 0fr;
+    opacity: 0;
   }
 }
 
