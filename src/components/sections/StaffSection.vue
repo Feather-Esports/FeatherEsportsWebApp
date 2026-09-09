@@ -238,19 +238,20 @@ onUnmounted(() => {
   border-radius: 0.19rem;
   transition:
     background-color 200ms ease,
+    color 200ms ease,
     opacity 200ms ease;
-}
 
-.carousel-arrow:hover {
-  background: var(--color-brand);
-  color: var(--color-title);
-}
+  &:hover {
+    background: var(--color-brand);
+    color: var(--color-bg);
+  }
 
-.carousel-arrow.prev {
-  left: 0.5rem;
-}
-.carousel-arrow.next {
-  right: 0.5rem;
+  &.prev {
+    left: 0.5rem;
+  }
+  &.next {
+    right: 0.5rem;
+  }
 }
 
 .staff-tabs {
