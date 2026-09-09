@@ -105,24 +105,37 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   display: flex;
   flex-direction: column;
   min-height: 10.63rem;
-  gap: 1.25rem;
+  gap: 1rem;
   border: 1px solid var(--color-line);
   border-radius: 0.19rem;
   background: var(--color-bg);
   padding: 1rem;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition:
     border-color 180ms ease,
     background-color 180ms ease,
     box-shadow 180ms ease;
 
-  &:hover,
+  @media (hover: hover) {
+    &:hover {
+      border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-line));
+      background: color-mix(in srgb, var(--color-brand) 6%, var(--color-bg));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-brand) 15%, transparent);
+    }
+  }
+
+  &:active {
+    background: color-mix(in srgb, var(--color-brand) 10%, var(--color-bg));
+  }
+
   &:focus-visible {
+    outline: none;
     border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-line));
-    background: color-mix(in srgb, var(--color-brand) 6%, var(--color-bg));
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-brand) 15%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-brand) 40%, transparent);
   }
 }
+
 .partner-card.is-cta {
   border-style: dashed;
 }
@@ -132,20 +145,29 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   align-items: center;
   gap: 0.75rem;
 }
+
 .partner-logo {
   height: 1.38rem;
   width: auto;
+  max-width: 5rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
+
 .partner-name {
   font-family: var(--font-title);
   font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.1;
+  font-size: 0.95rem;
+  line-height: 1.2;
   color: var(--color-title);
   text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .partner-icon {
-  justify-self: end;
+  flex-shrink: 0;
   margin-left: auto;
   font-size: 1.13rem;
   color: var(--color-title);
@@ -156,7 +178,7 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--color-text);
 }
 
@@ -165,20 +187,29 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+  min-height: 2.75rem;
   border: 1px solid var(--color-line);
   border-radius: 0.25rem;
   background: var(--color-panel);
   color: var(--color-text);
-  padding: 0.6rem 0.85rem;
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition:
     color 160ms ease,
     border-color 160ms ease,
     background-color 160ms ease;
 
-  &:hover {
-    color: var(--color-title);
-    border-color: color-mix(in srgb, var(--color-brand) 60%, var(--color-line));
-    background: color-mix(in srgb, var(--color-brand) 10%, rgba(255, 255, 255, 0.02));
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title);
+      border-color: color-mix(in srgb, var(--color-brand) 60%, var(--color-line));
+      background: color-mix(in srgb, var(--color-brand) 10%, rgba(255, 255, 255, 0.02));
+    }
+  }
+
+  &:active {
+    background: color-mix(in srgb, var(--color-brand) 20%, var(--color-panel));
   }
 }
 
@@ -197,19 +228,36 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
 .code-icon {
   font-size: 0.9rem;
   color: var(--color-text);
+  flex-shrink: 0;
   transition: color 160ms ease;
 }
-.partner-code:hover .code-icon {
-  color: var(--color-brand);
+
+@media (hover: hover) {
+  .partner-code:hover .code-icon {
+    color: var(--color-brand);
+  }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1024px) {
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
   .partners-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 
   .partner-card {
-    min-height: 15rem;
+    min-height: auto;
+    padding: 0.875rem;
+  }
+
+  .partner-name {
+    font-size: 0.9rem;
   }
 }
 </style>
