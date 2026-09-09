@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Team, TeamRegion } from "@/data/teams";
 import { useUiStore } from "@/stores/ui";
@@ -81,6 +81,14 @@ function getCountryEmoji(country: string): string {
     ...normalizedCountry.split("").map((character) => 127397 + character.charCodeAt(0)),
   );
 }
+
+onMounted(() => {
+  Object.values(teamLogos).forEach((url) => {
+    const img = new Image();
+    img.src = url;
+    img.decode().catch(() => {});
+  });
+});
 </script>
 
 <template>
@@ -116,6 +124,8 @@ function getCountryEmoji(country: string): string {
                 class="team-logo"
                 :src="teamLogos[`/src/assets/images/teams/${team.id}.webp`]"
                 :alt="team.name"
+                loading="eager"
+                decoding="async"
                 draggable="false"
               />
 

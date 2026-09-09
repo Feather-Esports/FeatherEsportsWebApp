@@ -92,6 +92,11 @@ watch([visibleStaff, () => uiStore.activeStaffRole], async () => {
 });
 
 onMounted(() => {
+  Object.values(staffAvatars).forEach((url) => {
+    const img = new Image();
+    img.src = url;
+    img.decode().catch(() => {});
+  });
   attachObserverAndScroll();
 });
 
@@ -148,6 +153,8 @@ onUnmounted(() => {
             class="staff-avatar"
             :src="staffAvatars[`/src/assets/images/staff/${member.id}.webp`]"
             :alt="member.name"
+            loading="eager"
+            decoding="async"
             draggable="false"
           />
           <div>
@@ -300,6 +307,8 @@ onUnmounted(() => {
   color: var(--color-title);
   height: 100%;
   width: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
 }
 
 .staff-card h3 {
