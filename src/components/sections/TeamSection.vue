@@ -367,7 +367,7 @@ onUnmounted(() => {
   background: var(--color-bg);
   border: 1px solid var(--color-line);
   border-radius: 0.19rem;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
 }
 
 .team-card {

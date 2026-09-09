@@ -26,6 +26,7 @@ const { t } = useI18n();
   text-align: center;
   background: var(--color-bg);
   border: 1px dashed var(--color-line);
+  padding: 0 1rem;
 }
 .matches-section svg {
   font-size: 1.5rem;
