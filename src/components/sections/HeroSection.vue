@@ -68,7 +68,7 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
         rgba(9, 9, 11, 0.75) 75%,
         rgba(9, 9, 11, 0.15) 100%
       ),
-      url("@/assets/images/background/hero_banner.webp") center / cover;
+      url("@/assets/images/background/hero_banner.avif") center / cover;
 
     -webkit-mask: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
     mask: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
