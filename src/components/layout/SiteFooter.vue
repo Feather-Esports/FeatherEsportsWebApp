@@ -7,10 +7,14 @@ const { t } = useI18n();
 
 <template>
   <footer>
-    <a class="wordmark" href="/" :aria-label="t('footer.label')"
-      ><Icon icon="game-icons:feather" /><span>Feather</span></a
-    ><span class="footer-divider">//</span><a class="contact" href="/">{{ t("footer.contact") }}</a
-    ><span class="footer-divider">//</span><a class="legal" href="/">{{ t("footer.legal") }}</a>
+    <a class="wordmark" href="/" :aria-label="t('footer.label')">
+      <Icon icon="game-icons:feather" />
+      <span>Feather</span>
+    </a>
+    <span class="footer-divider">//</span>
+    <a class="contact" href="/">{{ t("footer.contact") }}</a>
+    <span class="footer-divider">//</span>
+    <a class="legal" href="/">{{ t("footer.legal") }}</a>
   </footer>
 </template>
 
@@ -27,6 +31,7 @@ footer {
   background: var(--color-bg);
   border-top: 1px solid var(--color-line);
 }
+
 .wordmark {
   display: inline-flex;
   align-items: center;
@@ -36,6 +41,7 @@ footer {
   font-size: 1.593rem;
   text-transform: uppercase;
 }
+
 .footer-divider {
   color: var(--color-text-muted);
   font-family: var(--font-body);
@@ -43,6 +49,7 @@ footer {
   font-weight: 500;
   pointer-events: none;
 }
+
 .contact,
 .legal {
   font-family: var(--font-title);

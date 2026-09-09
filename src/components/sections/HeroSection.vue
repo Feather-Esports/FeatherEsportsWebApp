@@ -1,25 +1,33 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { Icon } from "@iconify/vue";
 import { useI18n } from "vue-i18n";
-import { socialLinks } from "@/data/site";
-import { discordLink } from "@/data/site";
+import { socialLinks, discordLink } from "@/data/site";
 
 const { t } = useI18n();
+
+const subtitleParts = computed(() => t("hero.subtitle").split("/"));
 </script>
 
 <template>
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-content">
       <h1 id="hero-title">{{ t("hero.title") }}</h1>
+
       <p class="hero-subtitle">
-        <template v-for="(part, index) in t('hero.subtitle').split('/')" :key="index">
-          <span v-if="index" class="subtitle-divider">/</span>{{ part }}
+        <template v-for="(part, index) in subtitleParts" :key="`${part}-${index}`">
+          <span v-if="index" class="subtitle-divider">/</span>
+          {{ part }}
         </template>
       </p>
+
       <p class="hero-description">{{ t("hero.description") }}</p>
-      <a class="hero-cta" :href="discordLink.href" target="_blank" rel="noreferrer"
-        ><Icon :icon="discordLink.icon" width="2rem" /> {{ t("hero.cta") }}</a
-      >
+
+      <a class="hero-cta" :href="discordLink.href" target="_blank" rel="noreferrer">
+        <Icon :icon="discordLink.icon" width="2rem" />
+        {{ t("hero.cta") }}
+      </a>
+
       <div class="social-links" aria-label="Social links">
         <a
           v-for="social in socialLinks"
@@ -28,8 +36,9 @@ const { t } = useI18n();
           target="_blank"
           rel="noreferrer"
         >
-          <Icon :icon="social.icon" width="1.175rem" /> {{ social.label }}</a
-        >
+          <Icon :icon="social.icon" width="1.175rem" />
+          {{ social.label }}
+        </a>
       </div>
     </div>
   </section>
@@ -65,6 +74,7 @@ const { t } = useI18n();
     mask: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
   }
 }
+
 .hero-content {
   position: relative;
   z-index: 3;
@@ -149,6 +159,7 @@ const { t } = useI18n();
     transform: translateY(-2px);
     box-shadow: 0 0.4rem 1.25rem color-mix(in srgb, var(--color-brand) 40%, transparent);
     filter: brightness(1.08);
+
     &::before {
       left: 140%;
     }
@@ -220,6 +231,7 @@ const { t } = useI18n();
     font-size: 0.82rem;
     height: 2.5rem;
   }
+
   .social-links {
     width: 70%;
     gap: 0.4rem;

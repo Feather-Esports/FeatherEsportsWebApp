@@ -39,6 +39,7 @@ export type TeamRegion = {
 type TeamOptions = Omit<Team, "id" | "region"> & { id: string; region: string }
 
 const team = (options: TeamOptions): Team => options
+
 const player = (username: string, country: string, role: string, isSub = false, dnp = false): TeamPlayer => ({
   username,
   country,
@@ -46,6 +47,7 @@ const player = (username: string, country: string, role: string, isSub = false, 
   isSub,
   dnp,
 })
+
 const staff = (username: string, country: string, role: string): TeamStaff => ({
   username,
   country,

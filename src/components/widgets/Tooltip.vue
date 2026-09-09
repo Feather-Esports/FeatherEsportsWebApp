@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from "vue";
 
-withDefaults(defineProps<{ id?: string }>(), { id: "tooltip" });
+const props = withDefaults(defineProps<{ id?: string }>(), {
+  id: "tooltip",
+});
 
 const visible = ref(false);
-const tooltipElement = ref<HTMLElement>();
+const tooltipElement = ref<HTMLElement | null>(null);
 const tooltipStyle = ref<Record<string, string>>({});
 
-function updatePosition() {
+function updatePosition(): void {
   const trigger = tooltipElement.value?.previousElementSibling;
-  if (!(trigger instanceof HTMLElement) || !tooltipElement.value) return;
+  if (!(trigger instanceof HTMLElement) || !tooltipElement.value) {
+    return;
+  }
 
   const gutter = 12;
   const triggerCenter = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
@@ -26,12 +30,21 @@ function updatePosition() {
   };
 }
 
-function show() {
+function handleMouseEnter(): void {
   visible.value = true;
   void nextTick(updatePosition);
 }
 
-function hide() {
+function handleMouseLeave(): void {
+  visible.value = false;
+}
+
+function handleFocusIn(): void {
+  visible.value = true;
+  void nextTick(updatePosition);
+}
+
+function handleFocusOut(): void {
   visible.value = false;
 }
 
@@ -40,19 +53,20 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
 </script>
 
 <template>
-  <div class="tooltip" @mouseenter="show" @mouseleave="hide">
+  <div class="tooltip" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <span
-      :aria-describedby="visible ? id : undefined"
+      :aria-describedby="visible ? props.id : undefined"
       class="tooltip-trigger"
-      @focusin="show"
-      @focusout="hide"
+      @focusin="handleFocusIn"
+      @focusout="handleFocusOut"
     >
       <slot name="trigger" />
     </span>
+
     <Transition name="tooltip-fade">
       <div
         v-if="visible"
-        :id="id"
+        :id="props.id"
         ref="tooltipElement"
         class="tooltip-content"
         role="tooltip"
@@ -68,6 +82,7 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
 .tooltip {
   position: relative;
 }
+
 .tooltip-trigger {
   display: inline-flex;
 }
@@ -80,7 +95,7 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
   top: 0;
   left: 0;
   width: min(15rem, calc(100vw - 1.5rem));
-  padding: 1rem 1rem;
+  padding: 1rem;
   gap: 0.5rem;
   background: var(--color-title);
   border-radius: 0.19rem;

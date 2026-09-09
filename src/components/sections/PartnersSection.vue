@@ -5,8 +5,10 @@ import { ref } from "vue";
 
 const copiedCode = ref<string | null>(null);
 
-const openPartner = (link: string) => {
-  if (!link) return;
+function openPartner(link: string): void {
+  if (!link) {
+    return;
+  }
 
   if (link.startsWith("mailto:")) {
     window.location.href = link;
@@ -14,10 +16,12 @@ const openPartner = (link: string) => {
   }
 
   window.open(link, "_blank", "noopener,noreferrer");
-};
+}
 
-const copyCode = async (code: string) => {
-  if (!code) return;
+async function copyCode(code: string): Promise<void> {
+  if (!code) {
+    return;
+  }
 
   try {
     await navigator.clipboard.writeText(code);
@@ -31,7 +35,7 @@ const copyCode = async (code: string) => {
   } catch {
     copiedCode.value = null;
   }
-};
+}
 
 const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   eager: true,
@@ -76,7 +80,7 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
         v-if="partner.code"
         type="button"
         class="partner-code"
-        @click.stop="copyCode(partner.code!)"
+        @click.stop="copyCode(partner.code)"
         :aria-label="`Copy affiliate code for ${partner.id}`"
       >
         <span class="code-content">
@@ -132,7 +136,6 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   height: 1.38rem;
   width: auto;
 }
-
 .partner-name {
   font-family: var(--font-title);
   font-weight: 700;
@@ -141,7 +144,6 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   color: var(--color-title);
   text-transform: uppercase;
 }
-
 .partner-icon {
   justify-self: end;
   margin-left: auto;

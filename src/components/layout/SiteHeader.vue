@@ -1,56 +1,78 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { discordLink } from "@/data/site";
 import Tooltip from "@/components/widgets/Tooltip.vue";
 
+type NavigationItem = {
+  id: string;
+  label: string;
+};
+
 const { t } = useI18n();
 const menuOpen = ref(false);
 
-const navigation = [
+const navigation: NavigationItem[] = [
   { id: "teams", label: "header.nav.teams" },
   { id: "faq", label: "header.nav.faq" },
   { id: "matches", label: "header.nav.matches" },
   { id: "partners", label: "header.nav.partners" },
   { id: "staff", label: "header.nav.staff" },
 ];
+
+const menuLabel = computed(() => (menuOpen.value ? "Close menu" : "Open menu"));
+
+function handleMenuToggle(): void {
+  menuOpen.value = !menuOpen.value;
+}
+
+function handleNavSelect(): void {
+  menuOpen.value = false;
+}
 </script>
 
 <template>
   <header class="site-header">
-    <a class="wordmark" href="/"
-      ><Icon icon="game-icons:feather" width="2.125rem" /><span>Feather</span></a
-    >
+    <a class="wordmark" href="/">
+      <Icon icon="game-icons:feather" width="2.125rem" />
+      <span>Feather</span>
+    </a>
+
     <button
       class="menu-toggle"
       type="button"
       :aria-expanded="menuOpen"
       aria-controls="site-navigation"
-      :aria-label="menuOpen ? 'Close menu' : 'Open menu'"
-      @click="menuOpen = !menuOpen"
+      :aria-label="menuLabel"
+      @click="handleMenuToggle"
     >
       <Icon :icon="menuOpen ? 'pixel:times' : 'pixel:bars'" />
     </button>
+
     <div class="header-panel" :class="{ open: menuOpen }">
       <nav id="site-navigation" class="main-nav" aria-label="Main navigation">
-        <a v-for="item in navigation" :key="item.id" :href="`#${item.id}`">
+        <a v-for="item in navigation" :key="item.id" :href="`#${item.id}`" @click="handleNavSelect">
           {{ t(item.label) }}
         </a>
       </nav>
+
       <div class="header-links">
         <Tooltip id="wip-tooltip">
           <template #trigger>
             <div class="wip-indicator">
-              <Icon icon="pixel:exclaimation-solid" width="0.875rem" /> {{ t("header.wip") }}
+              <Icon icon="pixel:exclaimation-solid" width="0.875rem" />
+              {{ t("header.wip") }}
             </div>
           </template>
           <strong>{{ t("header.wipTooltip.title") }}</strong>
           <p>{{ t("header.wipTooltip.description") }}</p>
         </Tooltip>
-        <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer"
-          ><Icon :icon="discordLink.icon" width="1.375rem" /> {{ t("header.discord") }}</a
-        >
+
+        <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer">
+          <Icon :icon="discordLink.icon" width="1.375rem" />
+          {{ t("header.discord") }}
+        </a>
       </div>
     </div>
   </header>
@@ -62,8 +84,7 @@ const navigation = [
   display: flex;
   align-items: center;
   position: fixed;
-  left: 0;
-  top: 0;
+  inset: 0 0 auto;
   width: 100%;
   min-height: 3.75rem;
   justify-content: space-between;
@@ -93,9 +114,11 @@ const navigation = [
   font-weight: 600;
   text-transform: uppercase;
 }
+
 .header-panel {
   display: contents;
 }
+
 .main-nav a {
   position: relative;
   color: var(--color-title);
@@ -128,6 +151,7 @@ const navigation = [
   align-items: center;
   gap: 1rem;
 }
+
 .wip-indicator,
 .discord-link {
   display: inline-flex;
@@ -138,15 +162,17 @@ const navigation = [
   font-weight: 600;
   gap: 0.313rem;
   height: 1.875rem;
-  padding: 0rem 0.63rem;
+  padding: 0 0.63rem;
   text-transform: uppercase;
   border-radius: 0.19rem;
 }
+
 .wip-indicator {
   border: 1px solid var(--color-brand);
   color: var(--color-brand);
   cursor: help;
 }
+
 .discord-link {
   background: var(--color-brand);
   color: var(--color-brand-muted);
@@ -158,6 +184,7 @@ const navigation = [
     min-height: 3.75rem;
     padding: 0.8rem 1rem;
   }
+
   .menu-toggle {
     display: inline-flex;
     align-items: center;
@@ -171,6 +198,7 @@ const navigation = [
     border: 1px solid var(--color-brand);
     border-radius: 0.19rem;
   }
+
   .main-nav {
     display: none;
     flex-direction: column;
@@ -183,6 +211,7 @@ const navigation = [
     border-bottom: 1px solid var(--color-line-soft);
     padding: 0.8rem 0;
   }
+
   .header-panel {
     display: none;
     background: color-mix(in srgb, var(--color-header) 96%, transparent);
@@ -191,11 +220,13 @@ const navigation = [
     position: absolute;
     top: 100%;
     width: 100%;
+
+    &.open,
+    &.open .main-nav {
+      display: flex;
+    }
   }
-  .header-panel.open,
-  .header-panel.open .main-nav {
-    display: flex;
-  }
+
   .header-links {
     display: none;
   }

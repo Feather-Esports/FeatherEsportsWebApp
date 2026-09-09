@@ -6,15 +6,15 @@ export const useUiStore = defineStore("ui", () => {
   const activeStaffRole = ref("founders")
   const openFaq = ref<string | null>(null)
 
-  function selectTeamRegion(region: string) {
+  function selectTeamRegion(region: string): void {
     activeTeamRegion.value = region
   }
 
-  function selectStaffRole(role: string) {
+  function selectStaffRole(role: string): void {
     activeStaffRole.value = role
   }
 
-  function toggleFaq(label: string) {
+  function toggleFaq(label: string): void {
     openFaq.value = openFaq.value === label ? null : label
   }
 

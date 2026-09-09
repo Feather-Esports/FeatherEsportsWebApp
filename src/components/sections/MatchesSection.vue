@@ -39,7 +39,6 @@ const { t } = useI18n();
   text-transform: uppercase;
 }
 .matches-section span {
-  font-size: 0.58rem;
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 0.9rem;

@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 
-const pluses = Array.from({ length: 18 }, (_, index) => ({
+type FloatingPlus = {
+  id: number;
+  left: string;
+  top: string;
+  size: string;
+  delay: string;
+  duration: string;
+  driftX: string;
+  driftY: string;
+};
+
+const pluses: FloatingPlus[] = Array.from({ length: 18 }, (_, index) => ({
   id: index,
   left: `${2 + ((index * 37) % 94)}%`,
   top: `${2 + ((index * 53) % 94)}%`,
@@ -41,6 +52,7 @@ const pluses = Array.from({ length: 18 }, (_, index) => ({
   width: 100vw;
   pointer-events: none;
 }
+
 .atmosphere-grid {
   z-index: 0;
   position: fixed;
@@ -50,13 +62,13 @@ const pluses = Array.from({ length: 18 }, (_, index) => ({
   background-position: center;
   background-size: 1.875rem 1.875rem;
 }
+
 .atmosphere-pluses {
   z-index: 2;
   position: absolute;
   bottom: 0;
   height: auto;
 }
-
 .atmosphere-plus {
   z-index: 2;
   position: absolute;

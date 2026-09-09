@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, ref, onMounted, onUnmounted, watch, nextTick } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { staff, staffRoles, staffSubRoles } from "@/data/site";
 import { useUiStore } from "@/stores/ui";
@@ -8,7 +8,9 @@ import { useUiStore } from "@/stores/ui";
 const { t } = useI18n();
 const uiStore = useUiStore();
 
-const subRoleLabelMap = computed(() => new Map(staffSubRoles.map((sr) => [sr.id, sr.label])));
+const subRoleLabelMap = computed<Map<string, string>>(
+  () => new Map(staffSubRoles.map((subRole) => [subRole.id, subRole.label])),
+);
 
 const staffAvatars = import.meta.glob("@/assets/images/staff/*.webp", {
   eager: true,
@@ -24,45 +26,46 @@ const visibleStaff = computed(() =>
   staff.filter((member) => member.roles.includes(uiStore.activeStaffRole)),
 );
 
-// Carousel Scroll Logic
 const carouselRef = ref<HTMLElement | null>(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
 let resizeObserver: ResizeObserver | null = null;
 
-function updateScrollState() {
-  const el = carouselRef.value;
-  if (!el) {
+function updateScrollState(): void {
+  const element = carouselRef.value;
+  if (!element) {
     canScrollLeft.value = false;
     canScrollRight.value = false;
     return;
   }
 
-  const maxScrollLeft = el.scrollWidth - el.clientWidth;
-  canScrollLeft.value = el.scrollLeft > 1;
-  canScrollRight.value = el.scrollLeft < maxScrollLeft - 1;
+  const maxScrollLeft = Math.max(element.scrollWidth - element.clientWidth, 0);
+  const hasOverflow = maxScrollLeft > 0;
+
+  canScrollLeft.value = hasOverflow && element.scrollLeft > 1;
+  canScrollRight.value = hasOverflow && element.scrollLeft < maxScrollLeft - 1;
 }
 
-function attachObserverAndScroll() {
-  const el = carouselRef.value;
-  if (!el) return;
-
-  if (resizeObserver) {
-    resizeObserver.disconnect();
+function attachObserverAndScroll(): void {
+  const element = carouselRef.value;
+  if (!element) {
+    return;
   }
 
+  resizeObserver?.disconnect();
   resizeObserver = new ResizeObserver(updateScrollState);
-  resizeObserver.observe(el);
-
+  resizeObserver.observe(element);
   updateScrollState();
 }
 
-function scrollCarousel(direction: "left" | "right") {
-  const el = carouselRef.value;
-  if (!el) return;
+function scrollCarousel(direction: "left" | "right"): void {
+  const element = carouselRef.value;
+  if (!element) {
+    return;
+  }
 
-  const scrollAmount = el.clientWidth * 0.8;
-  el.scrollBy({
+  const scrollAmount = element.clientWidth * 0.8;
+  element.scrollBy({
     left: direction === "left" ? -scrollAmount : scrollAmount,
     behavior: "smooth",
   });
@@ -73,16 +76,25 @@ function getSubRoleLabel(id: string): string {
   return labelKey ? t(labelKey) : id;
 }
 
-watch([visibleStaff, uiStore.activeStaffRole], async () => {
+function handleRoleChange(roleId: string): void {
+  uiStore.selectStaffRole(roleId);
+}
+
+watch([visibleStaff, () => uiStore.activeStaffRole], async () => {
   await nextTick();
-  if (carouselRef.value) {
-    carouselRef.value.scrollLeft = 0;
+  const element = carouselRef.value;
+  if (!element) {
+    return;
   }
+
+  element.scrollLeft = 0;
+  updateScrollState();
 });
 
 onMounted(() => {
   attachObserverAndScroll();
 });
+
 onUnmounted(() => {
   resizeObserver?.disconnect();
 });
@@ -97,7 +109,7 @@ onUnmounted(() => {
       role="tab"
       :aria-selected="uiStore.activeStaffRole === role.id"
       :class="{ active: uiStore.activeStaffRole === role.id }"
-      @click="uiStore.selectStaffRole(role.id)"
+      @click="handleRoleChange(role.id)"
     >
       {{ t(role.label) }}
     </button>
@@ -166,6 +178,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   margin-top: 0.9rem;
+  will-change: transform;
 }
 
 .staff-grid {

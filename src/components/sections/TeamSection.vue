@@ -1,31 +1,33 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, reactive } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Team, TeamRegion } from "@/data/teams";
 import { useUiStore } from "@/stores/ui";
 
 type TeamView = "players" | "staff";
+type TeamMember = Team["players"][number] | Team["staff"][number];
 
 const props = defineProps<{ regions: TeamRegion[] }>();
 
 const { t } = useI18n();
 const uiStore = useUiStore();
 
-const teamViews = reactive<Record<string, TeamView>>({});
-const expandedTeams = reactive(new Set<string>());
+const expandedTeams = ref<Set<string>>(new Set());
+const teamViews = ref<Record<string, TeamView>>({});
 
-const activeRegion = computed<TeamRegion>(
-  () =>
-    props.regions.find((region) => region.id === uiStore.activeTeamRegion) ??
-    props.regions[0] ?? {
-      id: "",
-      label: "",
-      icon: "",
-      color: "",
-      teams: [],
-    },
-);
+const fallbackRegion: TeamRegion = {
+  id: "",
+  label: "",
+  icon: "",
+  color: "",
+  teams: [],
+};
+
+const activeRegion = computed<TeamRegion>(() => {
+  const region = props.regions.find((item) => item.id === uiStore.activeTeamRegion);
+  return region ?? props.regions[0] ?? fallbackRegion;
+});
 
 const ROLE_ICONS = {
   tank: new URL("@/assets/images/icons/role_tank.webp", import.meta.url).href,
@@ -34,51 +36,57 @@ const ROLE_ICONS = {
   flex: new URL("@/assets/images/icons/role_flex.webp", import.meta.url).href,
 } as const;
 
-function toggleTeam(teamId: string) {
-  if (expandedTeams.has(teamId)) {
-    expandedTeams.delete(teamId);
-  } else {
-    expandedTeams.add(teamId);
-  }
-}
-
-function getTeamView(teamId: string): TeamView {
-  return teamViews[teamId] ?? "players";
-}
-
-function getMembers(team: Team) {
-  return getTeamView(team.id) === "players" ? team.players : team.staff;
-}
-
-function setTeamView(teamId: string, view: TeamView) {
-  teamViews[teamId] = view;
-}
-
-function getRoleIcon(role: string) {
-  return ROLE_ICONS[role?.toLowerCase() as keyof typeof ROLE_ICONS] ?? ROLE_ICONS.flex;
-}
-
-function getCountryEmoji(country: string) {
-  const normalizedCountry = country.trim().toUpperCase();
-  if (!/^[A-Z]{2}$/.test(normalizedCountry)) {
-    return "??";
-  }
-  return String.fromCodePoint(
-    ...normalizedCountry.split("").map((char) => 127397 + char.charCodeAt(0)),
-  );
-}
-
 const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
 }) as Record<string, string>;
+
+function toggleTeam(teamId: string): void {
+  const nextExpanded = new Set(expandedTeams.value);
+
+  if (nextExpanded.has(teamId)) {
+    nextExpanded.delete(teamId);
+  } else {
+    nextExpanded.add(teamId);
+  }
+
+  expandedTeams.value = nextExpanded;
+}
+
+function getTeamView(teamId: string): TeamView {
+  return teamViews.value[teamId] ?? "players";
+}
+
+function getMembers(team: Team): Array<TeamMember> {
+  return getTeamView(team.id) === "players" ? team.players : team.staff;
+}
+
+function setTeamView(teamId: string, view: TeamView): void {
+  teamViews.value[teamId] = view;
+}
+
+function getRoleIcon(role: string): string {
+  const normalizedRole = role.toLowerCase() as keyof typeof ROLE_ICONS;
+  return ROLE_ICONS[normalizedRole] ?? ROLE_ICONS.flex;
+}
+
+function getCountryEmoji(country: string): string {
+  const normalizedCountry = country.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(normalizedCountry)) {
+    return "??";
+  }
+
+  return String.fromCodePoint(
+    ...normalizedCountry.split("").map((character) => 127397 + character.charCodeAt(0)),
+  );
+}
 </script>
 
 <template>
   <div class="team-regions" role="tablist" :aria-label="t('teams.regions.label')">
     <button
-      v-for="region in regions"
+      v-for="region in props.regions"
       :key="region.id"
       type="button"
       role="tab"
@@ -95,7 +103,7 @@ const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   <div class="team-rosters">
     <Transition name="region-fade" mode="out-in">
       <div :key="activeRegion.id" class="rosters-grid">
-        <template v-if="activeRegion.teams && activeRegion.teams.length">
+        <template v-if="activeRegion.teams.length">
           <article
             v-for="team in activeRegion.teams"
             :key="team.id"

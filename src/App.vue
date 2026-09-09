@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n"
-import Atmosphere from "@/components/background/Atmosphere.vue"
-import SiteFooter from "@/components/layout/SiteFooter.vue"
-import SiteHeader from "@/components/layout/SiteHeader.vue"
-import FaqSection from "@/components/sections/FaqSection.vue"
-import HeroSection from "@/components/sections/HeroSection.vue"
-import MatchesSection from "@/components/sections/MatchesSection.vue"
-import PartnersSection from "@/components/sections/PartnersSection.vue"
-import StaffSection from "@/components/sections/StaffSection.vue"
-import TeamSection from "@/components/sections/TeamSection.vue"
-import { teamRegions } from "@/data/teams"
-import SectionHeading from "@/components/widgets/SectionHeading.vue"
+import { useI18n } from "vue-i18n";
+import Atmosphere from "@/components/background/Atmosphere.vue";
+import SiteFooter from "@/components/layout/SiteFooter.vue";
+import SiteHeader from "@/components/layout/SiteHeader.vue";
+import FaqSection from "@/components/sections/FaqSection.vue";
+import HeroSection from "@/components/sections/HeroSection.vue";
+import MatchesSection from "@/components/sections/MatchesSection.vue";
+import PartnersSection from "@/components/sections/PartnersSection.vue";
+import StaffSection from "@/components/sections/StaffSection.vue";
+import TeamSection from "@/components/sections/TeamSection.vue";
+import { teamRegions } from "@/data/teams";
+import SectionHeading from "@/components/widgets/SectionHeading.vue";
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>
@@ -22,7 +22,6 @@ const { t } = useI18n()
     <main>
       <HeroSection />
 
-      <!-- Teams -->
       <section id="teams" class="content-section" aria-labelledby="teams-title">
         <SectionHeading
           heading-id="teams-title"
@@ -32,7 +31,6 @@ const { t } = useI18n()
         <TeamSection :regions="teamRegions" />
       </section>
 
-      <!-- FAQ -->
       <section id="faq" class="content-section" aria-labelledby="faq-title">
         <SectionHeading
           heading-id="faq-title"
@@ -42,7 +40,6 @@ const { t } = useI18n()
         <FaqSection />
       </section>
 
-      <!-- Matches -->
       <section id="matches" class="content-section" aria-labelledby="matches-title">
         <SectionHeading
           heading-id="matches-title"
@@ -52,7 +49,6 @@ const { t } = useI18n()
         <MatchesSection />
       </section>
 
-      <!-- Partners -->
       <section id="partners" class="content-section" aria-labelledby="partners-title">
         <SectionHeading
           heading-id="partners-title"
@@ -62,7 +58,6 @@ const { t } = useI18n()
         <PartnersSection />
       </section>
 
-      <!-- Staff -->
       <section id="staff" class="content-section" aria-labelledby="staff-title">
         <SectionHeading
           heading-id="staff-title"
@@ -85,11 +80,13 @@ const { t } = useI18n()
   position: relative;
   z-index: 1;
 }
+
 main {
   flex: 1;
   width: 100%;
   padding: 0 0 5rem;
 }
+
 .content-section {
   margin: 4.5rem auto 0;
   max-width: 68rem;
@@ -98,6 +95,7 @@ main {
   scroll-margin-top: 6rem;
   z-index: 2;
 }
+
 @media (max-width: 760px) {
   .content-section {
     margin-top: 3rem;
