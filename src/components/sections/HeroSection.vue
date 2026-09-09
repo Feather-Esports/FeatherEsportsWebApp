@@ -86,13 +86,18 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   align-items: center;
   flex-direction: column;
   gap: 1.25rem;
+  width: 100%;
+  padding: 2rem 1.25rem;
 }
+
 .hero h1 {
   color: var(--color-brand);
   font-family: var(--font-brand);
-  font-size: 6.25rem;
+  font-size: clamp(3.2rem, 12vw, 6.25rem);
+  line-height: 1.05;
   text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
   text-transform: uppercase;
+  word-break: break-word;
 }
 .hero-subtitle {
   color: var(--color-title);
@@ -100,18 +105,18 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.11em;
-  word-spacing: -0.5em;
+  word-spacing: -0.2em;
 
   .subtitle-divider {
     color: var(--color-brand);
-    margin: 0 0.7rem;
+    margin: 0 0.5rem;
   }
 }
 .hero-description {
   max-width: 37.56rem;
   color: var(--color-text);
   font-size: 1rem;
-  line-height: 1.88em;
+  line-height: 1.75em;
 }
 
 .hero-cta {
@@ -119,15 +124,16 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   margin-top: 0.5rem;
-  height: 2.75rem;
-  padding: 0 0.92rem;
+  height: 2.85rem;
+  padding: 0 1.25rem;
   color: var(--color-brand-muted);
   font-family: var(--font-title);
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
-  gap: 0.46rem;
+  gap: 0.5rem;
   border-radius: 0.28rem;
   background: var(--color-brand);
   text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
@@ -177,22 +183,25 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
 .social-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.6rem;
   justify-content: center;
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
+  width: 100%;
+  max-width: 32rem;
 }
 .social-links a {
   display: inline-flex;
   align-items: center;
-  height: 2.7rem;
+  justify-content: center;
+  height: 2.75rem;
   color: var(--color-title);
   font-family: var(--font-title);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  gap: 0.3rem;
-  padding: 0 0.85rem;
+  gap: 0.4rem;
+  padding: 0 1rem;
   border: 0.15rem solid var(--color-line-soft);
-  border-radius: 0.16rem;
+  border-radius: 0.2rem;
   text-transform: uppercase;
   will-change: transform;
   transition:
@@ -218,33 +227,78 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
   }
 }
 
-@media (max-width: 760px) {
+@media (min-width: 1921px), (min-height: 1081px) {
+  .hero-content {
+    gap: 1.5rem;
+  }
   .hero h1 {
-    font-size: clamp(3.1rem, 11vw, 4.5rem);
+    font-size: 7.5rem;
+    text-shadow: 0 0 1.5rem color-mix(in srgb, var(--color-brand) 25%, transparent);
   }
   .hero-subtitle {
-    font-size: clamp(0.75rem, 3.2vw, 0.8rem);
-    letter-spacing: 0.08em;
+    font-size: 1.32rem;
   }
   .hero-description {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    max-width: 45.07rem;
+  }
+  .hero-cta {
+    height: 3.3rem;
+    font-size: 1.2rem;
+    padding: 0 1.1rem;
+  }
+  .social-links {
+    margin-top: 4.2rem;
+    max-width: 50rem;
+  }
+  .social-links a {
+    height: 3.24rem;
+    font-size: 0.96rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-content {
+    gap: 1rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 12vw, 3.8rem);
+  }
+  .hero-subtitle {
+    font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+    letter-spacing: 0.05em;
+  }
+  .hero-description {
+    font-size: 0.925rem;
     line-height: 1.6;
     max-width: 27rem;
   }
   .hero-cta {
-    font-size: 0.82rem;
-    height: 2.5rem;
+    font-size: 0.9rem;
+    height: 2.75rem;
+    width: 100%;
+    max-width: 18rem;
   }
-
   .social-links {
-    width: 70%;
-    gap: 0.4rem;
-    margin-top: 1.8rem;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
   }
   .social-links a {
-    font-size: 0.7rem;
-    height: 2.4rem;
-    padding: 0 0.55rem;
+    font-size: 0.75rem;
+    height: 2.75rem;
+    padding: 0 0.75rem;
+    flex: 1 1 calc(50% - 0.5rem);
+    max-width: 12rem;
+  }
+}
+
+@media (max-height: 650px) {
+  .hero {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+  .social-links {
+    margin-top: 1.25rem;
   }
 }
 </style>
