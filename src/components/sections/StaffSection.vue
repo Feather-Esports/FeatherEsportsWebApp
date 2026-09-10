@@ -157,7 +157,7 @@ onUnmounted(() => {
             decoding="async"
             draggable="false"
           />
-          <div>
+          <div class="staff-details">
             <h3>{{ member.name }}</h3>
             <p v-for="subRoleId in member.subRoles" :key="subRoleId">
               - {{ getSubRoleLabel(subRoleId) }}
@@ -197,6 +197,7 @@ onUnmounted(() => {
   padding: 0.5rem 0;
   background: var(--color-bg);
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .staff-grid::-webkit-scrollbar {
@@ -210,6 +211,7 @@ onUnmounted(() => {
   display: flex;
   height: 9rem;
   gap: 1rem;
+  border-radius: 0.19rem;
   background:
     linear-gradient(
       90deg,
@@ -220,6 +222,13 @@ onUnmounted(() => {
     var(--color-bg);
 }
 
+.staff-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
 .carousel-arrow {
   display: flex;
   align-items: center;
@@ -227,22 +236,24 @@ onUnmounted(() => {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: color-mix(in srgb, var(--color-bg) 50%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
   color: var(--color-text);
   border: none;
-  outline: none;
   font-size: 1.45rem;
   padding: 0.9rem 0.6rem;
   cursor: pointer;
   border-radius: 0.19rem;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background-color 200ms ease,
     color 200ms ease,
     opacity 200ms ease;
 
-  &:hover {
-    background: var(--color-brand);
-    color: var(--color-bg);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--color-brand);
+      color: var(--color-bg);
+    }
   }
 
   &.prev {
@@ -254,7 +265,6 @@ onUnmounted(() => {
 }
 
 .staff-tabs {
-  border-bottom: 1px solid var(--color-line);
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
@@ -264,37 +274,38 @@ onUnmounted(() => {
 }
 
 .staff-tabs button {
+  position: relative;
   background: transparent;
   border: 0;
-  border-bottom: 2px solid transparent;
+  border-bottom: 2px solid var(--color-line);
   color: var(--color-text);
-  font-style: var(--font-title);
+  font-family: var(--font-title);
   font-size: 0.75rem;
   font-weight: 600;
-  min-height: 2rem;
+  min-height: 2.75rem;
   padding: 0.5rem;
   text-transform: uppercase;
   width: 100%;
-  outline: none;
-  cursor: pointer;
   transition:
     background 200ms ease,
     color 200ms ease,
     border-color 200ms ease;
 
-  &:hover {
-    border-bottom-color: color-mix(in srgb, var(--color-brand) 70%, var(--color-line));
-    color: color-mix(in srgb, var(--color-brand) 70%, transparent);
-    background: linear-gradient(
-      360deg,
-      color-mix(in srgb, var(--color-brand) 10%, transparent) 0%,
-      transparent 75%,
-      transparent 100%
-    );
+  @media (hover: hover) {
+    &:hover:not(.active) {
+      border-bottom-color: color-mix(in srgb, var(--color-brand) 70%, var(--color-line));
+      color: color-mix(in srgb, var(--color-brand) 70%, transparent);
+      background: linear-gradient(
+        360deg,
+        color-mix(in srgb, var(--color-brand) 10%, transparent) 0%,
+        transparent 75%,
+        transparent 100%
+      );
+    }
   }
 
   &.active {
-    border-bottom-color: var(--color-brand);
+    border-bottom-color: var(--color-brand) !important;
     color: var(--color-brand);
     background: linear-gradient(
       360deg,
@@ -311,23 +322,27 @@ onUnmounted(() => {
   width: auto;
   aspect-ratio: 1 / 1;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 .staff-card h3 {
-  margin-top: 1rem;
-  margin-bottom: 0.4rem;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
   font-family: var(--font-title);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
   text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .staff-card p {
-  padding-right: 0.7rem;
+  padding-right: 0.5rem;
   font-family: var(--font-body);
   font-size: 0.81rem;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.4;
   color: var(--color-text);
 }
 
@@ -353,6 +368,7 @@ onUnmounted(() => {
   .carousel-container {
     will-change: transform, opacity;
     transform: translateZ(0);
+    contain: layout;
   }
 }
 
@@ -361,15 +377,24 @@ onUnmounted(() => {
     flex: 0 0 calc(50% - 0.5rem);
   }
 }
-@media (max-width: 600px) {
+
+@media (max-width: 640px) {
   .staff-tabs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, 1fr);
   }
-  .staff-tabs button:nth-child(-n + 4) {
-    border-bottom: 1px solid var(--color-line);
-  }
+
   .staff-card {
-    flex: 0 0 100%;
+    flex: 0 0 85%;
+    height: 7.5rem;
+  }
+
+  .staff-card h3 {
+    font-size: 1rem;
+  }
+
+  .carousel-arrow {
+    display: none;
   }
 }
 </style>
