@@ -35,7 +35,7 @@ function handleNavSelect(): void {
 <template>
   <header class="site-header">
     <a class="wordmark" href="/">
-      <Icon icon="game-icons:feather" width="2.125rem" />
+      <Icon icon="game-icons:feather" />
       <span>Feather</span>
     </a>
 
@@ -61,7 +61,7 @@ function handleNavSelect(): void {
         <Tooltip id="wip-tooltip">
           <template #trigger>
             <div class="wip-indicator">
-              <Icon icon="pixel:exclaimation-solid" width="0.875rem" />
+              <Icon icon="pixel:exclaimation-solid" />
               {{ t("header.wip") }}
             </div>
           </template>
@@ -70,7 +70,7 @@ function handleNavSelect(): void {
         </Tooltip>
 
         <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer">
-          <Icon :icon="discordLink.icon" width="1.375rem" />
+          <Icon :icon="discordLink.icon" />
           {{ t("header.discord") }}
         </a>
       </div>
@@ -81,29 +81,76 @@ function handleNavSelect(): void {
 <style scoped>
 .site-header {
   z-index: 10;
-  display: flex;
-  align-items: center;
   position: fixed;
-  inset: 0 0 auto;
-  width: 100%;
-  min-height: 3.75rem;
+  display: flex;
   justify-content: space-between;
+  align-items: center;
+  inset: 0 0 auto;
   gap: 2rem;
-  padding: 0 clamp(1.25rem, 5vw, 1.563rem);
   background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  border-bottom: 1px solid var(--color-line);
   -webkit-backdrop-filter: blur(0.75rem) saturate(1.15);
   backdrop-filter: blur(0.75rem) saturate(1.15);
-  border-bottom: 1px solid var(--color-line);
+  width: 100%;
+  min-height: 3.75rem;
+  padding: 0 clamp(1.25rem, 5vw, 1.563rem);
+
+  @media (max-width: 760px) {
+    gap: 0;
+    min-height: 3.75rem;
+    padding: 0.8rem 1rem;
+  }
 }
 
 .wordmark {
   display: inline-flex;
   align-items: center;
   gap: 0.438rem;
-  color: var(--color-brand);
   font-family: var(--font-brand);
-  font-size: 1.593rem;
+  font-size: 1.59rem;
   text-transform: uppercase;
+  color: var(--color-brand);
+
+  svg {
+    font-size: 2.13rem;
+  }
+}
+
+.menu-toggle {
+  display: none;
+
+  @media (max-width: 760px) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    font-size: 1.1rem;
+    color: var(--color-brand);
+    background: transparent;
+    border: 1px solid var(--color-brand);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.19rem;
+  }
+}
+
+.header-panel {
+  display: contents;
+
+  @media (max-width: 760px) {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    left: 0;
+    top: 100%;
+    background: color-mix(in srgb, var(--color-header) 96%, transparent);
+    width: 100%;
+
+    &.open,
+    &.open .main-nav {
+      display: flex;
+    }
+  }
 }
 
 .main-nav {
@@ -113,36 +160,48 @@ function handleNavSelect(): void {
   font-size: 0.81rem;
   font-weight: 600;
   text-transform: uppercase;
-}
 
-.header-panel {
-  display: contents;
-}
-
-.main-nav a {
-  position: relative;
-  color: var(--color-title);
-  padding: 0.313rem 0;
-
-  &:hover {
-    color: var(--color-brand);
+  & a {
+    position: relative;
+    color: var(--color-title);
+    padding: 0.313rem 0;
 
     &::after {
-      transform: scaleX(1);
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: var(--color-brand);
+      width: 100%;
+      height: 1px;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 180ms ease;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-brand);
+
+        &::after {
+          transform: scaleX(1);
+        }
+      }
     }
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
+  @media (max-width: 760px) {
+    display: none;
+    flex-direction: column;
+    gap: 0;
     width: 100%;
-    height: 1px;
-    background: var(--color-brand);
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform 180ms ease;
+    padding: 0.5rem 1rem 0.8rem;
+
+    & a {
+      border-bottom: 1px solid var(--color-line-soft);
+      padding: 0.875rem 0;
+      min-height: 2.75rem;
+    }
   }
 }
 
@@ -150,20 +209,24 @@ function handleNavSelect(): void {
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @media (max-width: 760px) {
+    display: none;
+  }
 }
 
 .wip-indicator,
 .discord-link {
   display: inline-flex;
   align-items: center;
-  color: var(--color-title);
+  gap: 0.313rem;
   font-family: var(--font-title);
   font-size: 0.688rem;
   font-weight: 600;
-  gap: 0.313rem;
-  height: 1.875rem;
-  padding: 0 0.63rem;
   text-transform: uppercase;
+  color: var(--color-title);
+  height: 2rem;
+  padding: 0 0.63rem;
   border-radius: 0.19rem;
 }
 
@@ -171,70 +234,18 @@ function handleNavSelect(): void {
   border: 1px solid var(--color-brand);
   color: var(--color-brand);
   cursor: help;
+
+  svg {
+    font-size: 0.875rem;
+  }
 }
 
 .discord-link {
   background: var(--color-brand);
   color: var(--color-brand-muted);
-}
 
-@media (max-width: 760px) {
-  .site-header {
-    gap: 0;
-    min-height: 3.75rem;
-    padding: 0.8rem 1rem;
-  }
-
-  .menu-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    width: 2.25rem;
-    height: 2.25rem;
-    color: var(--color-brand);
-    font-size: 1.1rem;
-    background: transparent;
-    border: 1px solid var(--color-brand);
-    border-radius: 0.19rem;
-  }
-
-  .main-nav {
-    display: none;
-    flex-direction: column;
-    gap: 0;
-    left: 0;
-    padding: 0.5rem 1rem 0.8rem;
-    width: 100%;
-  }
-  .main-nav a {
-    border-bottom: 1px solid var(--color-line-soft);
-    padding: 0.8rem 0;
-  }
-
-  .header-panel {
-    display: none;
-    background: color-mix(in srgb, var(--color-header) 96%, transparent);
-    flex-direction: column;
-    left: 0;
-    position: absolute;
-    top: 100%;
-    width: 100%;
-
-    &.open,
-    &.open .main-nav {
-      display: flex;
-    }
-  }
-
-  .header-links {
-    display: none;
-  }
-}
-
-@media (min-width: 761px) {
-  .menu-toggle {
-    display: none;
+  svg {
+    font-size: 1.375rem;
   }
 }
 </style>

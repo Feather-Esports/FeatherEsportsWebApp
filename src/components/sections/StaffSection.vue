@@ -141,6 +141,7 @@ onUnmounted(() => {
         :key="uiStore.activeStaffRole"
         ref="carouselRef"
         class="staff-grid"
+        tabindex="-1"
         @scroll="updateScrollState"
       >
         <article
@@ -187,31 +188,90 @@ onUnmounted(() => {
   margin-top: 0.9rem;
 }
 
+.staff-tabs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  margin-top: 0.9rem;
+  background: var(--color-bg);
+  width: 100%;
+
+  & button {
+    position: relative;
+    font-family: var(--font-title);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-text);
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid var(--color-line);
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem;
+    transition:
+      background 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+
+    @media (hover: hover) {
+      &:hover:not(.active) {
+        color: color-mix(in srgb, var(--color-brand) 70%, transparent);
+        background: linear-gradient(
+          360deg,
+          color-mix(in srgb, var(--color-brand) 10%, transparent) 0%,
+          transparent 75%,
+          transparent 100%
+        );
+        border-bottom-color: color-mix(in srgb, var(--color-brand) 70%, var(--color-line));
+      }
+    }
+
+    &.active {
+      color: var(--color-brand);
+      background: linear-gradient(
+        360deg,
+        color-mix(in srgb, var(--color-brand) 20%, transparent) 0%,
+        transparent 75%,
+        transparent 100%
+      );
+      border-bottom-color: var(--color-brand);
+    }
+
+    &:focus-visible {
+      z-index: 1;
+      outline: 2px solid var(--color-brand);
+      outline-offset: -2px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .staff-grid {
   display: flex;
   gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  background: var(--color-bg);
   width: 100%;
   padding: 0.5rem 0;
-  background: var(--color-bg);
+  overflow-x: auto;
   scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-}
 
-.staff-grid::-webkit-scrollbar {
-  display: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .staff-card {
-  flex: 0 0 calc(33.333% - 0.67rem);
-  scroll-snap-align: start;
-  box-sizing: border-box;
   display: flex;
-  height: 9rem;
+  flex: 0 0 calc(33.333% - 0.67rem);
   gap: 1rem;
-  border-radius: 0.19rem;
   background:
     linear-gradient(
       90deg,
@@ -220,30 +280,74 @@ onUnmounted(() => {
       transparent 100%
     ),
     var(--color-bg);
+  height: 9rem;
+  border-radius: 0.19rem;
+  scroll-snap-align: start;
+
+  & h3 {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+    font-family: var(--font-title);
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    @media (max-width: 640px) {
+      font-size: 1rem;
+    }
+  }
+
+  & p {
+    font-family: var(--font-body);
+    font-size: 0.81rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--color-text);
+    padding-right: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    flex: 0 0 calc(50% - 0.5rem);
+  }
+
+  @media (max-width: 640px) {
+    flex: 0 0 85%;
+    height: 7.5rem;
+  }
+}
+
+.staff-avatar {
+  color: var(--color-title);
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .staff-details {
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  flex-direction: column;
   min-width: 0;
 }
 
 .carousel-arrow {
+  z-index: 10;
+  position: absolute;
   display: flex;
   align-items: center;
-  position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
-  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
-  color: var(--color-text);
-  border: none;
   font-size: 1.45rem;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  border: none;
   padding: 0.9rem 0.6rem;
-  cursor: pointer;
   border-radius: 0.19rem;
-  -webkit-tap-highlight-color: transparent;
   transition:
     background-color 200ms ease,
     color 200ms ease,
@@ -259,91 +363,19 @@ onUnmounted(() => {
   &.prev {
     left: 0.5rem;
   }
+
   &.next {
     right: 0.5rem;
   }
-}
 
-.staff-tabs {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  width: 100%;
-  background: var(--color-bg);
-  margin-top: 0.9rem;
-}
-
-.staff-tabs button {
-  position: relative;
-  background: transparent;
-  border: 0;
-  border-bottom: 2px solid var(--color-line);
-  color: var(--color-text);
-  font-family: var(--font-title);
-  font-size: 0.75rem;
-  font-weight: 600;
-  min-height: 2.75rem;
-  padding: 0.5rem;
-  text-transform: uppercase;
-  width: 100%;
-  transition:
-    background 200ms ease,
-    color 200ms ease,
-    border-color 200ms ease;
-
-  @media (hover: hover) {
-    &:hover:not(.active) {
-      border-bottom-color: color-mix(in srgb, var(--color-brand) 70%, var(--color-line));
-      color: color-mix(in srgb, var(--color-brand) 70%, transparent);
-      background: linear-gradient(
-        360deg,
-        color-mix(in srgb, var(--color-brand) 10%, transparent) 0%,
-        transparent 75%,
-        transparent 100%
-      );
-    }
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
   }
 
-  &.active {
-    border-bottom-color: var(--color-brand) !important;
-    color: var(--color-brand);
-    background: linear-gradient(
-      360deg,
-      color-mix(in srgb, var(--color-brand) 20%, transparent) 0%,
-      transparent 75%,
-      transparent 100%
-    );
+  @media (max-width: 640px) {
+    display: none;
   }
-}
-
-.staff-avatar {
-  color: var(--color-title);
-  height: 100%;
-  width: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.staff-card h3 {
-  margin-top: 0;
-  margin-bottom: 0.25rem;
-  font-family: var(--font-title);
-  font-size: 1.15rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.staff-card p {
-  padding-right: 0.5rem;
-  font-family: var(--font-body);
-  font-size: 0.81rem;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--color-text);
 }
 
 .fade-slide {
@@ -358,6 +390,7 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateY(8px);
   }
+
   &-leave-to {
     opacity: 0;
     transform: translateY(-8px);
@@ -366,35 +399,9 @@ onUnmounted(() => {
 
 @supports (-moz-appearance: none) {
   .carousel-container {
-    will-change: transform, opacity;
     transform: translateZ(0);
     contain: layout;
-  }
-}
-
-@media (max-width: 900px) {
-  .staff-card {
-    flex: 0 0 calc(50% - 0.5rem);
-  }
-}
-
-@media (max-width: 640px) {
-  .staff-tabs {
-    grid-auto-flow: row;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .staff-card {
-    flex: 0 0 85%;
-    height: 7.5rem;
-  }
-
-  .staff-card h3 {
-    font-size: 1rem;
-  }
-
-  .carousel-arrow {
-    display: none;
+    will-change: transform, opacity;
   }
 }
 </style>

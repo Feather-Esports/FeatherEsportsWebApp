@@ -5,19 +5,6 @@ import { ref } from "vue";
 
 const copiedCode = ref<string | null>(null);
 
-function openPartner(link: string): void {
-  if (!link) {
-    return;
-  }
-
-  if (link.startsWith("mailto:")) {
-    window.location.href = link;
-    return;
-  }
-
-  window.open(link, "_blank", "noopener,noreferrer");
-}
-
 async function copyCode(code: string): Promise<void> {
   if (!code) {
     return;
@@ -51,12 +38,15 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
       :key="partner.id"
       class="partner-card"
       :class="{ 'is-cta': partner.id === 'cta' }"
-      role="link"
-      tabindex="0"
-      @click="openPartner(partner.link)"
-      @keydown.enter.prevent="openPartner(partner.link)"
-      @keydown.space.prevent="openPartner(partner.link)"
     >
+      <a
+        :href="partner.link"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="partner-link-overlay"
+        :aria-label="partner.label"
+      />
+
       <div class="partner-header">
         <img
           v-if="partner.id !== 'cta'"
@@ -80,7 +70,7 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
         v-if="partner.code"
         type="button"
         class="partner-code"
-        @click.stop="copyCode(partner.code)"
+        @click="copyCode(partner.code)"
         :aria-label="`Copy affiliate code for ${partner.id}`"
       >
         <span class="code-content">
@@ -96,48 +86,56 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
 .partners-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.63rem;
   margin-top: 0.9rem;
+  gap: 0.63rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 }
 
 .partner-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 10.63rem;
   gap: 1rem;
-  border: 1px solid var(--color-line);
-  border-radius: 0.19rem;
   background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  min-height: 10.63rem;
   padding: 1rem;
+  border-radius: 0.19rem;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   transition:
     border-color 180ms ease,
-    background-color 180ms ease,
-    box-shadow 180ms ease;
+    background-color 180ms ease;
+
+  &.is-cta {
+    border-style: dashed;
+  }
 
   @media (hover: hover) {
     &:hover {
-      border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-line));
       background: color-mix(in srgb, var(--color-brand) 6%, var(--color-bg));
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-brand) 15%, transparent);
+      border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-line));
     }
   }
 
-  &:active {
-    background: color-mix(in srgb, var(--color-brand) 10%, var(--color-bg));
-  }
-
-  &:focus-visible {
-    outline: none;
-    border-color: color-mix(in srgb, var(--color-brand) 55%, var(--color-line));
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-brand) 40%, transparent);
+  @media (max-width: 640px) {
+    min-height: auto;
+    padding: 0.875rem;
   }
 }
 
-.partner-card.is-cta {
-  border-style: dashed;
+.partner-link-overlay {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
 }
 
 .partner-header {
@@ -147,30 +145,34 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
 }
 
 .partner-logo {
-  height: 1.38rem;
   width: auto;
   max-width: 5rem;
+  height: 1.38rem;
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .partner-name {
   font-family: var(--font-title);
-  font-weight: 700;
   font-size: 0.95rem;
+  font-weight: 700;
   line-height: 1.2;
-  color: var(--color-title);
   text-transform: uppercase;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-title);
+  overflow: hidden;
+
+  @media (max-width: 640px) {
+    font-size: 0.9rem;
+  }
 }
 
 .partner-icon {
-  flex-shrink: 0;
   margin-left: auto;
   font-size: 1.13rem;
   color: var(--color-title);
+  flex-shrink: 0;
 }
 
 .partner-description {
@@ -183,33 +185,44 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
 }
 
 .partner-code {
+  z-index: 2;
+  position: relative;
   display: inline-flex;
-  align-items: center;
   justify-content: flex-start;
+  align-items: center;
+  color: var(--color-text);
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
   width: 100%;
   min-height: 2.75rem;
-  border: 1px solid var(--color-line);
-  border-radius: 0.25rem;
-  background: var(--color-panel);
-  color: var(--color-text);
   padding: 0.5rem 0.85rem;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  border-radius: 0.25rem;
   transition:
     color 160ms ease,
     border-color 160ms ease,
     background-color 160ms ease;
+
+  & .code-icon {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    flex-shrink: 0;
+    transition: color 160ms ease;
+  }
 
   @media (hover: hover) {
     &:hover {
       color: var(--color-title);
       border-color: color-mix(in srgb, var(--color-brand) 60%, var(--color-line));
       background: color-mix(in srgb, var(--color-brand) 10%, rgba(255, 255, 255, 0.02));
+
+      & .code-icon {
+        color: var(--color-brand);
+      }
     }
   }
 
-  &:active {
-    background: color-mix(in srgb, var(--color-brand) 20%, var(--color-panel));
+  &:focus-visible {
+    outline-offset: 2px;
   }
 }
 
@@ -218,46 +231,10 @@ const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
   align-items: center;
   gap: 0.45rem;
   font-family: var(--font-body);
-  font-weight: 700;
   font-size: 0.76rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
   text-align: left;
-}
-
-.code-icon {
-  font-size: 0.9rem;
-  color: var(--color-text);
-  flex-shrink: 0;
-  transition: color 160ms ease;
-}
-
-@media (hover: hover) {
-  .partner-code:hover .code-icon {
-    color: var(--color-brand);
-  }
-}
-
-@media (max-width: 1024px) {
-  .partners-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .partners-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .partner-card {
-    min-height: auto;
-    padding: 0.875rem;
-  }
-
-  .partner-name {
-    font-size: 0.9rem;
-  }
+  text-transform: uppercase;
 }
 </style>

@@ -20,29 +20,51 @@ const { t } = useI18n();
   justify-content: center;
   align-items: center;
   margin-top: 0.75rem;
-  min-height: 12rem;
   gap: 0.94rem;
-  border-radius: 0.19rem;
   text-align: center;
   background: var(--color-bg);
   border: 1px dashed var(--color-line);
-  padding: 0 1rem;
-}
-.matches-section svg {
-  font-size: 1.5rem;
-  color: var(--color-brand);
-}
-.matches-section p {
-  font-family: var(--font-title);
-  font-weight: 600;
-  font-size: 1.13rem;
-  color: var(--color-title);
-  text-transform: uppercase;
-}
-.matches-section span {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: var(--color-text);
+  min-height: 12rem;
+  padding: 1.5rem 1rem;
+  border-radius: 0.19rem;
+
+  & svg {
+    font-size: 1.5rem;
+    color: var(--color-brand);
+    flex-shrink: 0;
+
+    @media (max-width: 640px) {
+      font-size: 1.35rem;
+    }
+  }
+
+  & p {
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: 1.13rem;
+    font-weight: 600;
+    line-height: 1.3;
+    word-break: break-word;
+    text-transform: uppercase;
+    color: var(--color-title);
+
+    @media (max-width: 640px) {
+      font-size: 1rem;
+    }
+  }
+
+  & span {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.4;
+    word-break: break-word;
+    color: var(--color-text);
+    max-width: 28rem;
+
+    @media (max-width: 640px) {
+      font-size: 0.825rem;
+    }
+  }
 }
 </style>

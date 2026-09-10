@@ -23,42 +23,82 @@ footer {
   z-index: 2;
   position: relative;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   margin-top: auto;
   gap: 1.188rem;
-  padding: 1.5rem;
   background: var(--color-bg);
   border-top: 1px solid var(--color-line);
+  padding: 1.5rem;
+
+  @media (max-width: 640px) {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
 }
 
 .wordmark {
   display: inline-flex;
   align-items: center;
   gap: 0.438rem;
-  color: var(--color-brand);
   font-family: var(--font-brand);
-  font-size: 1.593rem;
+  font-size: 1.59rem;
   text-transform: uppercase;
+  color: var(--color-brand);
+  transition: opacity 150ms ease-in-out;
+
+  svg {
+    font-size: 2.13rem;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 0.15rem;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 1.35rem;
+  }
 }
 
 .footer-divider {
-  color: var(--color-text-muted);
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 500;
+  color: var(--color-text-muted);
   pointer-events: none;
+  user-select: none;
 }
 
 .contact,
 .legal {
   font-family: var(--font-title);
-  color: var(--color-text);
   font-size: 0.9rem;
+  color: var(--color-text);
   transition: color 150ms ease-in-out;
 
-  &:hover {
-    color: var(--color-title);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-title);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 0.15rem;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 0.8rem;
   }
 }
 </style>

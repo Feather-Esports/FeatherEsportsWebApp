@@ -142,7 +142,7 @@ onUnmounted(() => {
       :style="{ '--region-color': region.color }"
       @click="uiStore.selectTeamRegion(region.id)"
     >
-      <Icon :icon="region.icon" :color="region.color" width="1.375rem" />
+      <Icon :icon="region.icon" :color="region.color" />
       <span>{{ t(region.label) }}</span>
     </button>
   </div>
@@ -158,14 +158,11 @@ onUnmounted(() => {
             :class="{ expanded: expandedTeams.has(team.id) }"
             :style="{ '--team-color': team.color }"
           >
-            <header
+            <button
+              type="button"
               class="team-card-header"
-              tabindex="0"
-              role="button"
               :aria-expanded="expandedTeams.has(team.id)"
               @click="toggleTeam(team.id)"
-              @keydown.enter.prevent="toggleTeam(team.id)"
-              @keydown.space.prevent="toggleTeam(team.id)"
             >
               <img
                 class="team-logo"
@@ -185,13 +182,9 @@ onUnmounted(() => {
               </div>
 
               <div class="team-expand">
-                <Icon
-                  :class="{ rotated: expandedTeams.has(team.id) }"
-                  icon="pixel:chevron-down"
-                  width="1rem"
-                />
+                <Icon :class="{ rotated: expandedTeams.has(team.id) }" icon="pixel:chevron-down" />
               </div>
-            </header>
+            </button>
 
             <Transition name="expand">
               <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
@@ -289,51 +282,79 @@ onUnmounted(() => {
   display: grid;
   margin-top: 0.75rem;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-}
 
-.team-regions button {
-  align-items: center;
-  background: var(--color-bg);
-  border: 1px solid var(--color-line);
-  color: var(--color-text);
-  display: flex;
-  font-family: var(--font-title);
-  font-weight: 700;
-  font-size: 0.875rem;
-  gap: 0.5rem;
-  justify-content: center;
-  min-height: 2.81rem;
-  padding: 0.5rem;
-  outline: none;
-  border-radius: 0;
-  transition:
-    background-color 200ms ease,
-    border-color 200ms ease,
-    color 200ms ease;
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-line);
+    min-height: 2.81rem;
+    padding: 0.5rem;
+    border-radius: 0;
+    transition:
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease;
 
-  &:first-child {
-    border-radius: 0.19rem 0 0 0.19rem;
-  }
-  &:last-child {
-    border-radius: 0 0.19rem 0.19rem 0;
-  }
-  &:not(:first-child) {
-    margin-left: -1px;
+    svg {
+      font-size: 1.375rem;
+    }
+
+    &:first-child {
+      border-radius: 0.19rem 0 0 0.19rem;
+    }
+    &:last-child {
+      border-radius: 0 0.19rem 0.19rem 0;
+    }
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+
+    &:hover,
+    &.active {
+      z-index: 1;
+      color: var(--color-title);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--region-color) 5%, var(--color-bg));
+      border-color: color-mix(in srgb, var(--region-color) 20%, var(--color-bg));
+    }
+    &.active {
+      background: color-mix(in srgb, var(--region-color) 15%, var(--color-bg));
+      border-color: color-mix(in srgb, var(--region-color) 30%, var(--color-bg));
+    }
+
+    &:focus-visible {
+      outline-offset: -3px;
+    }
   }
 
-  &:hover,
-  &.active {
-    z-index: 1;
-    color: var(--color-title);
-  }
+  @media (max-width: 640px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  &:hover {
-    background: color-mix(in srgb, var(--region-color) 5%, var(--color-bg));
-    border-color: color-mix(in srgb, var(--region-color) 20%, var(--color-bg));
-  }
-  &.active {
-    background: color-mix(in srgb, var(--region-color) 15%, var(--color-bg));
-    border-color: color-mix(in srgb, var(--region-color) 30%, var(--color-bg));
+    & button {
+      border-radius: 0 !important;
+
+      &:nth-child(1) {
+        border-radius: 0.19rem 0 0 0 !important;
+      }
+      &:nth-child(2) {
+        border-radius: 0 0.19rem 0 0 !important;
+      }
+      &:nth-child(3) {
+        border-radius: 0 0 0 0.19rem !important;
+      }
+      &:nth-child(4) {
+        border-radius: 0 0 0.19rem 0 !important;
+      }
+    }
   }
 }
 
@@ -348,103 +369,144 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   flex: 1 1 0px;
-  width: 0;
   gap: 0.75rem;
+  width: 0;
   min-width: 0;
 }
 
 .empty-roster {
-  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 4rem;
+  align-items: center;
   font-family: var(--font-title);
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-text);
   text-align: center;
+  color: var(--color-text);
   background: var(--color-bg);
   border: 1px solid var(--color-line);
-  border-radius: 0.19rem;
+  width: 100%;
+  min-height: 4rem;
   padding: 0 1rem;
+  border-radius: 0.19rem;
 }
 
 .team-card {
-  min-width: 0;
   background: color-mix(in srgb, var(--team-color) 5%, var(--color-bg));
   border: 0.09rem solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
+  min-width: 0;
   border-radius: 0.28rem;
   overflow: hidden;
+
+  &.expanded .team-name {
+    text-overflow: clip;
+    white-space: normal;
+    word-break: break-word;
+    overflow: visible;
+  }
 }
 
 .team-card-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 2.53rem;
-  padding: 0.5rem;
+  font: inherit;
+  text-align: left;
+  color: inherit;
   background: transparent;
   border: none;
-  outline: none;
-  cursor: pointer;
-  user-select: none;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem;
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 640px) {
+    gap: 0.65rem;
+    padding: 0.6rem 0.65rem;
+  }
 }
+
 .team-logo {
   display: block;
-  height: 1.59rem;
   width: auto;
   max-width: 2.2rem;
+  height: 1.59rem;
   object-fit: contain;
   flex-shrink: 0;
+
+  @media (max-width: 640px) {
+    height: 1.75rem;
+  }
 }
+
 .team-info {
   display: flex;
+  flex: 1;
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-  flex: 1;
-  min-width: 0;
   text-align: left;
+  min-width: 0;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
 }
+
 .team-name {
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--color-title);
-  overflow: hidden;
+  line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.2;
+  color: var(--color-title);
+  overflow: hidden;
+
+  @media (max-width: 640px) {
+    font-size: 0.825rem;
+  }
 }
-.team-card.expanded .team-name {
-  overflow: visible;
-  text-overflow: clip;
-  white-space: normal;
-  word-break: break-word;
-}
+
 .team-meta {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: 640px) {
+    gap: 0.35rem;
+  }
 }
+
 .team-platform {
   font-size: 0.9rem;
   color: var(--color-title);
   flex-shrink: 0;
 }
+
 .team-tier {
   display: inline-flex;
   align-items: center;
-  background: color-mix(in srgb, var(--team-color) 10%, transparent);
-  border: 0.03rem solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
-  border-radius: 0.15rem;
   font-family: var(--font-body);
   font-size: 0.66rem;
   font-weight: 500;
   color: color-mix(in srgb, var(--color-title) 75%, transparent);
+  background: color-mix(in srgb, var(--team-color) 10%, transparent);
+  border: 0.03rem solid color-mix(in srgb, var(--team-color) 20%, var(--color-line));
   padding: 0.24rem 0.47rem;
+  border-radius: 0.15rem;
+
+  @media (max-width: 640px) {
+    line-height: 1;
+  }
 }
+
 .team-expand {
   display: inline-flex;
   justify-content: center;
@@ -454,11 +516,13 @@ onUnmounted(() => {
   padding: 0.25rem;
   flex-shrink: 0;
 
-  svg {
+  & svg {
+    font-size: 1rem;
     transition: transform 250ms ease;
-  }
-  svg.rotated {
-    transform: rotate(180deg);
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
   }
 }
 
@@ -476,46 +540,50 @@ onUnmounted(() => {
   position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 0.6rem 0.55rem;
   isolation: isolate;
   background: color-mix(in srgb, var(--team-color) 5%, transparent);
-  border-radius: 0.28rem;
   padding: 0.2rem;
-  margin: 0 0.6rem 0.55rem;
+  border-radius: 0.28rem;
 
   &::before {
     content: "";
+    z-index: 0;
     position: absolute;
     top: 0.25rem;
     bottom: 0.25rem;
     left: 0.25rem;
-    width: calc(50% - 0.25rem);
     background: color-mix(in srgb, var(--team-color) 15%, transparent);
     border: 1px solid color-mix(in srgb, var(--team-color) 25%, var(--color-line));
+    width: calc(50% - 0.25rem);
     border-radius: 0.2rem;
     transition: transform 225ms ease;
-    z-index: 0;
   }
 
-  button {
+  & button {
     z-index: 1;
-    background: transparent;
-    border: none;
-    outline: none;
+    position: relative;
     color: var(--color-text);
     font-family: var(--font-body);
     font-size: 0.7rem;
     font-weight: 600;
+    background: transparent;
+    border: none;
+    min-height: 2rem;
     padding: 0.4rem 0.5rem;
-    position: relative;
-    cursor: pointer;
     transition: color 175ms ease;
 
     &.active {
       color: var(--color-title);
     }
   }
+
   &:has(button:last-child.active)::before {
     transform: translateX(100%);
+  }
+
+  @media (max-width: 640px) {
+    padding: 0.35rem;
   }
 }
 
@@ -523,16 +591,21 @@ onUnmounted(() => {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-.member-list li {
-  align-items: center;
-  display: flex;
-  gap: 0.6rem;
-  padding: 0.45rem 0.6rem;
-  min-height: 2.2rem;
 
-  &:nth-child(odd) {
-    background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  & li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.2rem;
+    padding: 0.45rem 0.6rem;
+
+    &:nth-child(odd) {
+      background: color-mix(in srgb, var(--team-color) 5%, transparent);
+    }
+
+    @media (max-width: 640px) {
+      min-height: 2.5rem;
+    }
   }
 }
 
@@ -543,63 +616,66 @@ onUnmounted(() => {
   object-fit: contain;
   flex-shrink: 0;
 }
+
 .member-user {
-  flex: 1;
   display: flex;
+  flex: 1;
   align-items: center;
   gap: 0.4rem;
   min-width: 0;
+
+  & .username {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-title);
+    overflow: hidden;
+  }
 }
+
 .member-country {
-  flex-shrink: 0;
+  font-family: var(--font-emoji);
   font-size: 0.85rem;
   line-height: 1;
-  font-family: var(--font-emoji);
+  flex-shrink: 0;
 }
-.member-user .username {
-  color: var(--color-title);
-  font-size: 0.75rem;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+
 .member-badge {
   display: inline-flex;
   align-items: center;
-  background: color-mix(in srgb, var(--team-color) 5%, transparent);
-  border: 0.03rem solid color-mix(in srgb, var(--team-color) 15%, var(--color-line));
-  border-radius: 0.12rem;
+  margin-left: auto;
   font-family: var(--font-body);
   font-size: 0.55rem;
   font-weight: 600;
   color: color-mix(in srgb, var(--color-title) 80%, transparent);
+  background: color-mix(in srgb, var(--team-color) 5%, transparent);
+  border: 0.03rem solid color-mix(in srgb, var(--team-color) 15%, var(--color-line));
   padding: 0.15rem 0.35rem;
-  margin-left: auto;
+  border-radius: 0.12rem;
   flex-shrink: 0;
 }
 
 .advanced-wrapper {
   background: color-mix(in srgb, var(--team-color) 5%, transparent);
-  box-sizing: border-box;
-  padding: 0.6rem;
   width: 100%;
+  padding: 0.6rem;
 }
+
 .advanced-button {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   gap: 0.5rem;
-  padding: 0.5rem 0;
   font: inherit;
   font-size: 0.66rem;
   font-weight: 600;
   color: var(--color-title);
   background: color-mix(in srgb, var(--team-color) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--team-color) 15%, var(--color-line));
+  padding: 0.5rem 0;
   border-radius: 0.375rem;
-  cursor: pointer;
   transition:
     background-color 200ms ease,
     border-color 200ms ease;
@@ -609,9 +685,9 @@ onUnmounted(() => {
     border-color: color-mix(in srgb, var(--team-color) 20%, var(--color-line));
   }
 
-  svg {
-    color: currentColor;
+  & svg {
     font-size: 0.63rem;
+    color: currentColor;
   }
 }
 
@@ -670,67 +746,19 @@ onUnmounted(() => {
 
 @supports (-moz-appearance: none) {
   .team-card {
-    will-change: transform;
     transform: translateZ(0);
     contain: layout paint;
+    will-change: transform;
   }
 
   .member-list,
   .empty-roster {
-    will-change: height, transform;
     transform: translateZ(0);
+    will-change: height, transform;
   }
 
   .team-regions button {
     will-change: transform;
-  }
-}
-
-@media (max-width: 640px) {
-  .team-regions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .team-regions button {
-    border-radius: 0 !important;
-  }
-  .team-regions button:nth-child(1) {
-    border-radius: 0.19rem 0 0 0 !important;
-  }
-  .team-regions button:nth-child(2) {
-    border-radius: 0 0.19rem 0 0 !important;
-  }
-  .team-regions button:nth-child(3) {
-    border-radius: 0 0 0 0.19rem !important;
-  }
-  .team-regions button:nth-child(4) {
-    border-radius: 0 0 0.19rem 0 !important;
-  }
-
-  .team-card-header {
-    gap: 0.65rem;
-    padding: 0.6rem 0.65rem;
-  }
-  .team-logo {
-    height: 1.75rem;
-  }
-  .team-info {
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 0.35rem;
-  }
-  .team-name {
-    font-size: 0.825rem;
-  }
-  .team-meta {
-    gap: 0.35rem;
-  }
-  .team-tier {
-    line-height: 1;
-  }
-
-  .member-toggle {
-    padding: 0.45rem;
   }
 }
 </style>

@@ -46,52 +46,66 @@ const { t } = useI18n();
 }
 
 .faq-row {
-  border-bottom: 1px solid var(--color-line);
   background: var(--color-bg);
+  border-bottom: 1px solid var(--color-line);
 }
 
 .faq-header {
-  align-items: center;
-  background: transparent;
-  outline: none;
-  border: none;
   display: grid;
-  gap: 1rem;
+  align-items: center;
   grid-template-columns: 1.1rem 1fr 1.25rem;
+  gap: 1rem;
+  background: transparent;
+  border: none;
+  width: 100%;
   min-height: 3rem;
   padding: 0.9rem 1rem;
-  cursor: pointer;
   transition:
     background-color 150ms ease,
     color 150ms ease;
-  width: 100%;
 
-  &:hover,
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in srgb, var(--color-brand) 10%, transparent);
+    }
+  }
+
   &.active {
     background: color-mix(in srgb, var(--color-brand) 10%, transparent);
+
+    & .faq-number {
+      color: var(--color-brand);
+    }
+
+    & .faq-title {
+      color: var(--color-title);
+    }
+
+    & .faq-toggle {
+      color: var(--color-brand);
+      transform: rotate(45deg);
+    }
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
   }
 }
 
 .faq-number {
   font-family: var(--font-accent);
-  color: var(--color-text-muted);
   font-size: 0.7rem;
+  color: var(--color-text-muted);
   transition: color 150ms ease;
-}
-.faq-header.active .faq-number {
-  color: var(--color-brand);
 }
 
 .faq-title {
   font-family: var(--font-title);
-  font-weight: 500;
   font-size: 0.7rem;
-  color: var(--color-text);
+  font-weight: 500;
   text-align: left;
+  color: var(--color-text);
   transition: color 150ms ease;
-}
-.faq-header.active .faq-title {
-  color: var(--color-title);
 }
 
 .faq-toggle {
@@ -103,10 +117,6 @@ const { t } = useI18n();
   transition:
     transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
     color 150ms ease;
-}
-.faq-header.active .faq-toggle {
-  color: var(--color-brand);
-  transform: rotate(45deg);
 }
 
 .faq-expandable {
@@ -125,26 +135,34 @@ const { t } = useI18n();
 }
 
 .faq-detail {
-  color: var(--color-text);
   font-size: 0.7rem;
   line-height: 1.6;
+  color: var(--color-text);
   padding: 1rem 1rem 1.2rem calc(1.1rem + 2rem);
-}
 
-.faq-detail :deep(p) {
-  margin: 0 0 0.6rem 0;
-}
-.faq-detail :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.faq-detail :deep(ul) {
-  margin: 0.4rem 0 0.6rem 0;
-  padding-left: 1.2rem;
-}
-.faq-detail :deep(li) {
-  margin-bottom: 0.3rem;
-}
-.faq-detail :deep(strong) {
-  color: var(--color-title);
+  & :deep(p) {
+    margin: 0 0 0.6rem 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  & :deep(ul) {
+    margin: 0.4rem 0 0.6rem 0;
+    padding-left: 1.2rem;
+  }
+
+  & :deep(li) {
+    margin-bottom: 0.3rem;
+  }
+
+  & :deep(strong) {
+    color: var(--color-title);
+  }
+
+  @media (max-width: 640px) {
+    padding: 0.75rem 1rem 1rem;
+  }
 }
 </style>

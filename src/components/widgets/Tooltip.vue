@@ -81,6 +81,7 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
 <style scoped>
 .tooltip {
   position: relative;
+  display: inline-flex;
 }
 
 .tooltip-trigger {
@@ -94,24 +95,27 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
   flex-direction: column;
   top: 0;
   left: 0;
+  gap: 0.5rem;
+  text-align: left;
+  color: var(--color-bg);
+  background: var(--color-title);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
   width: min(15rem, calc(100vw - 1.5rem));
   padding: 1rem;
-  gap: 0.5rem;
-  background: var(--color-title);
   border-radius: 0.19rem;
-  color: var(--color-bg);
-  text-align: left;
 
   &::before {
     content: "";
     position: absolute;
     top: -0.85rem;
-    left: var(--pointer-left);
+    left: var(--pointer-left, 50%);
     transform: translateX(-50%);
     border-bottom: 0.9rem solid var(--color-title);
     border-left: 0.6rem solid transparent;
     border-right: 0.6rem solid transparent;
+    pointer-events: none;
   }
+
   &::after {
     content: "";
     position: absolute;
@@ -120,14 +124,18 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
     width: 100%;
     height: 1rem;
   }
+
   & :deep(strong) {
     font-family: var(--font-title);
     font-size: 0.75rem;
     font-weight: 600;
   }
+
   & :deep(p) {
+    margin: 0;
     font-family: var(--font-body);
     font-size: 0.75rem;
+    line-height: 1.4;
   }
 }
 
@@ -138,20 +146,11 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
       opacity 180ms ease,
       transform 180ms ease;
   }
+
   &-enter-from,
   &-leave-to {
     opacity: 0;
     transform: translateY(-0.35rem);
-  }
-}
-
-@media (max-width: 760px) {
-  .tooltip-content {
-    width: min(15rem, calc(100vw - 1.5rem));
-
-    &::before {
-      left: var(--pointer-left);
-    }
   }
 }
 </style>
