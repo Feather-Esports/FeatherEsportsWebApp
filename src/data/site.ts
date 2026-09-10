@@ -78,6 +78,7 @@ export const staff: StaffMember[] = [
   { id: "yuri", name: "Yuri", color: "#7252b3", roles: ["founders"], subRoles: ["tech", "media"] },
   { id: "blaco", name: "Blaco", color: "#2ba90a", roles: ["founders"], subRoles: ["community"] },
   { id: "luna", name: "Luna", color: "#ff0100", roles: ["founders"], subRoles: ["hr"] },
+  { id: "azrael", name: "Azrael", color: "#dec66a", roles: ["staff"], subRoles: ["team"] },
   { id: "genesis", name: "Genesis", color: "#03263f", roles: ["staff"], subRoles: ["team"] },
   { id: "sid", name: "Sid", color: "#ed7819", roles: ["staff"] },
   { id: "callson", name: "Callson", color: "#16171b", roles: ["media"], subRoles: ["media"] },
