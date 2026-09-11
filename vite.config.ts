@@ -18,6 +18,7 @@ export default defineConfig({
       dts: "components.d.ts",
     }),
   ],
+  base: "/FeatherEsportsWebApp/",
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
