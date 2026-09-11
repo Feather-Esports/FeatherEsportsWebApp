@@ -1,0 +1,16 @@
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "bun.lock, bunfig.toml, .gitignore, .gitattributes, .editorconfig, .eslint*, eslint*, .oxlint*, oxlint*, .oxfmt*, oxfmt*, components.d.ts, auto-imports.d.ts",
+    "vite.config.*": "index.html, .env, .env.*, .env.local, postcss.config.*, tailwind.config.*, jsconfig*",
+    "tsconfig.json": "tsconfig.*.json, env.d.ts, typed-router.d.ts",
+    "README.md": "LICENSE*, TODO*"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.oxc": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "oxc.oxc-vscode"
+}
