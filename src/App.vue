@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
+import { onMounted } from "vue";
+
 import Atmosphere from "@/components/background/Atmosphere.vue";
 import SiteFooter from "@/components/layout/SiteFooter.vue";
 import SiteHeader from "@/components/layout/SiteHeader.vue";
@@ -9,10 +11,33 @@ import MatchesSection from "@/components/sections/MatchesSection.vue";
 import PartnersSection from "@/components/sections/PartnersSection.vue";
 import StaffSection from "@/components/sections/StaffSection.vue";
 import TeamSection from "@/components/sections/TeamSection.vue";
-import { teamRegions } from "@/data/teams";
 import SectionHeading from "@/components/widgets/SectionHeading.vue";
 
+import { socialLinks, discordLink } from "@/data/site";
+import { teamRegions } from "@/data/teams";
+
 const { t } = useI18n();
+
+onMounted(() => {
+  const sameAsLinks = [discordLink.href, ...socialLinks.map((link) => link.href)];
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    name: "Feather Esports",
+    url: "https://feather-esports.github.io",
+    logo: "https://feather-esports.github.io/images/brand/logo.png",
+    sport: "Overwatch",
+    description: "Grassroots Overwatch organization competing across multiple skill tiers.",
+    sameAs: sameAsLinks,
+  };
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.id = "organization-schema";
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+});
 </script>
 
 <template>
