@@ -75,7 +75,7 @@ const { t } = useI18n();
 .site-shell {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--font-body);
   position: relative;
   z-index: 1;
@@ -94,10 +94,8 @@ main {
   position: relative;
   scroll-margin-top: 6rem;
   z-index: 2;
-}
 
-@media (max-width: 760px) {
-  .content-section {
+  @media (max-width: 760px) {
     margin-top: 3rem;
   }
 }
