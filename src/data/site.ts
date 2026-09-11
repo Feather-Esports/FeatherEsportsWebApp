@@ -16,7 +16,8 @@ export type FAQItem = {
   detail: string
   color?: string
 }
-export const faqs: FAQItem[] = [
+
+export const faqs = [
   { label: "faq.1.label", detail: "faq.1.detail" },
   { label: "faq.2.label", detail: "faq.2.detail" },
   { label: "faq.3.label", detail: "faq.3.detail" },
@@ -24,7 +25,7 @@ export const faqs: FAQItem[] = [
   { label: "faq.5.label", detail: "faq.5.detail" },
   { label: "faq.6.label", detail: "faq.6.detail" },
   { label: "faq.7.label", detail: "faq.7.detail" },
-]
+] as const satisfies FAQItem[]
 
 export type Partner = {
   id: string
@@ -33,6 +34,7 @@ export type Partner = {
   code?: string
   link: string
 }
+
 export const partners: Partner[] = [
   {
     id: "faceit",
@@ -50,20 +52,14 @@ export const partners: Partner[] = [
   },
 ]
 
-export type StaffMember = {
-  id: string
-  name: string
-  color: string
-  roles: string[]
-  subRoles?: string[]
-}
 export const staffRoles = [
   { id: "founders", label: "staff.roles.founders" },
   { id: "administrators", label: "staff.roles.administrators" },
   { id: "moderators", label: "staff.roles.moderators" },
   { id: "staff", label: "staff.roles.staff" },
   { id: "media", label: "staff.roles.media" },
-]
+] as const
+
 export const staffSubRoles = [
   { id: "networking", label: "staff.subRoles.networking" },
   { id: "community", label: "staff.subRoles.community" },
@@ -71,7 +67,19 @@ export const staffSubRoles = [
   { id: "hr", label: "staff.subRoles.hr" },
   { id: "tech", label: "staff.subRoles.tech" },
   { id: "media", label: "staff.subRoles.media" },
-]
+] as const
+
+export type StaffRoleId = (typeof staffRoles)[number]["id"]
+export type StaffSubRoleId = (typeof staffSubRoles)[number]["id"]
+
+export type StaffMember = {
+  id: string
+  name: string
+  color: string
+  roles: StaffRoleId[]
+  subRoles?: StaffSubRoleId[]
+}
+
 export const staff: StaffMember[] = [
   { id: "kepler", name: "Kepler", color: "#221d75", roles: ["founders"], subRoles: ["networking", "team"] },
   { id: "yiruzu", name: "yiruzu", color: "#0288df", roles: ["founders"], subRoles: ["networking", "tech", "media"] },

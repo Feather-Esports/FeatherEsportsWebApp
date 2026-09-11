@@ -1,77 +1,56 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from "vue";
+import { nextTick, ref } from "vue"
+import { useEventListener } from "@vueuse/core"
 
-const props = withDefaults(defineProps<{ id?: string }>(), {
+interface Props {
+  id?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
   id: "tooltip",
-});
+})
 
-const visible = ref(false);
-const tooltipElement = ref<HTMLElement | null>(null);
-const tooltipStyle = ref<Record<string, string>>({});
+const visible = ref<boolean>(false)
+const tooltipElement = ref<HTMLElement | null>(null)
+const tooltipStyle = ref<Record<string, string>>({})
 
 function updatePosition(): void {
-  const trigger = tooltipElement.value?.previousElementSibling;
-  if (!(trigger instanceof HTMLElement) || !tooltipElement.value) {
-    return;
-  }
+  const trigger = tooltipElement.value?.previousElementSibling
+  if (!(trigger instanceof HTMLElement) || !tooltipElement.value) return
 
-  const gutter = 12;
-  const triggerCenter = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
-  const { width } = tooltipElement.value.getBoundingClientRect();
-  const left = Math.min(
-    Math.max(gutter, triggerCenter - width / 2),
-    window.innerWidth - width - gutter,
-  );
+  const gutter = 12
+  const triggerRect = trigger.getBoundingClientRect()
+  const triggerCenter = triggerRect.left + trigger.offsetWidth / 2
+  const { width } = tooltipElement.value.getBoundingClientRect()
+  const left = Math.min(Math.max(gutter, triggerCenter - width / 2), window.innerWidth - width - gutter)
 
   tooltipStyle.value = {
     left: `${left}px`,
-    top: `${trigger.getBoundingClientRect().bottom + 16}px`,
+    top: `${triggerRect.bottom + 16}px`,
     "--pointer-left": `${triggerCenter - left}px`,
-  };
+  }
 }
 
-function handleMouseEnter(): void {
-  visible.value = true;
-  void nextTick(updatePosition);
+function handleShow(): void {
+  visible.value = true
+  void nextTick(updatePosition)
 }
 
-function handleMouseLeave(): void {
-  visible.value = false;
+function handleHide(): void {
+  visible.value = false
 }
 
-function handleFocusIn(): void {
-  visible.value = true;
-  void nextTick(updatePosition);
-}
-
-function handleFocusOut(): void {
-  visible.value = false;
-}
-
-onMounted(() => window.addEventListener("resize", updatePosition));
-onUnmounted(() => window.removeEventListener("resize", updatePosition));
+useEventListener("resize", updatePosition, { passive: true })
 </script>
 
 <template>
-  <div class="tooltip" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-    <span
-      :aria-describedby="visible ? props.id : undefined"
-      class="tooltip-trigger"
-      @focusin="handleFocusIn"
-      @focusout="handleFocusOut"
-    >
+  <div class="tooltip" @mouseenter="handleShow" @mouseleave="handleHide">
+    <span class="tooltip-trigger" tabindex="0" :aria-describedby="visible ? props.id : undefined" @focusin="handleShow" @focusout="handleHide">
       <slot name="trigger" />
     </span>
 
     <Transition name="tooltip-fade">
-      <div
-        v-if="visible"
-        :id="props.id"
-        ref="tooltipElement"
-        class="tooltip-content"
-        role="tooltip"
-        :style="tooltipStyle"
-      >
+      <div v-if="visible" :id="props.id" ref="tooltipElement" class="tooltip-content" role="tooltip" :style="tooltipStyle">
         <slot />
       </div>
     </Transition>
@@ -151,6 +130,13 @@ onUnmounted(() => window.removeEventListener("resize", updatePosition));
   &-leave-to {
     opacity: 0;
     transform: translateY(-0.35rem);
+  }
+}
+
+@supports (-moz-appearance: none) {
+  .tooltip-content {
+    transform: translateZ(0);
+    will-change: transform, opacity;
   }
 }
 </style>

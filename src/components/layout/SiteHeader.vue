@@ -1,34 +1,37 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { discordLink } from "@/data/site";
-import Tooltip from "@/components/widgets/Tooltip.vue";
+import { computed, ref } from "vue"
+import { useI18n } from "vue-i18n"
+import { Icon } from "@iconify/vue"
 
-type NavigationItem = {
-  id: string;
-  label: string;
-};
+import { discordLink } from "@/data/site"
 
-const { t } = useI18n();
-const menuOpen = ref(false);
+import Tooltip from "@/components/widgets/Tooltip.vue"
 
-const navigation: NavigationItem[] = [
+const { t } = useI18n()
+
+interface NavigationItem {
+  readonly id: string
+  readonly label: string
+}
+
+const menuOpen = ref<boolean>(false)
+
+const navigation: readonly NavigationItem[] = [
   { id: "teams", label: "header.nav.teams" },
   { id: "faq", label: "header.nav.faq" },
   { id: "matches", label: "header.nav.matches" },
   { id: "partners", label: "header.nav.partners" },
   { id: "staff", label: "header.nav.staff" },
-];
+]
 
-const menuLabel = computed(() => (menuOpen.value ? "Close menu" : "Open menu"));
+const menuLabel = computed<string>(() => (menuOpen.value ? "Close menu" : "Open menu"))
 
 function handleMenuToggle(): void {
-  menuOpen.value = !menuOpen.value;
+  menuOpen.value = !menuOpen.value
 }
 
 function handleNavSelect(): void {
-  menuOpen.value = false;
+  menuOpen.value = false
 }
 </script>
 
@@ -39,14 +42,7 @@ function handleNavSelect(): void {
       <span>Feather</span>
     </a>
 
-    <button
-      class="menu-toggle"
-      type="button"
-      :aria-expanded="menuOpen"
-      aria-controls="site-navigation"
-      :aria-label="menuLabel"
-      @click="handleMenuToggle"
-    >
+    <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-controls="site-navigation" :aria-label="menuLabel" @click="handleMenuToggle">
       <Icon :icon="menuOpen ? 'pixel:times' : 'pixel:bars'" />
     </button>
 
@@ -69,7 +65,7 @@ function handleNavSelect(): void {
           <p>{{ t("header.wipTooltip.description") }}</p>
         </Tooltip>
 
-        <a class="discord-link" :href="discordLink.href" target="_blank" rel="noreferrer">
+        <a class="discord-link" :href="discordLink.href" target="_blank" rel="noopener noreferrer">
           <Icon :icon="discordLink.icon" />
           {{ t("header.discord") }}
         </a>

@@ -1,81 +1,45 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { partners } from "@/data/site";
-import { ref } from "vue";
+import { useClipboard } from "@vueuse/core"
+import { Icon } from "@iconify/vue"
 
-const copiedCode = ref<string | null>(null);
+import { partners, type Partner } from "@/data/site"
 
-async function copyCode(code: string): Promise<void> {
-  if (!code) {
-    return;
-  }
+const { copy, copied, text: copiedText } = useClipboard({ copiedDuring: 1500 })
 
-  try {
-    await navigator.clipboard.writeText(code);
-    copiedCode.value = code;
-
-    window.setTimeout(() => {
-      if (copiedCode.value === code) {
-        copiedCode.value = null;
-      }
-    }, 1500);
-  } catch {
-    copiedCode.value = null;
-  }
-}
-
-const partnerLogos = import.meta.glob("@/assets/images/partners/*.webp", {
+const partnerLogos = import.meta.glob<string>("@/assets/images/partners/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
-}) as Record<string, string>;
+})
+
+function getPartnerLogo(partnerId: string): string | undefined {
+  return partnerLogos[`/src/assets/images/partners/${partnerId}.webp`]
+}
+
+function handleCopy(code: string): void {
+  if (code) copy(code)
+}
 </script>
 
 <template>
   <div class="partners-grid">
-    <article
-      v-for="partner in partners"
-      :key="partner.id"
-      class="partner-card"
-      :class="{ 'is-cta': partner.id === 'cta' }"
-    >
-      <a
-        :href="partner.link"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="partner-link-overlay"
-        :aria-label="partner.label"
-      />
+    <article v-for="partner in partners as Partner[]" :key="partner.id" class="partner-card" :class="{ 'is-cta': partner.id === 'cta' }">
+      <a :href="partner.link" target="_blank" rel="noopener noreferrer" class="partner-link-overlay" :aria-label="partner.label" />
 
       <div class="partner-header">
-        <img
-          v-if="partner.id !== 'cta'"
-          class="partner-logo"
-          :src="partnerLogos[`/src/assets/images/partners/${partner.id}.webp`]"
-          :alt="partner.id"
-          draggable="false"
-        />
+        <img v-if="partner.id !== 'cta'" class="partner-logo" :src="getPartnerLogo(partner.id)" :alt="partner.label" draggable="false" />
         <div class="partner-name">
           {{ partner.label }}
         </div>
-        <Icon
-          class="partner-icon"
-          :icon="partner.id === 'cta' ? 'pixel:plus' : 'pixel:external-link'"
-        />
+        <Icon class="partner-icon" :icon="partner.id === 'cta' ? 'pixel:plus' : 'pixel:external-link'" />
       </div>
 
       <p class="partner-description">{{ partner.description }}</p>
 
-      <button
-        v-if="partner.code"
-        type="button"
-        class="partner-code"
-        @click="copyCode(partner.code)"
-        :aria-label="`Copy affiliate code for ${partner.id}`"
-      >
+      <button v-if="partner.code" type="button" class="partner-code" :aria-label="`Copy affiliate code for ${partner.label}`" @click="handleCopy(partner.code)">
         <span class="code-content">
           <Icon class="code-icon" icon="pixel:copy" />
-          <span>{{ copiedCode === partner.code ? "Copied" : partner.code }}</span>
+          <span>{{ copied && copiedText === partner.code ? "Copied" : partner.code }}</span>
         </span>
       </button>
     </article>

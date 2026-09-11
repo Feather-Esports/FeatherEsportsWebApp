@@ -1,108 +1,87 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { staff, staffRoles, staffSubRoles } from "@/data/site";
-import { useUiStore } from "@/stores/ui";
+import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
+import { Icon } from "@iconify/vue"
+import { useResizeObserver, useScroll } from "@vueuse/core"
 
-const { t } = useI18n();
-const uiStore = useUiStore();
+import { useUiStore } from "@/stores/ui"
+import { staff, staffRoles, staffSubRoles, type StaffMember, type StaffRole } from "@/data/site"
 
-const subRoleLabelMap = computed<Map<string, string>>(
-  () => new Map(staffSubRoles.map((subRole) => [subRole.id, subRole.label])),
-);
+type StaffRoleId = (typeof staffRoles)[number]["id"]
+type StaffSubRoleId = (typeof staffSubRoles)[number]["id"]
 
-const staffAvatars = import.meta.glob("@/assets/images/staff/*.webp", {
+const { t } = useI18n()
+const uiStore = useUiStore()
+
+const subRoleMap = new Map<string, string>(staffSubRoles.map(sr => [sr.id, sr.label]))
+
+const staffAvatars = import.meta.glob<string>("@/assets/images/staff/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
-}) as Record<string, string>;
+})
 
-const activeStaffRoles = computed(() =>
-  staffRoles.filter((role) => staff.some((member) => member.roles.includes(role.id))),
-);
+const activeStaffRoles = computed<StaffRole[]>(() => staffRoles.filter(role => staff.some(member => member.roles.includes(role.id as StaffRoleId))))
 
-const visibleStaff = computed(() =>
-  staff.filter((member) => member.roles.includes(uiStore.activeStaffRole)),
-);
+const visibleStaff = computed<StaffMember[]>(() => staff.filter(member => member.roles.includes(uiStore.activeStaffRole as StaffRoleId)))
 
-const carouselRef = ref<HTMLElement | null>(null);
-const canScrollLeft = ref(false);
-const canScrollRight = ref(false);
-let resizeObserver: ResizeObserver | null = null;
+const carouselRef = ref<HTMLElement | null>(null)
+const { x: scrollX } = useScroll(carouselRef, { behavior: "smooth" })
+
+const canScrollLeft = ref<boolean>(false)
+const canScrollRight = ref<boolean>(false)
 
 function updateScrollState(): void {
-  const element = carouselRef.value;
-  if (!element) {
-    canScrollLeft.value = false;
-    canScrollRight.value = false;
-    return;
+  const el = carouselRef.value
+  if (!el) {
+    canScrollLeft.value = false
+    canScrollRight.value = false
+    return
   }
 
-  const maxScrollLeft = Math.max(element.scrollWidth - element.clientWidth, 0);
-  const hasOverflow = maxScrollLeft > 0;
+  const maxScrollLeft = Math.max(el.scrollWidth - el.clientWidth, 0)
+  const hasOverflow = maxScrollLeft > 0
 
-  canScrollLeft.value = hasOverflow && element.scrollLeft > 1;
-  canScrollRight.value = hasOverflow && element.scrollLeft < maxScrollLeft - 1;
+  canScrollLeft.value = hasOverflow && el.scrollLeft > 1
+  canScrollRight.value = hasOverflow && el.scrollLeft < maxScrollLeft - 1
 }
 
-function attachObserverAndScroll(): void {
-  const element = carouselRef.value;
-  if (!element) {
-    return;
-  }
-
-  resizeObserver?.disconnect();
-  resizeObserver = new ResizeObserver(updateScrollState);
-  resizeObserver.observe(element);
-  updateScrollState();
-}
+useResizeObserver(carouselRef, updateScrollState)
 
 function scrollCarousel(direction: "left" | "right"): void {
-  const element = carouselRef.value;
-  if (!element) {
-    return;
-  }
+  const el = carouselRef.value
+  if (!el) return
 
-  const scrollAmount = element.clientWidth * 0.8;
-  element.scrollBy({
-    left: direction === "left" ? -scrollAmount : scrollAmount,
-    behavior: "smooth",
-  });
+  const amount = el.clientWidth * 0.8
+  scrollX.value += direction === "left" ? -amount : amount
 }
 
-function getSubRoleLabel(id: string): string {
-  const labelKey = subRoleLabelMap.value.get(id);
-  return labelKey ? t(labelKey) : id;
+function getSubRoleLabel(id: StaffSubRoleId | string): string {
+  const labelKey = subRoleMap.get(id)
+  return labelKey ? t(labelKey) : id
 }
 
-function handleRoleChange(roleId: string): void {
-  uiStore.selectStaffRole(roleId);
-}
+watch(
+  () => uiStore.activeStaffRole,
+  async () => {
+    await nextTick()
+    if (carouselRef.value) {
+      carouselRef.value.scrollLeft = 0
+    }
+    updateScrollState()
+  },
+)
 
-watch([visibleStaff, () => uiStore.activeStaffRole], async () => {
-  await nextTick();
-  const element = carouselRef.value;
-  if (!element) {
-    return;
-  }
-
-  element.scrollLeft = 0;
-  updateScrollState();
-});
+watch(scrollX, updateScrollState)
 
 onMounted(() => {
-  Object.values(staffAvatars).forEach((url) => {
-    const img = new Image();
-    img.src = url;
-    img.decode().catch(() => {});
-  });
-  attachObserverAndScroll();
-});
-
-onUnmounted(() => {
-  resizeObserver?.disconnect();
-});
+  Object.values(staffAvatars).forEach(url => {
+    const img = new Image()
+    img.src = url
+    img.decode().catch(() => {})
+  })
+  updateScrollState()
+})
 </script>
 
 <template>
@@ -114,67 +93,30 @@ onUnmounted(() => {
       role="tab"
       :aria-selected="uiStore.activeStaffRole === role.id"
       :class="{ active: uiStore.activeStaffRole === role.id }"
-      @click="handleRoleChange(role.id)"
+      @click="uiStore.selectStaffRole(role.id)"
     >
       {{ t(role.label) }}
     </button>
   </div>
 
   <div class="carousel-container">
-    <button
-      v-if="canScrollLeft"
-      type="button"
-      class="carousel-arrow prev"
-      aria-label="Scroll left"
-      @click="scrollCarousel('left')"
-    >
+    <button v-if="canScrollLeft" type="button" class="carousel-arrow prev" aria-label="Scroll left" @click="scrollCarousel('left')">
       <Icon icon="pixel:angle-left" />
     </button>
 
-    <Transition
-      name="fade-slide"
-      mode="out-in"
-      @after-enter="attachObserverAndScroll"
-      @leave="updateScrollState"
-    >
-      <div
-        :key="uiStore.activeStaffRole"
-        ref="carouselRef"
-        class="staff-grid"
-        tabindex="-1"
-        @scroll="updateScrollState"
-      >
-        <article
-          v-for="member in visibleStaff"
-          :key="member.id"
-          class="staff-card"
-          :style="{ '--member-color': member.color }"
-        >
-          <img
-            class="staff-avatar"
-            :src="staffAvatars[`/src/assets/images/staff/${member.id}.webp`]"
-            :alt="member.name"
-            loading="eager"
-            decoding="async"
-            draggable="false"
-          />
+    <Transition name="fade-slide" mode="out-in" @after-enter="updateScrollState">
+      <div :key="uiStore.activeStaffRole" ref="carouselRef" class="staff-grid" tabindex="-1">
+        <article v-for="member in visibleStaff" :key="member.id" class="staff-card" :style="{ '--member-color': member.color }">
+          <img class="staff-avatar" :src="staffAvatars[`/src/assets/images/staff/${member.id}.webp`]" :alt="member.name" loading="eager" decoding="async" draggable="false" />
           <div class="staff-details">
             <h3>{{ member.name }}</h3>
-            <p v-for="subRoleId in member.subRoles" :key="subRoleId">
-              - {{ getSubRoleLabel(subRoleId) }}
-            </p>
+            <p v-for="subRoleId in member.subRoles" :key="subRoleId">- {{ getSubRoleLabel(subRoleId) }}</p>
           </div>
         </article>
       </div>
     </Transition>
 
-    <button
-      v-if="canScrollRight"
-      type="button"
-      class="carousel-arrow next"
-      aria-label="Scroll right"
-      @click="scrollCarousel('right')"
-    >
+    <button v-if="canScrollRight" type="button" class="carousel-arrow next" aria-label="Scroll right" @click="scrollCarousel('right')">
       <Icon icon="pixel:angle-right" />
     </button>
   </div>
@@ -217,24 +159,14 @@ onUnmounted(() => {
     @media (hover: hover) {
       &:hover:not(.active) {
         color: color-mix(in srgb, var(--color-brand) 70%, transparent);
-        background: linear-gradient(
-          360deg,
-          color-mix(in srgb, var(--color-brand) 10%, transparent) 0%,
-          transparent 75%,
-          transparent 100%
-        );
+        background: linear-gradient(360deg, color-mix(in srgb, var(--color-brand) 10%, transparent) 0%, transparent 75%, transparent 100%);
         border-bottom-color: color-mix(in srgb, var(--color-brand) 70%, var(--color-line));
       }
     }
 
     &.active {
       color: var(--color-brand);
-      background: linear-gradient(
-        360deg,
-        color-mix(in srgb, var(--color-brand) 20%, transparent) 0%,
-        transparent 75%,
-        transparent 100%
-      );
+      background: linear-gradient(360deg, color-mix(in srgb, var(--color-brand) 20%, transparent) 0%, transparent 75%, transparent 100%);
       border-bottom-color: var(--color-brand);
     }
 
@@ -272,14 +204,7 @@ onUnmounted(() => {
   display: flex;
   flex: 0 0 calc(33.333% - 0.67rem);
   gap: 1rem;
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--member-color) 50%, transparent) 0%,
-      transparent 95%,
-      transparent 100%
-    ),
-    var(--color-bg);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--member-color) 50%, transparent) 0%, transparent 95%, transparent 100%), var(--color-bg);
   height: 9rem;
   border-radius: 0.19rem;
   scroll-snap-align: start;

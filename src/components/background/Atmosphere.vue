@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue"
 
-const TOTAL_COUNT = 40;
-const MIN_SIZE_REM = 0.7;
-const MAX_SIZE_REM = 1.8;
-const VERTICAL_STEP_PX = 100;
-const RANDOM_Y_OFFSET = 80;
+const TOTAL_COUNT = 40
+const MIN_SIZE_REM = 0.7
+const MAX_SIZE_REM = 1.8
+const VERTICAL_STEP_PX = 100
+const RANDOM_Y_OFFSET = 80
 
 type FloatingElement = {
-  id: number;
-  left: string;
-  top: string;
-  size: string;
-  delay: string;
-  duration: string;
-  driftX: string;
-  driftY: string;
-  maxOpacity: number;
-};
+  id: number
+  left: string
+  top: string
+  size: string
+  delay: string
+  duration: string
+  driftX: string
+  driftY: string
+  maxOpacity: number
+}
 
 const elements: FloatingElement[] = Array.from({ length: TOTAL_COUNT }, (_, index) => {
-  const topPx = 60 + index * VERTICAL_STEP_PX + ((index * 53) % RANDOM_Y_OFFSET);
-  const leftPct = 3 + ((index * 43) % 92);
+  const topPx = 60 + index * VERTICAL_STEP_PX + ((index * 53) % RANDOM_Y_OFFSET)
+  const leftPct = 3 + ((index * 43) % 92)
 
-  const sizeTier = (index % 4) / 3;
-  const calculatedSize = MIN_SIZE_REM + sizeTier * (MAX_SIZE_REM - MIN_SIZE_REM);
+  const sizeTier = (index % 4) / 3
+  const calculatedSize = MIN_SIZE_REM + sizeTier * (MAX_SIZE_REM - MIN_SIZE_REM)
 
   return {
     id: index,
@@ -36,8 +36,8 @@ const elements: FloatingElement[] = Array.from({ length: TOTAL_COUNT }, (_, inde
     driftX: `${(index % 2 === 0 ? 1 : -1) * (1.5 + (index % 3))}rem`,
     driftY: `${(index % 3 === 0 ? -1 : 1) * (1.5 + (index % 3))}rem`,
     maxOpacity: 0.75,
-  };
-});
+  }
+})
 </script>
 
 <template>

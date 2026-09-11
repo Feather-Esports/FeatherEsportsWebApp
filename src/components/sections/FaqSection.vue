@@ -1,25 +1,36 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { useI18n } from "vue-i18n";
-import { faqs } from "@/data/site";
-import { useUiStore } from "@/stores/ui";
+import { useI18n } from "vue-i18n"
+import { Icon } from "@iconify/vue"
 
-const uiStore = useUiStore();
-const { t } = useI18n();
+import { useUiStore } from "@/stores/ui"
+import { faqs, type FaqItem } from "@/data/site"
+
+const uiStore = useUiStore()
+const { t } = useI18n()
+
+function isOpen(label: string): boolean {
+  return uiStore.openFaq === label
+}
+
+function formatIndex(index: number): string {
+  return String(index + 1).padStart(2, "0")
+}
 </script>
 
 <template>
   <div class="faq-section">
-    <div v-for="(item, index) in faqs" :key="item.label" class="faq-row">
+    <div v-for="(item, index) in faqs as FaqItem[]" :key="item.label" class="faq-row">
       <button
+        :id="`faq-header-${index}`"
+        type="button"
         class="faq-header"
-        :class="{ active: uiStore.openFaq === item.label }"
-        :aria-expanded="uiStore.openFaq === item.label"
+        :class="{ active: isOpen(item.label) }"
+        :aria-expanded="isOpen(item.label)"
         :aria-controls="`faq-content-${index}`"
         @click="uiStore.toggleFaq(item.label)"
       >
         <span class="faq-number">
-          {{ String(index + 1).padStart(2, "0") }}
+          {{ formatIndex(index) }}
         </span>
         <span class="faq-title">{{ t(item.label) }}</span>
 
@@ -27,9 +38,9 @@ const { t } = useI18n();
       </button>
 
       <Transition name="expand">
-        <div v-show="uiStore.openFaq === item.label" class="faq-expandable">
+        <div v-show="isOpen(item.label)" :id="`faq-content-${index}`" class="faq-expandable" role="region" :aria-labelledby="`faq-header-${index}`">
           <div class="faq-inner">
-            <div :id="`faq-content-${index}`" class="faq-detail" v-html="t(item.detail)" />
+            <div class="faq-detail" v-html="t(item.detail)" />
           </div>
         </div>
       </Transition>

@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { Icon } from "@iconify/vue";
-import { useI18n } from "vue-i18n";
-import { socialLinks, discordLink } from "@/data/site";
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
+import { Icon } from "@iconify/vue"
 
-const { t } = useI18n();
+import { socialLinks, discordLink, type SocialLink } from "@/data/site"
 
-const subtitleParts = computed(() => t("hero.subtitle").split("/"));
+const { t } = useI18n()
+
+const subtitleParts = computed<string[]>(() =>
+  t("hero.subtitle")
+    .split("/")
+    .map(part => part.trim()),
+)
 </script>
 
 <template>
@@ -15,31 +20,25 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
       <h1 id="hero-title">{{ t("hero.title") }}</h1>
 
       <p class="hero-subtitle">
-        <template v-for="(part, index) in subtitleParts" :key="`${part}-${index}`">
-          <span v-if="index" class="subtitle-divider">/</span>
-          {{ part }}
+        <template v-for="(part, index) in subtitleParts" :key="part">
+          <span v-if="index > 0" class="subtitle-divider" aria-hidden="true">/</span>
+          <span>{{ part }}</span>
         </template>
       </p>
 
       <p class="hero-description">{{ t("hero.description") }}</p>
 
-      <a class="hero-cta" :href="discordLink.href" target="_blank" rel="noreferrer">
+      <a class="hero-cta" :href="discordLink.href" target="_blank" rel="noopener noreferrer">
         <Icon :icon="discordLink.icon" />
-        {{ t("hero.cta") }}
+        <span>{{ t("hero.cta") }}</span>
       </a>
 
-      <div class="social-links" aria-label="Social links">
-        <a
-          v-for="social in socialLinks"
-          :key="social.label"
-          :href="social.href"
-          target="_blank"
-          rel="noreferrer"
-        >
+      <nav class="social-links" :aria-label="t('hero.socialsLabel')">
+        <a v-for="social in socialLinks as SocialLink[]" :key="social.label" :href="social.href" target="_blank" rel="noopener noreferrer" :aria-label="social.label">
           <Icon :icon="social.icon" />
-          {{ social.label }}
+          <span>{{ social.label }}</span>
         </a>
-      </div>
+      </nav>
     </div>
   </section>
 </template>
@@ -71,11 +70,8 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
         color-mix(in srgb, var(--color-bg) 75%, transparent) 75%,
         color-mix(in srgb, var(--color-bg) 100%, transparent) 100%
       ),
-      image-set(
-          url("@/assets/images/background/hero_banner.avif") type("image/avif"),
-          url("@/assets/images/background/hero_banner.webp") type("image/webp")
-        )
-        center / cover no-repeat;
+      image-set(url("@/assets/images/background/hero_banner.avif") type("image/avif"), url("@/assets/images/background/hero_banner.webp") type("image/webp")) center / cover
+        no-repeat;
   }
 
   @media (max-height: 650px) {
@@ -106,7 +102,7 @@ const subtitleParts = computed(() => t("hero.subtitle").split("/"));
 h1 {
   font-family: var(--font-brand);
   font-size: clamp(3.2rem, 12vw, 6.25rem);
-  line-height: 1.05;
+  font-weight: 500;
   text-transform: uppercase;
   word-break: break-word;
   text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-brand) 25%, transparent);
@@ -192,12 +188,7 @@ h1 {
     position: absolute;
     top: 0;
     left: -100%;
-    background: linear-gradient(
-      120deg,
-      transparent,
-      color-mix(in srgb, #fff 35%, transparent),
-      transparent
-    );
+    background: linear-gradient(120deg, transparent, color-mix(in srgb, #fff 35%, transparent), transparent);
     width: 60%;
     height: 100%;
     pointer-events: none;

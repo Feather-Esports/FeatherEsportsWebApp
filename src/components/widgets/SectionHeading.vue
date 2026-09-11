@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  headingId?: string;
-  title: string;
-  description: string;
-}>();
+  headingId?: string
+  title: string
+  description: string
+}>()
 </script>
 
 <template>
@@ -19,13 +19,7 @@ defineProps<{
 .section-heading {
   display: flex;
   align-items: flex-start;
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-brand) 15%, transparent) 0%,
-      transparent 100%
-    ),
-    var(--color-bg);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-brand) 15%, transparent) 0%, transparent 100%), var(--color-bg);
   border-left: 2px solid var(--color-brand);
   padding: 1.5rem 1.875rem;
 

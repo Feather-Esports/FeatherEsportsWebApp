@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { computed, ref, onMounted, onUnmounted } from "vue";
-import { useI18n } from "vue-i18n";
-import type { Team, TeamRegion } from "@/data/teams";
-import { useUiStore } from "@/stores/ui";
+import { computed, ref } from "vue"
+import { useWindowSize } from "@vueuse/core"
+import { useI18n } from "vue-i18n"
+import { Icon } from "@iconify/vue"
 
-type TeamView = "players" | "staff";
-type TeamMember = Team["players"][number] | Team["staff"][number];
+import { useUiStore } from "@/stores/ui"
+import type { Team, TeamRegion } from "@/data/teams"
 
-const props = defineProps<{ regions: TeamRegion[] }>();
+type TeamView = "players" | "staff"
 
-const { t } = useI18n();
-const uiStore = useUiStore();
+const props = defineProps<{ regions: TeamRegion[] }>()
 
-const expandedTeams = ref<Set<string>>(new Set());
-const teamViews = ref<Record<string, TeamView>>({});
+const { t } = useI18n()
+const uiStore = useUiStore()
+const { width: screenWidth } = useWindowSize()
+
+const expandedTeams = ref<Set<string>>(new Set())
+const teamViews = ref<Record<string, TeamView>>({})
 
 const fallbackRegion: TeamRegion = {
   id: "",
@@ -22,112 +24,75 @@ const fallbackRegion: TeamRegion = {
   icon: "",
   color: "",
   teams: [],
-};
+}
 
 const activeRegion = computed<TeamRegion>(() => {
-  const region = props.regions.find((item) => item.id === uiStore.activeTeamRegion);
-  return region ?? props.regions[0] ?? fallbackRegion;
-});
+  return props.regions.find(item => item.id === uiStore.activeTeamRegion) ?? props.regions[0] ?? fallbackRegion
+})
 
 const ROLE_ICONS = {
   tank: new URL("@/assets/images/icons/role_tank.webp", import.meta.url).href,
   damage: new URL("@/assets/images/icons/role_damage.webp", import.meta.url).href,
   support: new URL("@/assets/images/icons/role_support.webp", import.meta.url).href,
   flex: new URL("@/assets/images/icons/role_flex.webp", import.meta.url).href,
-} as const;
+} as const
 
 const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   eager: true,
   import: "default",
   query: "?url",
-}) as Record<string, string>;
+}) as Record<string, string>
 
 const PLATFORM_ICONS = {
   pc: "pixel:pc-solid",
   console: "pixel:gaming",
   mixed: "pixel:retro-pc-solid",
-} as const;
+} as const
 
 function getPlatformIcon(platform: Team["platform"]): string {
-  return PLATFORM_ICONS[platform] ?? "lucide:monitor";
+  return PLATFORM_ICONS[platform] ?? "lucide:monitor"
 }
 
 function toggleTeam(teamId: string): void {
-  const nextExpanded = new Set(expandedTeams.value);
-
-  if (nextExpanded.has(teamId)) {
-    nextExpanded.delete(teamId);
+  if (expandedTeams.value.has(teamId)) {
+    expandedTeams.value.delete(teamId)
   } else {
-    nextExpanded.add(teamId);
+    expandedTeams.value.add(teamId)
   }
-
-  expandedTeams.value = nextExpanded;
 }
 
 function getTeamView(teamId: string): TeamView {
-  return teamViews.value[teamId] ?? "players";
-}
-
-function getMembers(team: Team): Array<TeamMember> {
-  return getTeamView(team.id) === "players" ? team.players : team.staff;
+  return teamViews.value[teamId] ?? "players"
 }
 
 function setTeamView(teamId: string, view: TeamView): void {
-  teamViews.value[teamId] = view;
+  teamViews.value[teamId] = view
 }
 
 function getRoleIcon(role: string): string {
-  const normalizedRole = role.toLowerCase() as keyof typeof ROLE_ICONS;
-  return ROLE_ICONS[normalizedRole] ?? ROLE_ICONS.flex;
+  const normalizedRole = role.toLowerCase() as keyof typeof ROLE_ICONS
+  return ROLE_ICONS[normalizedRole] ?? ROLE_ICONS.flex
 }
 
 function getCountryEmoji(country: string): string {
-  const normalizedCountry = country.trim().toUpperCase();
-  if (!/^[A-Z]{2}$/.test(normalizedCountry)) {
-    return "??";
-  }
-
-  return String.fromCodePoint(
-    ...normalizedCountry.split("").map((character) => 127397 + character.charCodeAt(0)),
-  );
-}
-
-const screenWidth = ref(typeof window !== "undefined" ? window.innerWidth : 1200);
-function updateWidth(): void {
-  screenWidth.value = window.innerWidth;
+  const normalized = country.trim().toUpperCase()
+  if (!/^[A-Z]{2}$/.test(normalized)) return "??"
+  return String.fromCodePoint(...normalized.split("").map(char => 127397 + char.charCodeAt(0)))
 }
 
 const columnCount = computed(() => {
-  if (screenWidth.value <= 640) return 1;
-  if (screenWidth.value <= 1024) return 2;
-  return 4;
-});
+  if (screenWidth.value <= 640) return 1
+  if (screenWidth.value <= 1024) return 2
+  return 4
+})
 
 const teamColumns = computed(() => {
-  const cols: (typeof activeRegion.value.teams)[] = Array.from(
-    { length: columnCount.value },
-    () => [],
-  );
+  const cols: Team[][] = Array.from({ length: columnCount.value }, () => [])
   activeRegion.value.teams.forEach((team, index) => {
-    cols[index % columnCount.value].push(team);
-  });
-  return cols;
-});
-
-onMounted(() => {
-  Object.values(teamLogos).forEach((url) => {
-    const img = new Image();
-    img.src = url;
-    img.decode().catch(() => {});
-  });
-
-  updateWidth();
-  window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", updateWidth);
-});
+    cols[index % columnCount.value].push(team)
+  })
+  return cols
+})
 </script>
 
 <template>
@@ -151,27 +116,9 @@ onUnmounted(() => {
     <div :key="activeRegion.id" class="rosters-columns">
       <template v-if="activeRegion.teams.length">
         <div v-for="(columnTeams, colIndex) in teamColumns" :key="colIndex" class="roster-column">
-          <article
-            v-for="team in columnTeams"
-            :key="team.id"
-            class="team-card"
-            :class="{ expanded: expandedTeams.has(team.id) }"
-            :style="{ '--team-color': team.color }"
-          >
-            <button
-              type="button"
-              class="team-card-header"
-              :aria-expanded="expandedTeams.has(team.id)"
-              @click="toggleTeam(team.id)"
-            >
-              <img
-                class="team-logo"
-                :src="teamLogos[`/src/assets/images/teams/${team.id}.webp`]"
-                :alt="team.name"
-                loading="eager"
-                decoding="async"
-                draggable="false"
-              />
+          <article v-for="team in columnTeams" :key="team.id" class="team-card" :class="{ expanded: expandedTeams.has(team.id) }" :style="{ '--team-color': team.color }">
+            <button type="button" class="team-card-header" :aria-expanded="expandedTeams.has(team.id)" @click="toggleTeam(team.id)">
+              <img class="team-logo" :src="teamLogos[`/src/assets/images/teams/${team.id}.webp`]" :alt="team.name" loading="eager" decoding="async" draggable="false" />
 
               <div class="team-info">
                 <span class="team-name">{{ team.name }}</span>
@@ -190,24 +137,12 @@ onUnmounted(() => {
               <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
                 <div class="team-card-inner">
                   <div class="team-card-body">
-                    <div
-                      class="member-toggle"
-                      role="tablist"
-                      :aria-label="t('teams.card.memberView')"
-                    >
-                      <button
-                        type="button"
-                        :class="{ active: getTeamView(team.id) === 'players' }"
-                        @click="setTeamView(team.id, 'players')"
-                      >
+                    <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
+                      <button type="button" :class="{ active: getTeamView(team.id) === 'players' }" @click="setTeamView(team.id, 'players')">
                         {{ t("teams.card.players") }}
                       </button>
 
-                      <button
-                        type="button"
-                        :class="{ active: getTeamView(team.id) === 'staff' }"
-                        @click="setTeamView(team.id, 'staff')"
-                      >
+                      <button type="button" :class="{ active: getTeamView(team.id) === 'staff' }" @click="setTeamView(team.id, 'staff')">
                         {{ t("teams.card.staff") }}
                       </button>
                     </div>
@@ -215,43 +150,41 @@ onUnmounted(() => {
                     <Transition name="tab-switch" mode="out-in">
                       <div :key="getTeamView(team.id)" class="tab-content">
                         <ul class="member-list">
-                          <li
-                            v-for="member in getMembers(team)"
-                            :key="member.username + member.role"
-                          >
-                            <img
-                              v-if="getTeamView(team.id) === 'players'"
-                              class="member-role-icon"
-                              :src="getRoleIcon(member.role)"
-                              :alt="member.role"
-                              draggable="false"
-                            />
+                          <template v-if="getTeamView(team.id) === 'players'">
+                            <li v-for="player in team.players" :key="player.username + player.role">
+                              <img class="member-role-icon" :src="getRoleIcon(player.role)" :alt="player.role" draggable="false" />
 
-                            <div class="member-user">
-                              <span
-                                class="member-country"
-                                :aria-label="member.country.toUpperCase()"
-                              >
-                                {{ getCountryEmoji(member.country) }}
+                              <div class="member-user">
+                                <span class="member-country" :aria-label="player.country.toUpperCase()">
+                                  {{ getCountryEmoji(player.country) }}
+                                </span>
+                                <span class="username">{{ player.username }}</span>
+                              </div>
+
+                              <span v-if="player.isSub" class="member-badge">
+                                {{ t("teams.card.sub") }}
                               </span>
-                              <span class="username">{{ member.username }}</span>
-                            </div>
 
-                            <span v-if="'isSub' in member && member.isSub" class="member-badge">
-                              {{ t("teams.card.sub") }}
-                            </span>
+                              <span v-if="player.dnp" class="member-badge">
+                                {{ t("teams.card.dnp") }}
+                              </span>
+                            </li>
+                          </template>
 
-                            <span v-if="'dnp' in member && member.dnp" class="member-badge">
-                              {{ t("teams.card.dnp") }}
-                            </span>
+                          <template v-else>
+                            <li v-for="staffMember in team.staff" :key="staffMember.username + staffMember.role">
+                              <div class="member-user">
+                                <span class="member-country" :aria-label="staffMember.country.toUpperCase()">
+                                  {{ getCountryEmoji(staffMember.country) }}
+                                </span>
+                                <span class="username">{{ staffMember.username }}</span>
+                              </div>
 
-                            <span
-                              v-if="getTeamView(team.id) === 'staff' && member.role"
-                              class="member-badge"
-                            >
-                              {{ t(`teams.staff.${member.role}`) }}
-                            </span>
-                          </li>
+                              <span v-if="staffMember.role" class="member-badge">
+                                {{ t(`teams.staff.${staffMember.role}`) }}
+                              </span>
+                            </li>
+                          </template>
                         </ul>
                       </div>
                     </Transition>
@@ -261,11 +194,11 @@ onUnmounted(() => {
             </Transition>
 
             <!-- <div class="advanced-wrapper">
-            <button class="advanced-button" type="button">
-              <span>{{ t("teams.card.advanced") }}</span>
-              <Icon icon="pixel:arrow-right" />
-            </button>
-          </div> -->
+              <button class="advanced-button" type="button">
+                <span>{{ t("teams.card.advanced") }}</span>
+                <Icon icon="pixel:arrow-right" />
+              </button>
+            </div> -->
           </article>
         </div>
       </template>
