@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n"
 import { Icon } from "@iconify/vue"
+import { useI18n } from "vue-i18n"
 
-import { useUiStore } from "@/stores/ui"
 import { faqs, type FaqItem } from "@/data/site"
+import { useUiStore } from "@/stores/ui"
 
 const uiStore = useUiStore()
 const { t } = useI18n()

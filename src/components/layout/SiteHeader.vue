@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
-import { useI18n } from "vue-i18n"
 import { Icon } from "@iconify/vue"
+import { useI18n } from "vue-i18n"
 
 import { discordLink } from "@/data/site"
-
-import Tooltip from "@/components/widgets/Tooltip.vue"
 
 const { t } = useI18n()
 

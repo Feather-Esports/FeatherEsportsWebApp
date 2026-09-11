@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue"
-import { useI18n } from "vue-i18n"
 import { Icon } from "@iconify/vue"
+import { useI18n } from "vue-i18n"
 
-import { socialLinks, discordLink, type SocialLink } from "@/data/site"
+import { discordLink, socialLinks, type SocialLink } from "@/data/site"
 
 const { t } = useI18n()
 

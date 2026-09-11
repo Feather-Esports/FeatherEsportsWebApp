@@ -1,19 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
-import { onMounted, onUnmounted } from "vue"
 
-import Atmosphere from "@/components/background/Atmosphere.vue"
-import SiteFooter from "@/components/layout/SiteFooter.vue"
-import SiteHeader from "@/components/layout/SiteHeader.vue"
-import FaqSection from "@/components/sections/FaqSection.vue"
-import HeroSection from "@/components/sections/HeroSection.vue"
-import MatchesSection from "@/components/sections/MatchesSection.vue"
-import PartnersSection from "@/components/sections/PartnersSection.vue"
-import StaffSection from "@/components/sections/StaffSection.vue"
-import TeamSection from "@/components/sections/TeamSection.vue"
-import SectionHeading from "@/components/widgets/SectionHeading.vue"
-
-import { socialLinks, discordLink } from "@/data/site"
+import { discordLink, socialLinks } from "@/data/site"
 import { teamRegions } from "@/data/teams"
 
 const { t } = useI18n()

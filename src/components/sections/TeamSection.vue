@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { Icon } from "@iconify/vue"
 import { useWindowSize } from "@vueuse/core"
 import { useI18n } from "vue-i18n"
-import { Icon } from "@iconify/vue"
 
-import { useUiStore } from "@/stores/ui"
 import type { Team, TeamRegion } from "@/data/teams"
+import { useUiStore } from "@/stores/ui"
 
 type TeamView = "players" | "staff"
 

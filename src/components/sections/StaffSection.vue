@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from "vue"
-import { useI18n } from "vue-i18n"
 import { Icon } from "@iconify/vue"
 import { useResizeObserver, useScroll } from "@vueuse/core"
+import { useI18n } from "vue-i18n"
 
-import { useUiStore } from "@/stores/ui"
 import { staff, staffRoles, staffSubRoles, type StaffMember, type StaffRole, type StaffRoleId, type StaffSubRoleId } from "@/data/site"
+import { useUiStore } from "@/stores/ui"
 
 const { t } = useI18n()
 const uiStore = useUiStore()

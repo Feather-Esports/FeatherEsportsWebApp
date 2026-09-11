@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useClipboard } from "@vueuse/core"
 import { Icon } from "@iconify/vue"
+import { useClipboard } from "@vueuse/core"
 
 import { partners, type Partner } from "@/data/site"
 
