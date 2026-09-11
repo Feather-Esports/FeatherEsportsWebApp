@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { nextTick, onMounted, onUnmounted } from "vue"
 import { useI18n } from "vue-i18n"
 
 import { discordLink, socialLinks } from "@/data/site"
@@ -10,28 +11,39 @@ const SCRIPT_ID = "organization-schema"
 
 let sectionObserver: IntersectionObserver | undefined
 
-onMounted(() => {
-  if (document.getElementById(SCRIPT_ID)) return
+onMounted(async () => {
+  await nextTick()
 
-  const sameAsLinks = [discordLink.href, ...socialLinks.map(link => link.href)]
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "SportsOrganization",
-    name: "Feather Esports",
-    url: "https://feather-esports.github.io",
-    logo: "https://feather-esports.github.io/images/brand/logo.png",
-    sport: "Overwatch",
-    description: "Grassroots Overwatch organization competing across multiple skill tiers.",
-    sameAs: sameAsLinks,
+  // 1. Sync theme-color meta tag with actual page background
+  const computedBg = getComputedStyle(document.body).backgroundColor
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]')
+  if (themeColorMeta && computedBg) {
+    themeColorMeta.setAttribute("content", computedBg)
   }
 
-  const script = document.createElement("script")
-  script.type = "application/ld+json"
-  script.id = SCRIPT_ID
-  script.textContent = JSON.stringify(schema)
-  document.head.appendChild(script)
+  // 2. Inject JSON-LD Schema
+  if (!document.getElementById(SCRIPT_ID)) {
+    const sameAsLinks = [discordLink.href, ...socialLinks.map(link => link.href)]
 
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      name: "Feather Esports",
+      url: "https://feather-esports.github.io",
+      logo: "https://feather-esports.github.io/images/brand/logo.png",
+      sport: "Overwatch",
+      description: "Grassroots Overwatch organization competing across multiple skill tiers.",
+      sameAs: sameAsLinks,
+    }
+
+    const script = document.createElement("script")
+    script.type = "application/ld+json"
+    script.id = SCRIPT_ID
+    script.textContent = JSON.stringify(schema)
+    document.head.appendChild(script)
+  }
+
+  // 3. Set up IntersectionObserver for scroll animations
   const sections = document.querySelectorAll(".content-section")
 
   sectionObserver = new IntersectionObserver(
