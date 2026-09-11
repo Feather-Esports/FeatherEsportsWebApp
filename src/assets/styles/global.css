@@ -1,6 +1,6 @@
 html,
 body {
-  background: var(--color-bg);
+  background-color: var(--color-bg) !important;
   color: var(--color-title);
   font-family: var(--font-body);
   font-feature-settings: "liga", "kern";
