@@ -58,9 +58,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   const existingScript = document.getElementById(SCRIPT_ID)
-  if (existingScript) {
-    existingScript.remove()
-  }
+  if (existingScript) existingScript.remove()
 
   sectionObserver?.disconnect()
 })

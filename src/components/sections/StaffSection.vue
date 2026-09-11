@@ -61,9 +61,7 @@ watch(
   () => uiStore.activeStaffRole,
   async () => {
     await nextTick()
-    if (carouselRef.value) {
-      carouselRef.value.scrollLeft = 0
-    }
+    if (carouselRef.value) carouselRef.value.scrollLeft = 0
     updateScrollState()
   },
 )
