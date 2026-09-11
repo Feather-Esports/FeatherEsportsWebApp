@@ -160,7 +160,7 @@ const teamColumns = computed(() => {
                                 <span class="username">{{ player.username }}</span>
                               </div>
 
-                              <span v-if="player.isSub" class="member-badge">
+                              <span v-if="player.sub" class="member-badge">
                                 {{ t("teams.card.sub") }}
                               </span>
 

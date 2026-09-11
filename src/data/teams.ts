@@ -6,7 +6,7 @@ export type TeamPlayer = {
   username: string
   country: string
   role: PlayerRole
-  isSub?: boolean
+  sub?: boolean
   dnp?: boolean
 }
 
@@ -243,7 +243,7 @@ export const teamRegions: TeamRegion[] = [
         skillTier: "Open",
         players: [
           { username: "oops", country: "us", role: "tank" },
-          { username: "Azrael", country: "us", role: "tank", isSub: true },
+          { username: "Azrael", country: "us", role: "tank", sub: true },
           { username: "Kersite", country: "us", role: "damage" },
           { username: "Gilgamesh", country: "us", role: "damage" },
           { username: "Genesis", country: "us", role: "support" },
