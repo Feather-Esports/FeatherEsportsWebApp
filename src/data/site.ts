@@ -1,17 +1,23 @@
+export type SocialLink = {
+  icon: string
+  label: string
+  href: string
+}
+
 export const socialLinks = [
   { icon: "pixel:twitch", label: "Twitch", href: "https://www.twitch.tv/fthresports" },
   { icon: "pixel:youtube", label: "YouTube", href: "https://www.youtube.com/@FeatherEsports" },
   { icon: "pixel:x", label: "X/Twitter", href: "https://x.com/FeatherEsports" },
   { icon: "pixel:tiktok", label: "TikTok", href: "https://www.tiktok.com/@featheresports" },
   { icon: "pixel:instagram", label: "Instagram", href: "https://www.instagram.com/fthr_esports" },
-] as const
+] as const satisfies SocialLink[]
 
 export const discordLink = {
   icon: "pixel:discord",
   href: "https://discord.gg/uNJQD4j75N",
 } as const
 
-export type FAQItem = {
+export type FaqItem = {
   label: string
   detail: string
   color?: string
@@ -25,7 +31,7 @@ export const faqs = [
   { label: "faq.5.label", detail: "faq.5.detail" },
   { label: "faq.6.label", detail: "faq.6.detail" },
   { label: "faq.7.label", detail: "faq.7.detail" },
-] as const satisfies FAQItem[]
+] as const satisfies FaqItem[]
 
 export type Partner = {
   id: string
@@ -52,13 +58,23 @@ export const partners: Partner[] = [
   },
 ]
 
+export type StaffRole = {
+  readonly id: string
+  readonly label: string
+}
+
+export type StaffSubRole = {
+  readonly id: string
+  readonly label: string
+}
+
 export const staffRoles = [
   { id: "founders", label: "staff.roles.founders" },
   { id: "administrators", label: "staff.roles.administrators" },
   { id: "moderators", label: "staff.roles.moderators" },
   { id: "staff", label: "staff.roles.staff" },
   { id: "media", label: "staff.roles.media" },
-] as const
+] as const satisfies readonly StaffRole[]
 
 export const staffSubRoles = [
   { id: "networking", label: "staff.subRoles.networking" },
@@ -67,7 +83,7 @@ export const staffSubRoles = [
   { id: "hr", label: "staff.subRoles.hr" },
   { id: "tech", label: "staff.subRoles.tech" },
   { id: "media", label: "staff.subRoles.media" },
-] as const
+] as const satisfies readonly StaffSubRole[]
 
 export type StaffRoleId = (typeof staffRoles)[number]["id"]
 export type StaffSubRoleId = (typeof staffSubRoles)[number]["id"]

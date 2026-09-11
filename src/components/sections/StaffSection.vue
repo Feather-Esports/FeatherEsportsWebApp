@@ -5,10 +5,7 @@ import { Icon } from "@iconify/vue"
 import { useResizeObserver, useScroll } from "@vueuse/core"
 
 import { useUiStore } from "@/stores/ui"
-import { staff, staffRoles, staffSubRoles, type StaffMember, type StaffRole } from "@/data/site"
-
-type StaffRoleId = (typeof staffRoles)[number]["id"]
-type StaffSubRoleId = (typeof staffSubRoles)[number]["id"]
+import { staff, staffRoles, staffSubRoles, type StaffMember, type StaffRole, type StaffRoleId, type StaffSubRoleId } from "@/data/site"
 
 const { t } = useI18n()
 const uiStore = useUiStore()
@@ -21,7 +18,7 @@ const staffAvatars = import.meta.glob<string>("@/assets/images/staff/*.webp", {
   query: "?url",
 })
 
-const activeStaffRoles = computed<StaffRole[]>(() => staffRoles.filter(role => staff.some(member => member.roles.includes(role.id as StaffRoleId))))
+const activeStaffRoles = computed<readonly StaffRole[]>(() => staffRoles.filter(role => staff.some(member => member.roles.includes(role.id))))
 
 const visibleStaff = computed<StaffMember[]>(() => staff.filter(member => member.roles.includes(uiStore.activeStaffRole as StaffRoleId)))
 

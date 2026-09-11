@@ -89,7 +89,7 @@ const columnCount = computed(() => {
 const teamColumns = computed(() => {
   const cols: Team[][] = Array.from({ length: columnCount.value }, () => [])
   activeRegion.value.teams.forEach((team, index) => {
-    cols[index % columnCount.value].push(team)
+    cols[index % columnCount.value]?.push(team)
   })
   return cols
 })
