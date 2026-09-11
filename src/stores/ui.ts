@@ -4,6 +4,7 @@ export const useUiStore = defineStore("ui", () => {
   const activeTeamRegion = ref("emea")
   const activeStaffRole = ref("founders")
   const openFaq = ref<string | null>(null)
+  const legalModalOpen = ref(false)
 
   function selectTeamRegion(region: string): void {
     activeTeamRegion.value = region
@@ -17,12 +18,23 @@ export const useUiStore = defineStore("ui", () => {
     openFaq.value = openFaq.value === label ? null : label
   }
 
+  function openLegalModal(): void {
+    legalModalOpen.value = true
+  }
+
+  function closeLegalModal(): void {
+    legalModalOpen.value = false
+  }
+
   return {
-    activeStaffRole,
     activeTeamRegion,
+    activeStaffRole,
     openFaq,
-    selectStaffRole,
+    legalModalOpen,
     selectTeamRegion,
+    selectStaffRole,
     toggleFaq,
+    openLegalModal,
+    closeLegalModal,
   }
 })

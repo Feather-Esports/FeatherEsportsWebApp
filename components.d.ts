@@ -14,6 +14,7 @@ declare module 'vue' {
     Atmosphere: typeof import('./src/components/background/Atmosphere.vue')['default']
     FaqSection: typeof import('./src/components/sections/FaqSection.vue')['default']
     HeroSection: typeof import('./src/components/sections/HeroSection.vue')['default']
+    LegalModal: typeof import('./src/components/modal/LegalModal.vue')['default']
     MatchesSection: typeof import('./src/components/sections/MatchesSection.vue')['default']
     PartnersSection: typeof import('./src/components/sections/PartnersSection.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

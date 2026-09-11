@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useUiStore } from "@/stores/ui"
 import { Icon } from "@iconify/vue"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
+const uiStore = useUiStore()
 </script>
 
 <template>
@@ -12,9 +14,13 @@ const { t } = useI18n()
       <span>Feather</span>
     </a>
     <span class="footer-divider">//</span>
-    <a class="contact" href="/">{{ t("footer.contact") }}</a>
+    <a class="contact" href="mailto:fthr.esports@gmail.com">
+      {{ t("footer.contact") }}
+    </a>
     <span class="footer-divider">//</span>
-    <a class="legal" href="/">{{ t("footer.legal") }}</a>
+    <button type="button" class="legal" @click="uiStore.openLegalModal()">
+      {{ t("footer.legal") }}
+    </button>
   </footer>
 </template>
 
@@ -83,6 +89,8 @@ footer {
   font-family: var(--font-title);
   font-size: 0.9rem;
   color: var(--color-text);
+  background: transparent;
+  border: 0;
   transition: color 150ms ease-in-out;
 
   @media (hover: hover) {

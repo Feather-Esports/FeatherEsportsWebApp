@@ -98,6 +98,8 @@ onUnmounted(() => {
     </main>
     <SiteFooter />
   </div>
+
+  <LegalModal />
 </template>
 
 <style scoped>
