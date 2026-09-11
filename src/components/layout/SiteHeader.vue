@@ -3,6 +3,7 @@ import { Icon } from "@iconify/vue"
 import { useI18n } from "vue-i18n"
 
 import { discordLink } from "@/data/site"
+import { scrollToSection } from "@/lib/lenis"
 
 const { t } = useI18n()
 
@@ -27,8 +28,17 @@ function handleMenuToggle(): void {
   menuOpen.value = !menuOpen.value
 }
 
-function handleNavSelect(): void {
+function handleNavSelect(event: MouseEvent): void {
+  const target = event.currentTarget as HTMLAnchorElement | null
+  const href = target?.getAttribute("href")
+  const sectionId = href?.replace(/^#/, "")
+
   menuOpen.value = false
+
+  if (!sectionId) return
+
+  event.preventDefault()
+  scrollToSection(sectionId, { offset: 72, duration: 1.1 })
 }
 </script>
 
