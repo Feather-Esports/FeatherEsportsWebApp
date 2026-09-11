@@ -98,7 +98,7 @@ function handleNavSelect(): void {
   @media (max-width: 760px) {
     gap: 0;
     min-height: 3.75rem;
-    padding: 0.8rem 1rem;
+    padding: 0.6rem 1rem;
   }
 }
 
@@ -143,7 +143,11 @@ function handleNavSelect(): void {
     flex-direction: column;
     left: 0;
     top: 100%;
-    background: color-mix(in srgb, var(--color-header) 96%, transparent);
+    background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+    -webkit-backdrop-filter: blur(0.75rem) saturate(1.15);
+    backdrop-filter: blur(0.75rem) saturate(1.15);
     width: 100%;
 
     &.open,
