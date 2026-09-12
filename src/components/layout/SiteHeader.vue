@@ -50,7 +50,10 @@ function handleNavSelect(event: MouseEvent): void {
     </a>
 
     <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-controls="site-navigation" :aria-label="menuLabel" @click="handleMenuToggle">
-      <Icon :icon="menuOpen ? 'pixel:times' : 'pixel:bars'" />
+      <span class="hamburger">
+        <span class="bar top"></span>
+        <span class="bar bottom"></span>
+      </span>
     </button>
 
     <div class="header-panel" :class="{ open: menuOpen }">
@@ -61,7 +64,7 @@ function handleNavSelect(event: MouseEvent): void {
       </nav>
 
       <div class="header-links">
-        <Tooltip id="wip-tooltip">
+        <Tooltip id="wip-tooltip" class="desktop-only-tooltip">
           <template #trigger>
             <div class="wip-indicator">
               <Icon icon="pixel:exclaimation-solid" />
@@ -71,6 +74,11 @@ function handleNavSelect(event: MouseEvent): void {
           <strong>{{ t("header.wipTooltip.title") }}</strong>
           <p>{{ t("header.wipTooltip.description") }}</p>
         </Tooltip>
+
+        <div class="wip-indicator mobile-only-wip">
+          <Icon icon="pixel:exclaimation-solid" />
+          {{ t("header.wip") }}
+        </div>
 
         <a class="discord-link" :href="discordLink.href" target="_blank" rel="noopener noreferrer">
           <Icon :icon="discordLink.icon" />
@@ -95,27 +103,36 @@ function handleNavSelect(event: MouseEvent): void {
   -webkit-backdrop-filter: blur(0.75rem) saturate(1.15);
   backdrop-filter: blur(0.75rem) saturate(1.15);
   width: 100%;
-  min-height: 3.75rem;
+  height: 3.75rem;
   padding: 0 clamp(1.25rem, 5vw, 1.563rem);
 
   @media (max-width: 760px) {
     gap: 0;
-    min-height: 3.75rem;
-    padding: 0.6rem 1rem;
+    background: var(--color-bg);
+    padding: 0 1.25rem;
   }
 }
 
 .wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 0.438rem;
+  gap: 0.4rem;
   font-family: var(--font-brand);
-  font-size: 1.59rem;
+  font-size: 1.6rem;
+  font-weight: 500;
   text-transform: uppercase;
   color: var(--color-brand);
 
   svg {
-    font-size: 2.13rem;
+    font-size: 2.25rem;
+  }
+
+  @media (max-width: 760px) {
+    font-size: 1.75rem;
+
+    svg {
+      font-size: 2.4rem;
+    }
   }
 }
 
@@ -127,13 +144,38 @@ function handleNavSelect(event: MouseEvent): void {
     align-items: center;
     justify-content: center;
     margin-left: auto;
-    font-size: 1.1rem;
-    color: var(--color-brand);
     background: transparent;
     border: 1px solid var(--color-brand);
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 0.19rem;
+
+    .hamburger {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 1.125rem;
+      height: 0.7rem;
+    }
+
+    .bar {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: var(--color-brand);
+      transform-origin: center;
+      transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &[aria-expanded="true"] {
+      .bar.top {
+        transform: translateY(4.5px) rotate(45deg);
+      }
+      .bar.bottom {
+        transform: translateY(-4.5px) rotate(-45deg);
+      }
+    }
   }
 }
 
@@ -146,15 +188,14 @@ function handleNavSelect(event: MouseEvent): void {
     flex-direction: column;
     left: 0;
     top: 100%;
-    background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+    gap: 1.25rem;
+    background: var(--color-bg);
     border-top: 1px solid var(--color-line);
     border-bottom: 1px solid var(--color-line);
-    -webkit-backdrop-filter: blur(0.75rem) saturate(1.15);
-    backdrop-filter: blur(0.75rem) saturate(1.15);
     width: 100%;
+    padding: 1.25rem;
 
-    &.open,
-    &.open .main-nav {
+    &.open {
       display: flex;
     }
   }
@@ -198,16 +239,21 @@ function handleNavSelect(event: MouseEvent): void {
   }
 
   @media (max-width: 760px) {
-    display: none;
     flex-direction: column;
-    gap: 0;
+    gap: 0.25rem;
+    font-size: 0.9rem;
     width: 100%;
-    padding: 0.5rem 1rem 0.8rem;
 
     & a {
-      border-bottom: 1px solid var(--color-line-soft);
-      padding: 0.875rem 0;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--color-line-soft, rgba(255, 255, 255, 0.08));
       min-height: 2.75rem;
+      padding: 0.75rem 0.25rem;
+
+      &::after {
+        display: none;
+      }
     }
   }
 }
@@ -218,7 +264,39 @@ function handleNavSelect(event: MouseEvent): void {
   gap: 1rem;
 
   @media (max-width: 760px) {
-    display: none;
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    padding-top: 0.75rem;
+
+    .mobile-only-wip {
+      flex: 0 0 20%;
+      justify-content: center;
+      height: 2.5rem;
+      cursor: default;
+    }
+
+    .discord-link {
+      flex: 1;
+      justify-content: center;
+      height: 2.5rem;
+    }
+  }
+}
+
+.mobile-only-wip {
+  display: none !important;
+
+  @media (max-width: 760px) {
+    display: inline-flex !important;
+  }
+}
+
+.desktop-only-tooltip {
+  display: inline-flex;
+
+  @media (max-width: 760px) {
+    display: none !important;
   }
 }
 
@@ -226,14 +304,14 @@ function handleNavSelect(event: MouseEvent): void {
 .discord-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.313rem;
+  gap: 0.35rem;
   font-family: var(--font-title);
-  font-size: 0.688rem;
+  font-size: 0.69rem;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--color-title);
   height: 2rem;
-  padding: 0 0.63rem;
+  padding: 0 0.75rem;
   border-radius: 0.19rem;
 }
 
