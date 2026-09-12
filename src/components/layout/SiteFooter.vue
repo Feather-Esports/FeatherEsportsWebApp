@@ -47,15 +47,16 @@ footer {
 .wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 0.438rem;
+  gap: 0.4rem;
   font-family: var(--font-brand);
-  font-size: 1.59rem;
+  font-size: 1.6rem;
+  font-weight: 500;
   text-transform: uppercase;
   color: var(--color-brand);
   transition: opacity 150ms ease-in-out;
 
   svg {
-    font-size: 2.13rem;
+    font-size: 2.25rem;
   }
 
   @media (hover: hover) {
@@ -68,10 +69,6 @@ footer {
     outline: 2px solid var(--color-brand);
     outline-offset: 3px;
     border-radius: 0.15rem;
-  }
-
-  @media (max-width: 640px) {
-    font-size: 1.35rem;
   }
 }
 
