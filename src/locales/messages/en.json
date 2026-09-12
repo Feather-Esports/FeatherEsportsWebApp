@@ -82,7 +82,7 @@
     }
   },
   "matches": {
-    "empty": "No scheduled matches found.",
+    "empty": "No scheduled matches found",
     "hint": "Match schedules and results tracking are currently under development."
   },
   "staff": {
@@ -96,13 +96,13 @@
     "contact": "Contact",
     "email": "fthr.esports{'@'}gmail.com",
     "paragraphs": {
-      "1": "Feather is a grassroots Overwatch esports organization built around the community scene. This website is for informational and promotional purposes only and does not constitute legal advice, formal team representation, or a binding sponsorship agreement.",
+      "1": "Feather Esports is a grassroots Overwatch esports organization built around the community scene. This website is for informational and promotional purposes only and does not constitute legal advice, formal team representation, or a binding sponsorship agreement.",
       "2": "All branding, media, and match-related materials featured here are used for editorial and promotional purposes. If you are a partner, creator, or rights holder and believe something should be updated, credited differently, or removed, please contact the org directly."
     },
     "list": {
       "1": "Official communication should be directed through the contact email below.",
       "2": "Third-party logos, trademarks, and media remain the property of their respective owners.",
-      "3": "Feather may update this notice as the org expands, partners, or changes operations."
+      "3": "Feather Esports may update this notice as the org expands, partners, or changes operations."
     }
   }
 }
