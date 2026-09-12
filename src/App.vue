@@ -49,18 +49,16 @@ onMounted(async () => {
     entries => {
       entries.forEach(entry => {
         const target = entry.target as HTMLElement
-
         if (entry.isIntersecting) {
           target.classList.add("is-visible")
           return
         }
-
         target.classList.remove("is-visible")
       })
     },
     {
-      threshold: 0.15,
-      rootMargin: "0px 0px -8% 0px",
+      threshold: [0.05, 0.2],
+      rootMargin: "0px 0px -50px 0px",
     },
   )
 
