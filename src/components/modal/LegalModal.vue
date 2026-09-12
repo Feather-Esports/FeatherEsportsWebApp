@@ -65,14 +65,14 @@ onClickOutside(legalModalRef, () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.5rem;
   background: var(--color-bg);
   border: 1px solid var(--color-line);
   box-shadow: 0 20px 48px color-mix(in srgb, var(--color-bg) 35%, transparent);
   width: min(100%, 30rem);
   max-height: calc(100dvh - 2rem);
   padding: 1.1rem;
-  border-radius: 0.8rem;
+  border-radius: 0.19rem;
   overscroll-behavior: contain;
   touch-action: pan-y;
   overflow-y: auto;
@@ -103,7 +103,7 @@ h2 {
   border: 1px solid var(--color-line);
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0.4rem;
+  border-radius: 0.19rem;
   transition:
     background-color 150ms ease,
     border-color 150ms ease,
@@ -115,6 +115,10 @@ h2 {
       border-color: var(--color-brand);
       color: var(--color-title);
     }
+  }
+
+  svg {
+    font-size: 0.85rem;
   }
 }
 
