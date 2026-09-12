@@ -311,8 +311,8 @@ const teamColumns = computed(() => {
   justify-content: center;
   align-items: center;
   font-family: var(--font-title);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 400;
   text-align: center;
   color: var(--color-text);
   background: var(--color-bg);
