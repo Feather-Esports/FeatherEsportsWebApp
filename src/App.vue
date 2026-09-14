@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
 
-import { discordLink, socialLinks } from "@/data/site"
 import { teamRegions } from "@/data/teams"
 
 const { t } = useI18n()
-
-const SCRIPT_ID = "organization-schema"
 
 let sectionObserver: IntersectionObserver | undefined
 
@@ -20,29 +17,7 @@ onMounted(async () => {
     themeColorMeta.setAttribute("content", computedBg)
   }
 
-  // 2. Inject JSON-LD Schema
-  if (!document.getElementById(SCRIPT_ID)) {
-    const sameAsLinks = [discordLink.href, ...socialLinks.map(link => link.href)]
-
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "SportsOrganization",
-      name: "Feather Esports",
-      url: "https://feather-esports.github.io",
-      logo: "https://feather-esports.github.io/images/brand/logo.png",
-      sport: "Overwatch",
-      description: "Grassroots Overwatch organization competing across multiple skill tiers.",
-      sameAs: sameAsLinks,
-    }
-
-    const script = document.createElement("script")
-    script.type = "application/ld+json"
-    script.id = SCRIPT_ID
-    script.textContent = JSON.stringify(schema)
-    document.head.appendChild(script)
-  }
-
-  // 3. Set up IntersectionObserver for scroll animations
+  // 2. Set up IntersectionObserver for scroll animations
   const sections = document.querySelectorAll(".content-section")
 
   sectionObserver = new IntersectionObserver(
@@ -66,9 +41,6 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  const existingScript = document.getElementById(SCRIPT_ID)
-  if (existingScript) existingScript.remove()
-
   sectionObserver?.disconnect()
 })
 </script>
