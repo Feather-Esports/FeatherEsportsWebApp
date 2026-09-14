@@ -13,3 +13,4 @@
 ## Low Priority
 
 - [ ] add discord webhook integration for discord embeds
+- [ ] eventually add extra pages for teams and matches
