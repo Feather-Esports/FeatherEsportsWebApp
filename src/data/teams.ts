@@ -155,6 +155,21 @@ export const teamRegions: TeamRegion[] = [
         ],
       },
       {
+        id: "robin",
+        name: "Robin",
+        region: "EMEA",
+        color: "#E28DB9",
+        platform: "pc",
+        skillTier: "4K",
+        players: [
+          { username: "Luna", country: "de", role: "damage" },
+          { username: "Kepler", country: "dz", role: "damage" },
+          { username: "hori", country: "gb", role: "support" },
+          { username: "yiruzu", country: "de", role: "flex" },
+        ],
+        staff: [],
+      },
+      {
         id: "kite",
         name: "Kite",
         region: "EMEA",
