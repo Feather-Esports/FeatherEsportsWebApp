@@ -2,7 +2,6 @@
 
 ## High Priority
 
-- [ ] fix scroll block thats happening sometimes when expanding teams
 - [ ] fix footer overflow background on touch devices
 
 ## Medium Priority

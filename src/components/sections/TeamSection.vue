@@ -14,8 +14,19 @@ const { t } = useI18n()
 const uiStore = useUiStore()
 const { width: screenWidth } = useWindowSize()
 
-const expandedTeams = ref<Set<string>>(new Set())
-const teamViews = ref<Record<string, TeamView>>({})
+const teamViews = reactive<Record<string, TeamView>>({})
+
+const expandedTeams = shallowRef<Set<string>>(new Set())
+
+function toggleTeam(teamId: string): void {
+  const nextSet = new Set(expandedTeams.value)
+  if (nextSet.has(teamId)) {
+    nextSet.delete(teamId)
+  } else {
+    nextSet.add(teamId)
+  }
+  expandedTeams.value = nextSet
+}
 
 const fallbackRegion: TeamRegion = {
   id: "",
@@ -29,12 +40,12 @@ const activeRegion = computed<TeamRegion>(() => {
   return props.regions.find(item => item.id === uiStore.activeTeamRegion) ?? props.regions[0] ?? fallbackRegion
 })
 
-const ROLE_ICONS = {
+const ROLE_ICONS: Record<string, string> = {
   tank: new URL("@/assets/images/icons/role_tank.webp", import.meta.url).href,
   damage: new URL("@/assets/images/icons/role_damage.webp", import.meta.url).href,
   support: new URL("@/assets/images/icons/role_support.webp", import.meta.url).href,
   flex: new URL("@/assets/images/icons/role_flex.webp", import.meta.url).href,
-} as const
+}
 
 const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   eager: true,
@@ -42,38 +53,14 @@ const teamLogos = import.meta.glob("@/assets/images/teams/*.webp", {
   query: "?url",
 }) as Record<string, string>
 
-const PLATFORM_ICONS = {
+const PLATFORM_ICONS: Record<Team["platform"], string> = {
   pc: "pixel:pc-solid",
   console: "pixel:gaming",
   mixed: "pixel:retro-pc-solid",
-} as const
-
-function getPlatformIcon(platform: Team["platform"]): string {
-  return PLATFORM_ICONS[platform] ?? "lucide:monitor"
-}
-
-function toggleTeam(teamId: string): void {
-  if (expandedTeams.value.has(teamId)) {
-    expandedTeams.value.delete(teamId)
-  } else {
-    expandedTeams.value.add(teamId)
-  }
-}
-
-function getTeamView(teamId: string): TeamView {
-  return teamViews.value[teamId] ?? "players"
-}
-
-function setTeamView(teamId: string, view: TeamView): void {
-  teamViews.value[teamId] = view
-}
-
-function getRoleIcon(role: string): string {
-  const normalizedRole = role.toLowerCase() as keyof typeof ROLE_ICONS
-  return ROLE_ICONS[normalizedRole] ?? ROLE_ICONS.flex
 }
 
 function getCountryEmoji(country: string): string {
+  if (!country) return "??"
   const normalized = country.trim().toUpperCase()
   if (!/^[A-Z]{2}$/.test(normalized)) return "??"
   return String.fromCodePoint(...normalized.split("").map(char => 127397 + char.charCodeAt(0)))
@@ -122,7 +109,7 @@ const teamColumns = computed(() => {
               <div class="team-info">
                 <span class="team-name">{{ team.name }}</span>
                 <div class="team-meta">
-                  <Icon class="team-platform" :icon="getPlatformIcon(team.platform)" />
+                  <Icon class="team-platform" :icon="PLATFORM_ICONS[team.platform]" />
                   <span class="team-tier">{{ team.skillTier }}</span>
                 </div>
               </div>
@@ -133,25 +120,25 @@ const teamColumns = computed(() => {
             </button>
 
             <Transition name="expand">
-              <div v-show="expandedTeams.has(team.id)" class="team-card-expandable">
+              <div v-if="expandedTeams.has(team.id)" class="team-card-expandable">
                 <div class="team-card-inner">
                   <div class="team-card-body">
                     <div class="member-toggle" role="tablist" :aria-label="t('teams.card.memberView')">
-                      <button type="button" :class="{ active: getTeamView(team.id) === 'players' }" @click="setTeamView(team.id, 'players')">
+                      <button type="button" :class="{ active: (teamViews[team.id] ?? 'players') === 'players' }" @click="teamViews[team.id] = 'players'">
                         {{ t("teams.card.players") }}
                       </button>
 
-                      <button type="button" :class="{ active: getTeamView(team.id) === 'staff' }" @click="setTeamView(team.id, 'staff')">
+                      <button type="button" :class="{ active: teamViews[team.id] === 'staff' }" @click="teamViews[team.id] = 'staff'">
                         {{ t("teams.card.staff") }}
                       </button>
                     </div>
 
                     <Transition name="tab-switch" mode="out-in">
-                      <div :key="getTeamView(team.id)" class="tab-content">
+                      <div :key="teamViews[team.id] ?? 'players'" class="tab-content">
                         <ul class="member-list">
-                          <template v-if="getTeamView(team.id) === 'players'">
+                          <template v-if="(teamViews[team.id] ?? 'players') === 'players'">
                             <li v-for="player in team.players" :key="player.username + player.role">
-                              <img class="member-role-icon" :src="getRoleIcon(player.role)" :alt="player.role" draggable="false" />
+                              <img class="member-role-icon" :src="ROLE_ICONS[player.role.toLowerCase()] ?? ROLE_ICONS.flex" :alt="player.role" draggable="false" />
 
                               <div class="member-user">
                                 <span class="member-country" :aria-label="player.country.toUpperCase()">
