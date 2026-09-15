@@ -155,21 +155,6 @@ export const teamRegions: TeamRegion[] = [
         ],
       },
       {
-        id: "robin",
-        name: "Robin",
-        region: "EMEA",
-        color: "#E28DB9",
-        platform: "pc",
-        skillTier: "4K",
-        players: [
-          { username: "Luna", country: "de", role: "damage" },
-          { username: "Kepler", country: "dz", role: "damage" },
-          { username: "hori", country: "gb", role: "support" },
-          { username: "yiruzu", country: "de", role: "flex" },
-        ],
-        staff: [],
-      },
-      {
         id: "kite",
         name: "Kite",
         region: "EMEA",
@@ -268,6 +253,7 @@ export const teamRegions: TeamRegion[] = [
         staff: [
           { username: "Genesis", country: "us", role: "manager" },
           { username: "Kepler", country: "dz", role: "manager" },
+          { username: "Kersite", country: "us", role: "captain" },
           { username: "Aubstacle", country: "us", role: "coach" },
         ],
       },
@@ -281,6 +267,7 @@ export const teamRegions: TeamRegion[] = [
         players: [
           { username: "Azrael", country: "us", role: "tank" },
           { username: "Jwam", country: "mx", role: "support" },
+          { username: "Kirby", country: "us", role: "damage", sub: true },
         ],
         staff: [{ username: "Azrael", country: "us", role: "manager" }],
       },
